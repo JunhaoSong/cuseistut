@@ -40,7 +40,7 @@ How to install GMT?
 
 The following steps have been tested successfully for Linux, macOS, and window subsystem for linux.
 
-| 1. **Install** `**miniconda** <https://docs.conda.io/en/latest/miniconda.html>`_
+| 1. **Install** `miniconda <https://docs.conda.io/en/latest/miniconda.html>`_
 | 2. **Open a terminal and run these commands sequentially**
 
 .. warning:: 
@@ -49,8 +49,8 @@ The following steps have been tested successfully for Linux, macOS, and window s
 
 .. code:: 
 
- $ conda create --name gmt-env python=3.8
- $ conda activate  gmt-env
+ $ conda create --name gmt-env
+ $ conda activate gmt-env
  $ conda install gmt -c conda-forge
 
 | 3. **Check if it has been successfully installed**
