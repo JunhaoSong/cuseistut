@@ -175,10 +175,10 @@
 <h4>3.2.1 Browse documents<a class="headerlink" href="#browse-documents" title="Permalink to this headline"></a></h4>
 <p>Now we can download the catalog file. The file could be download from <a class="reference download internal" download="" href="../_downloads/c4bd0d29bd47409c5fbfa9d547fc263f/Unix_command_Materials.tgz"><code class="xref download docutils literal notranslate"><span class="pre">here</span></code></a>. After downloading the catalogue, it will first be stored in the <code class="file docutils literal notranslate"><span class="pre">~/Downloads</span></code>. To move the files from <code class="file docutils literal notranslate"><span class="pre">~/Downloads</span></code> to the directory you created, you may use the command  <code class="file docutils literal notranslate"><span class="pre">mv</span></code></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>$ pwd
-<span class="linenos">2</span>Home/user/desktop/ Data_storage
-<span class="linenos">3</span>$ mv ~/Downloads/CUSeisTut_Materials.tgz ./
+<span class="linenos">2</span>Home/user/desktop/Data_storage
+<span class="linenos">3</span>$ mv ~/Downloads/Unix_command_Materials.tgz ./
 <span class="linenos">4</span>$ ls
-<span class="linenos">5</span>CUSeisTut_Materials.tgz
+<span class="linenos">5</span>Unix_command_Materials.tgz
 </pre></div>
 </div>
 <div class="admonition note">
@@ -186,9 +186,9 @@
 <p>The directory <code class="file docutils literal notranslate"><span class="pre">~/Downloads</span></code> here is suitable for Unix system. please change it to your own directory accordingly.</p>
 </div>
 <p>The file was now moved to your working directory. As the file is zipped as a .tgz file, it needs to be unzipped. It can be done by the command <code class="file docutils literal notranslate"><span class="pre">tar</span></code></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>$ tar -zxf CUSeisTut_Materials.tgz
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>$ tar -zxf Unix_command_Materials.tgz
 <span class="linenos">2</span>$ ls
-<span class="linenos">3</span>CUSeisTut CUSeisTut_Materials.tgz
+<span class="linenos">3</span>CUSeisTut Unix_command_Materials.tgz
 </pre></div>
 </div>
 <p>The file was now unzipped and the directory <code class="file docutils literal notranslate"><span class="pre">CUSeisTut</span></code> was create. Change your working directory to the <code class="file docutils literal notranslate"><span class="pre">CUSeisTut</span></code>  and use  <code class="file docutils literal notranslate"><span class="pre">ls</span></code> to check the contents.</p>
@@ -430,7 +430,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright 2021-2022, CUSeisTut team.
-      <span class="lastupdated">Last updated on 2022-01-25.
+      <span class="lastupdated">Last updated on 2022-01-29.
       </span></p>
   </div>
 

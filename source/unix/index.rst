@@ -107,10 +107,10 @@ Now we can download the catalog file. The file could be download from :download:
     :linenos:
 	
     $ pwd
-    Home/user/desktop/ Data_storage
-    $ mv ~/Downloads/CUSeisTut_Materials.tgz ./
+    Home/user/desktop/Data_storage
+    $ mv ~/Downloads/Unix_command_Materials.tgz ./
     $ ls
-    CUSeisTut_Materials.tgz
+    Unix_command_Materials.tgz
     
 .. note::
 
@@ -121,9 +121,9 @@ The file was now moved to your working directory. As the file is zipped as a .tg
 .. code-block:: 
     :linenos:
 	
-    $ tar -zxf CUSeisTut_Materials.tgz
+    $ tar -zxf Unix_command_Materials.tgz
     $ ls
-    CUSeisTut CUSeisTut_Materials.tgz
+    CUSeisTut Unix_command_Materials.tgz
     
 The file was now unzipped and the directory :file:`CUSeisTut` was create. Change your working directory to the :file:`CUSeisTut`  and use  :file:`ls` to check the contents.
 
