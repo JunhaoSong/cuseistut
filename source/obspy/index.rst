@@ -14,8 +14,8 @@ What is ObsPy?
 
 We assume that you already have some experience of using Python. If not, you are suggested to read this `small, incomplete introduction to the Python programming language <https://docs.obspy.org/tutorial/code_snippets/python_introduction.html>`_.
 
-How to install ObsPy?
-*********************
+How to install ObsPy
+********************
 
 .. note::
  | It's strongly recommended to install ObsPy via conda.
@@ -44,17 +44,19 @@ We will introduce how to request, read, visualize, and further process seismic d
 #. Theoreotical Travel Time Calculation
 #. Cross-section waveforms plot
 
+Developed by LAU Tsz Lam Zoe under the instructions of Junhao SONG, Han CHEN, and Suli Yao.
+
 --------
 
-UTC Date Time
--------------
+1 UTC Date Time 
+----------------------------
 
 Now let's introduce the UTC DateTime format. 
 
 The UTC DateTime is a Coordinated Universal Time. Usually we could see that HKT (UTC+8) or BJT (UTC+8), which means that Hong Kong or Beijing time is 8 hours earlier than UTC time. We usually use UTC Datetime to present the origin time of an earthquake. Seismic time-series data like digital seismograms also use UTC Datetime to present the time of each sample.
 
-DateTime Initialization
-***********************
+1.1 DateTime Initialization
+***************************
 
 First in the terminal, type ``python`` and then type ``enter``:
 
@@ -81,21 +83,22 @@ First in the terminal, type ``python`` and then type ``enter``:
 
 Description of some lines in the above example:
 
-``from obspy import UTCDateTime`` imports the ``UTCDateTime`` function from ``obspy`` module.
+``from obspy import UTCDateTime`` import the module.
 
-``UTCDateTime`` makes the UTCDateTime object according to the arguments.
+``UTCDateTime`` make the UTCDateTime object according to the argument.
 
 .. note::
 
- | There are many other ways to produce the UTCDateTime object.
- | Method 1 & 2 are two common examples. You can explore others `here <https://docs.obspy.org/packages/autogen/obspy.core.utcdatetime.UTCDateTime.html#obspy.core.utcdatetime.UTCDateTime>`_. 
+ | There are many ways to produce the UTCDateTime object.
+ | Method 1 & 2 are examples. You can explore others `here <https://docs.obspy.org/packages/autogen/obspy.core.utcdatetime.UTCDateTime.html#obspy.core.utcdatetime.UTCDateTime>`_. 
 
-DateTime Attribute Access
-*************************
+
+1.2 DateTime Attribute Access
+*****************************
 
 Now we can assign the UTCDateTime object to a variable "time".
 
-.. code::
+. code::
 
  >>>time = UTCDateTime("2012-09-07T12:15:00")
  >>>print(time)
@@ -132,12 +135,12 @@ Description of some lines in the above example:
 
 .. note::
   
-  | The UNIX timestamp formate means the number of seconds since the Epoch. 
-  | Let's try with the following code and see the output. 
+  | The UNIX timestamp format means the number of seconds since the Epoch. 
+  | Let's try the following code and see the output. 
   | The reference time: "1970-01-01" 
 
-Handling time differences
-*************************
+1.3 Handling time differences
+*****************************
 
 Calculate the time difference or add seconds into original "time"
 
@@ -151,16 +154,16 @@ Calculate the time difference or add seconds into original "time"
  
 Clearly, we can see that "time2" is 1 hour (3600 seconds) later than "time".
 
-------------
+----------------------
 
-Basic Seismic Data Processing
------------------------------
+2 Basic Seismic Data Processing
+-------------------------------
 
 Flow chart
 **********
 
 .. image:: flowchart.png
-   :width: 60%
+   :width: 100%
 
 
 2.1 Choose an event
@@ -191,15 +194,15 @@ Make sure the selected station is operating during the event.
 
 .. note::
 
- | Here is the header informatioin of the station list.
- | Network | Station | Location | Channel | Latitude | Longitude | Elevation | Depth | Azimuth | Dip |   SensorDescription | Scale | ScaleFreq |ScaleUnits | SampleRate | StartTime | EndTime
+ | Here is the header information of the station list.
+ | Network | Station | Location | Channel | Latitude | Longitude | Elevation | Depth | Azimuth | Dip |   SensorDescription | Scale | ScaleFreq | ScaleUnits | SampleRate | StartTime | EndTime
 
  | YS|BAOP||BHZ|-8.4882|123.2696|67.0|0.0|0.0|-90.0|Nanometrics Trillium 120 Sec Response/Taurus Stand|1.19642E9|0.3|m/s|50.0|2014-10-31T00:00:00|2016-12-31T23:59:59
 
 2.3 Get waveforms
 *****************
 
-Import the web service providers and input station informations.
+Import the web service providers and input station information.
 
 .. code::
  
@@ -266,12 +269,31 @@ There are some default attributes.
 
  | 6. ``endtime`` : UTCDateTime of the last data sample
 
-You can assign / print the corresponding attributes by calling them individually.
+ | 7. ``gcarc`` : Epicentral distance 
+
+ | 8. ``baz`` : Back azimuth
+
+You can print the corresponding attributes by calling them individually.
 
 .. code::
 
- # Print the sampling rate
  print(st[0].stats.sampling_rate)
+
+.. Tip::
+
+ For ``gcarc`` and ``bac`` , they are available in sac filed. You can print them by: 
+
+ .. code::
+
+   print(st[0].stats.sac.gcarc)
+
+
+If the header value is empty, you can assign value into the header.
+
+.. code::
+
+ st[0].stats.network = 'IU'
+
 
 2.5 Plot the waveforms
 **********************
@@ -363,12 +385,6 @@ The procedures are the same with remove mean.
 .. image:: linear_shift.png
    :width: 80%
 
-**Summary of detrend**
-
-We have introduced two methods of detrend. You can choose one of them in this tutorial. 
-
-.. image:: detrend_comparison.png
-   :width: 80%
 
 After detrend, you can plot the waveform plot and spectrogram again.
 Compare the results with the previous plots. 
@@ -390,11 +406,41 @@ Compare the results with the previous plots.
 
 You can apply different filters to filter the data. For example, "bandpass", "highness" and "lowpass". 
 
-We here used bandpass to filter the waveform. 
+To further understand the effects of different filter, you can download the waveform filehere :download:`20170604050016-PG06.z <./20170604050016-PG06.z>` for practice. 
 
 .. code::
 
- st.filter("bandpass", freqmin=1.0, freqmax=15.0)
+  from obspy import read
+
+  # Read the waveform file
+  mag = read('./20170604050016-PG06.z')
+  
+  # Plot the raw waveform
+  mag.plot(starttime=start_time,endtime=start_time+80)
+
+  # Copy the waveform for further processing
+  mag_processed_low = mag.copy()
+
+  # Filter the waveform with lowpass filter
+  mag_processed_low.filter("lowpass",freq=1)
+
+  # Plot the waveform and spectrogram to see the difference
+  mag_processed_low.plot(starttime=start_time,endtime=start_time+80)
+  mag_processed_low.spectrogram(title='lowpass')
+
+You can try with different filters using the above code. 
+
+**Summary**
+
+Here is the comparison using different filters
+
+.. image:: mag_comparison1.png
+   :width: 60%
+
+.. image:: mag_comparison2.png
+   :width: 60%
+
+Then, you can decide which filter to be used in this tutorial.
 
 2.8 Waveform rotation
 *********************
@@ -468,10 +514,9 @@ Rotate and Plot the radial and transverse components.
 2.9 Seismic Phases in seismogram
 ********************************
 
-There are many seismic phases can be presented in the seismogram. For beginners, we can focus on P - and S waves. Here is the demonstration of picking P - and S waves in a teleseismic earthquakes. 
+Many seismic phases can be presented in the seismogram. For beginners, we can focus on P - and S - waves. Here is the demonstration of picking P - and S - waves in a teleseismic earthquake. 
 
 .. image:: Teleseismic_phase.png
    :width: 65%
 
 We will introduce the picking method in next section!
-
