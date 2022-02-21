@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Python ObsPy Tutorial &mdash; CUSeisTut</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> CUSeisTut
+          </a>
+              <div class="version">
+                0.0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">CUSeisTut</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro/index.html">Introduction</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Entry level</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../unix/index.html">Unix commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../GMT6/index.html">Generic Mapping Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Python ObsPy Tutorial</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Intermediate level</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Cro_Cor/index.html">Cross Correlation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced level</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../AI/index.html">Deep Learning</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendix</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index.html">List of developers</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://docs.google.com/forms/d/e/1FAIpQLScSQIcOtANjTonJDhK4KYmoA6H2lUHou9Mqz1oFCHSTd5wxhQ/viewform?usp=sf_link">Give us feedback here</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CUSeisTut</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Python ObsPy Tutorial</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/obspy/ObsPy_web.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="python-obspy-tutorial">
+<h1>Python ObsPy Tutorial<a class="headerlink" href="#python-obspy-tutorial" title="Permalink to this headline"></a></h1>
+<section id="brief-introduction">
+<h2>Brief introduction<a class="headerlink" href="#brief-introduction" title="Permalink to this headline"></a></h2>
+<section id="what-is-obspy">
+<h3>What is ObsPy?<a class="headerlink" href="#what-is-obspy" title="Permalink to this headline"></a></h3>
+<p><strong>ObsPy</strong> is an open-source project dedicated to provide a <strong>Python</strong> framework for <strong>processing seismological data</strong>. It provides parsers for common file formats, clients to access data centers and seismological signal processing routines which allow the manipulation of seismological time series (copied from ObsPy Github page).</p>
+<a class="reference internal image-reference" href="../_images/obspy_logo.png"><img alt="../_images/obspy_logo.png" src="../_images/obspy_logo.png" style="width: 50%;" /></a>
+<p>We assume that you already have some experience of using Python. If not, you are suggested to read this <a class="reference external" href="https://docs.obspy.org/tutorial/code_snippets/python_introduction.html">small, incomplete introduction to the Python programming language</a>.</p>
+</section>
+<section id="how-to-install-obspy">
+<h3>How to install ObsPy<a class="headerlink" href="#how-to-install-obspy" title="Permalink to this headline"></a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<div class="line-block">
+<div class="line">It’s strongly recommended to install ObsPy via conda.</div>
+<div class="line">We here assume you have already installed conda on your computer after finishing the previous GMT tutorial.</div>
+<div class="line">If not, please first install it (suggest installation of <a class="reference external" href="https://docs.conda.io/en/latest/miniconda.html">miniconda</a>).</div>
+</div>
+</div>
+<p>Open your terminal and run the following commands.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ conda create --name obspy
+$ conda activate obspy
+$ conda install obspy=1.2
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Exclude $ sign and start without whitespace!</p>
+</div>
+</section>
+<section id="contents-of-this-tutorial">
+<h3>Contents of this tutorial<a class="headerlink" href="#contents-of-this-tutorial" title="Permalink to this headline"></a></h3>
+<p>We will introduce how to request, read, visualize, and further process seismic data using a few basic <code class="docutils literal notranslate"><span class="pre">functions</span></code> in the ObsPy <code class="docutils literal notranslate"><span class="pre">module</span></code>. it includes:</p>
+<ol class="arabic simple">
+<li><p>UTC DateTime</p></li>
+<li><p>Basic Seismic Data Processing</p></li>
+<li><p>Theoreotical Travel Time Calculation</p></li>
+<li><p>Cross-section waveforms plot</p></li>
+</ol>
+</section>
+</section>
+<hr class="docutils" />
+<section id="utc-date-time">
+<h2>1 UTC Date Time<a class="headerlink" href="#utc-date-time" title="Permalink to this headline"></a></h2>
+<p>Now let’s introduce the UTC DateTime format.</p>
+<p>The UTC DateTime is a Coordinated Universal Time. Usually we could see that HKT (UTC+8) or BJT (UTC+8), which means that Hong Kong or Beijing time is 8 hours earlier than UTC time. We usually use UTC Datetime to present the origin time of an earthquake. Seismic time-series data like digital seismograms also use UTC Datetime to present the time of each sample.</p>
+<section id="datetime-initialization">
+<h3>1.1 DateTime Initialization<a class="headerlink" href="#datetime-initialization" title="Permalink to this headline"></a></h3>
+<p>First in the terminal, type <code class="docutils literal notranslate"><span class="pre">python</span></code> and then type <code class="docutils literal notranslate"><span class="pre">enter</span></code>:</p>
+<p><strong>Method 1</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;from obspy import UTCDateTime</span>
+<span class="go">&gt;&gt;&gt;year = 2022</span>
+<span class="go">&gt;&gt;&gt;month = 1</span>
+<span class="go">&gt;&gt;&gt;day = 7</span>
+<span class="go">&gt;&gt;&gt;hour = 17</span>
+<span class="go">&gt;&gt;&gt;minute = 45</span>
+<span class="go">&gt;&gt;&gt;second = 30.0</span>
+<span class="go">&gt;&gt;&gt;UTCDateTime(year, month, day, hour, minute, second)</span>
+<span class="go">UTCDateTime(2022, 1, 7, 17, 45, 30)</span>
+</pre></div>
+</div>
+<p><strong>Method 2</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;UTCDateTime(&quot;2012-09-07T12:15:00&quot;)</span>
+<span class="go">UTCDateTime(2012, 9, 7, 12, 15)</span>
+</pre></div>
+</div>
+<p>Description of some lines in the above example:</p>
+<p><code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">obspy</span> <span class="pre">import</span> <span class="pre">UTCDateTime</span></code> import the module.</p>
+<p><code class="docutils literal notranslate"><span class="pre">UTCDateTime</span></code> make the UTCDateTime object according to the argument.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<div class="line-block">
+<div class="line">There are many ways to produce the UTCDateTime object.</div>
+<div class="line">Method 1 &amp; 2 are examples. You can explore others <a class="reference external" href="https://docs.obspy.org/packages/autogen/obspy.core.utcdatetime.UTCDateTime.html#obspy.core.utcdatetime.UTCDateTime">here</a>.</div>
+</div>
+</div>
+</section>
+<section id="datetime-attribute-access">
+<h3>1.2 DateTime Attribute Access<a class="headerlink" href="#datetime-attribute-access" title="Permalink to this headline"></a></h3>
+<p>Now we can assign the UTCDateTime object to a variable “time”.</p>
+<p>. code:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;time = UTCDateTime(&quot;2012-09-07T12:15:00&quot;)</span>
+<span class="go">&gt;&gt;&gt;print(time)</span>
+<span class="go">2012-09-07T12:15:00.000000Z</span>
+<span class="go">&gt;&gt;&gt;print(type(time))</span>
+<span class="go">&lt;class &#39;obspy.core.utcdatetime.UTCDateTime&#39;&gt;</span>
+</pre></div>
+</div>
+<p>Then, since it’s a python class object, we can extract different time information by using UTCDateTime built-in functions/atttributes.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;print(time.year)</span>
+<span class="go">2012</span>
+<span class="go">&gt;&gt;&gt;print(time.julday)</span>
+<span class="go">251</span>
+<span class="go">&gt;&gt;&gt;print(time.timestamp)</span>
+<span class="go">1347020100.0</span>
+<span class="go">&gt;&gt;&gt;print(UTCDateTime(&quot;1970-01-01&quot;).timestamp)</span>
+<span class="go">0.0</span>
+</pre></div>
+</div>
+<p>Description of some lines in the above example:</p>
+<p><code class="docutils literal notranslate"><span class="pre">.year</span></code> only output the year of “time”.</p>
+<p><code class="docutils literal notranslate"><span class="pre">.julday</span></code> output the Julian day of “time”.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<div class="line-block">
+<div class="line">Julian Day is a continuous count of days since the beginning of the year.</div>
+<div class="line">Simple example: What is the July of 1st Feb, 2022?</div>
+<div class="line">Ans: 32</div>
+</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">.timestamp</span></code> output the UNIX timestamp format of “time”.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<div class="line-block">
+<div class="line">The UNIX timestamp format means the number of seconds since the Epoch.</div>
+<div class="line">Let’s try the following code and see the output.</div>
+<div class="line">The reference time: “1970-01-01”</div>
+</div>
+</div>
+</section>
+<section id="handling-time-differences">
+<h3>1.3 Handling time differences<a class="headerlink" href="#handling-time-differences" title="Permalink to this headline"></a></h3>
+<p>Calculate the time difference or add seconds into original “time”</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;print(time - UTCDateTime(&quot;2012-09-07&quot;))</span>
+<span class="go">44100.0</span>
+<span class="go">&gt;&gt;&gt;time2 = time + 3600</span>
+<span class="go">&gt;&gt;&gt;print(time2)</span>
+<span class="go">2012-09-07T13:15:00.000000Z</span>
+</pre></div>
+</div>
+<p>Clearly, we can see that “time2” is 1 hour (3600 seconds) later than “time”.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="basic-seismic-data-processing">
+<h2>2 Basic Seismic Data Processing<a class="headerlink" href="#basic-seismic-data-processing" title="Permalink to this headline"></a></h2>
+<section id="flow-chart">
+<h3>Flow chart<a class="headerlink" href="#flow-chart" title="Permalink to this headline"></a></h3>
+<a class="reference internal image-reference" href="../_images/flowchart.png"><img alt="../_images/flowchart.png" src="../_images/flowchart.png" style="width: 100%;" /></a>
+</section>
+<section id="choose-an-event">
+<h3>2.1 Choose an event<a class="headerlink" href="#choose-an-event" title="Permalink to this headline"></a></h3>
+<p>You can select one event in the event list.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<div class="line-block">
+<div class="line">Here is the header information of the event list</div>
+<div class="line">indx year mon day time sec_relative_to_day res lat lon dep mag</div>
+<div class="line">9393 2015 08 11 16:22:15.200000 58935.2000 1.403 -8.624 123.202 171.9 3.9</div>
+</div>
+</div>
+<p>Input the origin time, coordinates and magnitude of the selected event.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">origin_time</span> <span class="o">=</span> <span class="n">UTCDateTime</span><span class="p">(</span><span class="s2">&quot;2015-08-11T16:22:15.200000&quot;</span><span class="p">)</span>
+<span class="n">event_longitude</span> <span class="o">=</span> <span class="mf">123.202</span>
+<span class="n">event_latitude</span> <span class="o">=</span> <span class="o">-</span><span class="mf">8.624</span>
+<span class="n">event_depth</span> <span class="o">=</span> <span class="mf">171.9</span>
+<span class="n">event_magnitude</span> <span class="o">=</span> <span class="mf">3.9</span>
+</pre></div>
+</div>
+</section>
+<section id="choose-a-station">
+<h3>2.2 Choose a station<a class="headerlink" href="#choose-a-station" title="Permalink to this headline"></a></h3>
+<p>Choose one station from the station list.
+Make sure the selected station is operating during the event.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<div class="line-block">
+<div class="line">Here is the header information of the station list.</div>
+<div class="line">Network | Station | Location | Channel | Latitude | Longitude | Elevation | Depth | Azimuth | Dip |   SensorDescription | Scale | ScaleFreq <a href="#id1"><span class="problematic" id="id2">|</span></a>ScaleUnits | SampleRate | StartTime | EndTime</div>
+</div>
+<div class="line-block">
+<div class="line">YS|BAOP||BHZ|-8.4882|123.2696|67.0|0.0|0.0|-90.0|Nanometrics Trillium 120 Sec Response/Taurus Stand|1.19642E9|0.3|m/s|50.0|2014-10-31T00:00:00|2016-12-31T23:59:59</div>
+</div>
+</div>
+</section>
+<section id="get-waveforms">
+<h3>2.3 Get waveforms<a class="headerlink" href="#get-waveforms" title="Permalink to this headline"></a></h3>
+<p>Import the web service providers and input station information.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">obspy.clients.fdsn</span> <span class="kn">import</span> <span class="n">Client</span>
+
+<span class="c1"># IRIS is one of those providers.</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="s1">&#39;IRIS&#39;</span><span class="p">)</span>
+
+<span class="c1"># Input station informations</span>
+<span class="c1"># network</span>
+<span class="n">net</span> <span class="o">=</span> <span class="s1">&#39;YS&#39;</span>
+<span class="c1"># station</span>
+<span class="n">sta</span> <span class="o">=</span> <span class="s1">&#39;BAOP&#39;</span>
+<span class="c1"># location</span>
+<span class="n">loc</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+<span class="c1"># channel</span>
+<span class="n">cha</span> <span class="o">=</span> <span class="s1">&#39;BHZ&#39;</span>
+
+<span class="c1"># starttime</span>
+<span class="n">stt</span> <span class="o">=</span> <span class="n">origin_time</span>
+<span class="c1"># endtime</span>
+<span class="n">edt</span> <span class="o">=</span> <span class="n">origin_time</span> <span class="o">+</span> <span class="mi">120</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<div class="line-block">
+<div class="line">FDSN web services for data access to different web service providers.</div>
+<div class="line">IRIS is one of the web service providers which is commonly used.</div>
+</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Client()</span></code> to initialize a client object.</p>
+<p>Get the waveforms from client</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">st</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_waveforms</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">sta</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="n">cha</span><span class="p">,</span> <span class="n">stt</span><span class="p">,</span> <span class="n">edt</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">client.get_waveforms()</span></code> to get the waveform by the corresponding argument from clients.</p>
+</section>
+<section id="meta-data">
+<h3>2.4 Meta data<a class="headerlink" href="#meta-data" title="Permalink to this headline"></a></h3>
+<p>We can print the meta data inside the stream.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">st</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">stats</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/metadata.png"><img alt="../_images/metadata.png" src="../_images/metadata.png" style="width: 80%;" /></a>
+<p><code class="docutils literal notranslate"><span class="pre">.stats</span></code> contains all header information of a Trace object.</p>
+<p>There are some default attributes.</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">1. <code class="docutils literal notranslate"><span class="pre">sampling</span> <span class="pre">rate</span></code> : Sampling rate in hertz.</div>
+</div>
+<div class="line-block">
+<div class="line">2. <code class="docutils literal notranslate"><span class="pre">network</span></code> : Network code</div>
+</div>
+<div class="line-block">
+<div class="line">3. <code class="docutils literal notranslate"><span class="pre">station</span></code> : Station code</div>
+</div>
+<div class="line-block">
+<div class="line">4. <code class="docutils literal notranslate"><span class="pre">channel</span></code> : Channel code</div>
+</div>
+<div class="line-block">
+<div class="line">5. <code class="docutils literal notranslate"><span class="pre">starttime</span></code> : UTCDateTime of the first data sample</div>
+</div>
+<div class="line-block">
+<div class="line">6. <code class="docutils literal notranslate"><span class="pre">endtime</span></code> : UTCDateTime of the last data sample</div>
+</div>
+<div class="line-block">
+<div class="line">7. <code class="docutils literal notranslate"><span class="pre">gcarc</span></code> : Epicentral distance</div>
+</div>
+<div class="line-block">
+<div class="line">8. <code class="docutils literal notranslate"><span class="pre">baz</span></code> : Back azimuth</div>
+</div>
+</div></blockquote>
+<p>You can print the corresponding attributes by calling them individually.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">st</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">sampling_rate</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>For <code class="docutils literal notranslate"><span class="pre">gcarc</span></code> and <code class="docutils literal notranslate"><span class="pre">bac</span></code> , they are available in sac filed. You can print them by:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">st</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">sac</span><span class="o">.</span><span class="n">gcarc</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>If the header value is empty, you can assign value into the header.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">st</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">network</span> <span class="o">=</span> <span class="s1">&#39;IU&#39;</span>
+</pre></div>
+</div>
+</section>
+<section id="plot-the-waveforms">
+<h3>2.5 Plot the waveforms<a class="headerlink" href="#plot-the-waveforms" title="Permalink to this headline"></a></h3>
+<p>Here we plot the waveforms without any preprocessing procedure.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">st</span><span class="o">.</span><span class="n">plot</span><span class="p">();</span>
+<span class="n">st</span><span class="o">.</span><span class="n">spectrogram</span><span class="p">();</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/plot_raw.png"><img alt="../_images/plot_raw.png" src="../_images/plot_raw.png" style="width: 80%;" /></a>
+<a class="reference internal image-reference" href="../_images/spectrogram_raw.png"><img alt="../_images/spectrogram_raw.png" src="../_images/spectrogram_raw.png" style="width: 80%;" /></a>
+</section>
+<section id="detrend-data">
+<h3>2.6 Detrend Data<a class="headerlink" href="#detrend-data" title="Permalink to this headline"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">detrend()</span></code> to remove a trend from the trace.</p>
+<p>There are many methods listed for detrend function.</p>
+<p>To better visualise and demonstrate the effect of detrend, we will provide you some examples.
+Please download the following waveform data.</p>
+<p><strong>2.6.1 Remove Mean</strong></p>
+<p>You can download the waveform file here. <a class="reference download internal" download="" href="../_downloads/ca8189fd374c579ff8d627ff2e8c32ad/PA01.bhy"><code class="xref download docutils literal notranslate"><span class="pre">PA01.bhy</span></code></a>
+We first read the downloaded waveform file.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">obspy</span> <span class="kn">import</span> <span class="n">read</span>
+<span class="n">rmean_raw</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="s1">&#39;PA01.bhy&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">read</span></code> Read waveform files into an ObsPy Stream object.</p>
+<p>Plot the waveform without any processing and copy the stream.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rmean_raw</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="n">rmean_processed</span> <span class="o">=</span> <span class="n">rmean_raw</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">copy()</span></code> Copy the stream</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<div class="line-block">
+<div class="line">If you want to see the difference before and after the processing of data. It is better to copy the stream as the processing will overwrite the original waveforms.</div>
+</div>
+</div>
+<p>We detrend the waveforms and plot it again.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rmean_processed</span><span class="o">.</span><span class="n">detrend</span><span class="p">(</span><span class="s2">&quot;demean&quot;</span><span class="p">)</span>
+<span class="n">rmean_processed</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Compare the raw waveforms and processed waveforms.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">tr</span> <span class="ow">in</span> <span class="n">rmean</span><span class="p">:</span>
+    <span class="n">data1</span> <span class="o">=</span> <span class="n">tr</span><span class="o">.</span><span class="n">data</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data1</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;raw&#39;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">tr</span> <span class="ow">in</span> <span class="n">rmean_test</span><span class="p">:</span>
+    <span class="n">data2</span> <span class="o">=</span> <span class="n">tr</span><span class="o">.</span><span class="n">data</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data2</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;removed mean&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Here is the result.</p>
+<a class="reference internal image-reference" href="../_images/rmean.png"><img alt="../_images/rmean.png" src="../_images/rmean.png" style="width: 80%;" /></a>
+<p><strong>2.6.2 Remove Linear trend</strong></p>
+<p>You can download the waveform file here. <a class="reference download internal" download="" href="../_downloads/eed756c44bc9c6ab4d804daf60b96810/LLT.E.Vel.BF.SAC"><code class="xref download docutils literal notranslate"><span class="pre">LLT.E.Vel.BF.SAC</span></code></a>
+The procedures are the same with remove mean.</p>
+<p><code class="docutils literal notranslate"><span class="pre">.detrend(&quot;linear&quot;)</span></code> Remove linear trend</p>
+<a class="reference internal image-reference" href="../_images/linear_shift.png"><img alt="../_images/linear_shift.png" src="../_images/linear_shift.png" style="width: 80%;" /></a>
+<p>After detrend, you can plot the waveform plot and spectrogram again.
+Compare the results with the previous plots.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">st</span><span class="o">.</span><span class="n">detrend</span><span class="p">(</span><span class="s2">&quot;linear&quot;</span><span class="p">)</span>
+<span class="n">st</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/plot_detrend.png"><img alt="../_images/plot_detrend.png" src="../_images/plot_detrend.png" style="width: 80%;" /></a>
+<a class="reference internal image-reference" href="../_images/spectrogram_detrend.png"><img alt="../_images/spectrogram_detrend.png" src="../_images/spectrogram_detrend.png" style="width: 80%;" /></a>
+</section>
+<section id="filter-data">
+<h3>2.7 Filter Data<a class="headerlink" href="#filter-data" title="Permalink to this headline"></a></h3>
+<p>You can apply different filters to filter the data. For example, “bandpass”, “highness” and “lowpass”.</p>
+<p>To further understand the effects of different filter, you can download the waveform filehere <a class="reference download internal" download="" href="../_downloads/881e2827993b1aa8f4bd514be27cdb13/20170604050016-PG06.z"><code class="xref download docutils literal notranslate"><span class="pre">20170604050016-PG06.z</span></code></a> for practice.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">obspy</span> <span class="kn">import</span> <span class="n">read</span>
+
+<span class="c1"># Read the waveform file</span>
+<span class="n">mag</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="s1">&#39;./20170604050016-PG06.z&#39;</span><span class="p">)</span>
+
+<span class="c1"># Plot the raw waveform</span>
+<span class="n">mag</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">starttime</span><span class="o">=</span><span class="n">start_time</span><span class="p">,</span><span class="n">endtime</span><span class="o">=</span><span class="n">start_time</span><span class="o">+</span><span class="mi">80</span><span class="p">)</span>
+
+<span class="c1"># Copy the waveform for further processing</span>
+<span class="n">mag_processed_low</span> <span class="o">=</span> <span class="n">mag</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+<span class="c1"># Filter the waveform with lowpass filter</span>
+<span class="n">mag_processed_low</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="s2">&quot;lowpass&quot;</span><span class="p">,</span><span class="n">freq</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Plot the waveform and spectrogram to see the difference</span>
+<span class="n">mag_processed_low</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">starttime</span><span class="o">=</span><span class="n">start_time</span><span class="p">,</span><span class="n">endtime</span><span class="o">=</span><span class="n">start_time</span><span class="o">+</span><span class="mi">80</span><span class="p">)</span>
+<span class="n">mag_processed_low</span><span class="o">.</span><span class="n">spectrogram</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;lowpass&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You can try with different filters using the above code.</p>
+<p><strong>Summary</strong></p>
+<p>Here is the comparison using different filters</p>
+<a class="reference internal image-reference" href="../_images/mag_comparison1.png"><img alt="../_images/mag_comparison1.png" src="../_images/mag_comparison1.png" style="width: 60%;" /></a>
+<a class="reference internal image-reference" href="../_images/mag_comparison2.png"><img alt="../_images/mag_comparison2.png" src="../_images/mag_comparison2.png" style="width: 60%;" /></a>
+<p>Then, you can decide which filter to be used in this tutorial.</p>
+</section>
+<section id="waveform-rotation">
+<h3>2.8 Waveform rotation<a class="headerlink" href="#waveform-rotation" title="Permalink to this headline"></a></h3>
+<p>We can rotate the North - East components of a seismogram to radial and transverse components.</p>
+<p>Get the waveform of the North - East components</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Input station informations</span>
+<span class="c1"># network</span>
+<span class="n">net</span> <span class="o">=</span> <span class="s1">&#39;YS&#39;</span>
+<span class="c1"># station</span>
+<span class="n">sta</span> <span class="o">=</span> <span class="s1">&#39;BAOP&#39;</span>
+<span class="c1"># location</span>
+<span class="n">loc</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+<span class="c1"># channel</span>
+<span class="n">cha</span> <span class="o">=</span> <span class="s1">&#39;BH*&#39;</span>
+
+<span class="c1"># starttime</span>
+<span class="n">stt</span> <span class="o">=</span> <span class="n">origin_time</span>
+<span class="c1"># endtime</span>
+<span class="n">edt</span> <span class="o">=</span> <span class="n">origin_time</span> <span class="o">+</span> <span class="mi">120</span>
+<span class="n">st_N</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_waveforms</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">sta</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="s1">&#39;BH1&#39;</span><span class="p">,</span> <span class="n">stt</span><span class="p">,</span> <span class="n">edt</span><span class="p">)</span>
+<span class="n">st_E</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_waveforms</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">sta</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="s1">&#39;BH2&#39;</span><span class="p">,</span> <span class="n">stt</span><span class="p">,</span> <span class="n">edt</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Get the data of the North - East components.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">tr1</span> <span class="ow">in</span> <span class="n">st_N</span><span class="p">:</span>
+  <span class="n">north</span> <span class="o">=</span> <span class="n">tr1</span><span class="o">.</span><span class="n">data</span>
+<span class="k">for</span> <span class="n">tr2</span> <span class="ow">in</span> <span class="n">st_E</span><span class="p">:</span>
+  <span class="n">east</span> <span class="o">=</span> <span class="n">tr2</span><span class="o">.</span><span class="n">data</span>
+</pre></div>
+</div>
+<p>Calculate the back azimuth.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">obspy.geodetics</span> <span class="kn">import</span> <span class="n">gps2dist_azimuth</span>
+<span class="c1"># Receiver = station received the signals</span>
+<span class="n">sta_lat</span> <span class="o">=</span> <span class="o">-</span><span class="mf">8.4882</span>
+<span class="n">sta_lon</span> <span class="o">=</span> <span class="mf">123.2696</span>
+
+<span class="c1"># Input the information of the source(earthquake)</span>
+<span class="n">eq_lat</span> <span class="o">=</span> <span class="o">-</span><span class="mf">8.624</span>
+<span class="n">eq_lon</span> <span class="o">=</span> <span class="mf">123.202</span>
+<span class="n">eq_dep</span> <span class="o">=</span> <span class="mf">171.9</span>
+
+<span class="n">back_azimuth_st2</span><span class="o">=</span><span class="n">gps2dist_azimuth</span><span class="p">(</span><span class="n">eq_lat</span><span class="p">,</span> <span class="n">eq_lon</span><span class="p">,</span><span class="n">sta_lat</span><span class="p">,</span> <span class="n">sta_lon</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mf">6378137.0</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="mf">0.0033528106647474805</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">gps2dist_azimuth</span></code> calculate the back azimuth using the coordinates of the source and receiver</p>
+<p>Rotate and Plot the radial and transverse components.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Radial</span><span class="p">,</span> <span class="n">Transverse</span> <span class="o">=</span> <span class="n">rotate</span><span class="o">.</span><span class="n">rotate_ne_rt</span><span class="p">(</span><span class="n">north</span><span class="p">,</span><span class="n">east</span><span class="p">,</span><span class="n">back_azimuth_st2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Radial</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Transverse</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">rotate.rotate_ne_rt</span></code> rotate waveforms from North - East components to radial and transverse component</p>
+<a class="reference internal image-reference" href="../_images/rotate_radial.png"><img alt="../_images/rotate_radial.png" src="../_images/rotate_radial.png" style="width: 55%;" /></a>
+<a class="reference internal image-reference" href="../_images/rotate_transverse.png"><img alt="../_images/rotate_transverse.png" src="../_images/rotate_transverse.png" style="width: 55%;" /></a>
+</section>
+<section id="seismic-phases-in-seismogram">
+<h3>2.9 Seismic Phases in seismogram<a class="headerlink" href="#seismic-phases-in-seismogram" title="Permalink to this headline"></a></h3>
+<p>Many seismic phases can be presented in the seismogram. For beginners, we can focus on P - and S - waves. Here is the demonstration of picking P - and S - waves in a teleseismic earthquake.</p>
+<a class="reference internal image-reference" href="../_images/Teleseismic_phase.png"><img alt="../_images/Teleseismic_phase.png" src="../_images/Teleseismic_phase.png" style="width: 65%;" /></a>
+<p>We will introduce the picking method in next section!</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021-2022, CUSeisTut team.
+      <span class="lastupdated">Last updated on 2022-02-21.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(false);
+      });
+  </script> 
+
+</body>
+</html>
