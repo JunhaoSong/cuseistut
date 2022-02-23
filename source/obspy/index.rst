@@ -520,3 +520,320 @@ Many seismic phases can be presented in the seismogram. For beginners, we can fo
    :width: 65%
 
 We will introduce the picking method in next section!
+
+----------------------------
+
+3 TauP
+----------------------------
+
+TauP is a toolkit to calculate the seismic travel time calculator. It handles many types of velocity models and calculate times for virtually any seismic phase with a phase parser. 
+
+.. note::
+
+ Seismic velocity model is the velocity profile of P and S waves along depth. IASP91 model is commonly used.
+
+3.1 Source Configuration
+************************
+
+Input the information of the source (earthquake)
+
+.. code::
+
+ eq_lat = -8.624
+ eq_lon = 123.202
+ eq_dep = 171.9
+
+3.2 Receiver Configuration
+**************************
+
+Input the information of the receiver (station)
+
+.. code::
+
+ sta_lat = -8.4882
+ sta_lon = 123.2696
+
+3.3 Travel Time Calculation
+***************************
+
+There are 2 methods to calculate the travel time.
+
+Method 1
+********
+
+.. code::
+
+ from obspy.geodetics import locations2degrees
+
+ for tr in st: 
+     # calculate the distance in degree between the source and receiver
+     deg_distance = locations2degrees(sta_lat, sta_lon,eq_lat, eq_lon)
+     print(deg_distance)
+
+    
+     # Get the arrivals using the model configured
+     arrivals = model.get_travel_times(source_depth_in_km=eq_dep, distance_in_degree=deg_distance, )
+
+``location2degrees`` calculate the great circle distance between 2 points on a spherical earth
+
+``model.get_travel_times`` get the travel times of the phases
+
+Method 2
+********
+
+.. code::
+ 
+ p_arrival,s_arrival = model.get_travel_times_geo(source_depth_in_km=eq_dep,
+                                         source_latitude_in_deg=eq_lat,
+                                         source_longitude_in_deg=eq_lon,
+                                         receiver_latitude_in_deg=float(sta_lat),
+                                         receiver_longitude_in_deg=float(sta_lon),
+                                         phase_list=["p","s"])
+
+``model.get_travel_times_geo`` get the travel times of the phases given geographical data
+
+Then you can get the travel time of P - and S waves.
+
+.. code::
+
+ print(p_arrival, "\n", s_arrival)
+
+ #Output P - and S waves arrival time(s)
+ print(p_arrival.time, s_arrival.time)
+
+3.4 Visualise the result
+************************
+
+Plot the theoretical travel time onto the waveform.
+
+.. code::
+
+ # Import matplotlib module
+ import matplotlib.pyplot as plt
+ from matplotlib.dates import date2num
+ 
+ # Make figure
+ fig = plt.figure()
+ st.plot(fig=fig)
+ 
+ # Axis of the plot 
+ ax = fig.axes[0]
+ # Add vertical line across the axes
+ ax.axvline(date2num((origin_time+p_arrival.time).datetime),lw=2)
+ ax.axvline(date2num((origin_time+s_arrival.time).datetime),lw=2,color='r')
+ plt.show()
+ fig.savefig('taup_single_waveform.png',dpi=500)
+
+.. image:: taup_waveform.png
+   :width: 60%
+
+
+----------------------------
+
+4 Section Plot
+----------------------------
+
+Plot a record section.
+
+4.1 Get the waveform data with more than 1 station
+**************************************************
+
+For our example, station 'BAOP', 'HADA', 'SINA' 'BKOR' and 'ALRB' are located near the epicentre of the earthquake.
+It is expected that these 5 stations can record the event well. 
+
+.. image:: section_station.png
+   :width: 60%
+
+.. code::
+ 
+ # Set up a list for bulk request
+ bulk = [('YS', 'BAOP', '', 'BHZ', origin_time, origin_time+120), 
+         ('YS', 'HADA', '', 'BHZ', origin_time, origin_time+120), 
+         ('YS', 'SINA', '', 'BHZ', origin_time, origin_time+120), 
+         ('YS', 'BKOR', '', 'BHZ', origin_time, origin_time+120), 
+         ('YS', 'ALRB', '', 'BHZ', origin_time, origin_time+120)]
+
+ st = client.get_waveforms_bulk(bulk)
+ print(st)
+
+
+``get_waveforms_bulk`` send a bulk request for waveforms to the server
+
+
+4.2 Calculate the great circle distance from stations to earthquake
+*******************************************************************
+
+.. code::
+
+ # Input the coordinates of stations 
+ ALRB_loc = [-8.2194, 124.4115]
+ BAOP_loc = [-8.4882, 123.2696]
+ BKOR_loc = [-8.4868, 122.5509]
+ HADA_loc = [-8.3722, 123.5454]
+ SINA_loc = [-8.1838, 122.9124]
+
+ # Loop, get the station coordinates and calculate the distance 
+ for tr in st:
+     sta = tr.stats.station
+     if sta == 'ALRB':
+         sta_lat = ALRB_loc[0]
+         sta_lon = ALRB_loc[1]
+     if sta == 'BAOP':
+         sta_lat = BAOP_loc[0]
+         sta_lon = BAOP_loc[1]
+     if sta =='BKOR':
+         sta_lat = BKOR_loc[0]
+         sta_lon = BKOR_loc[1]
+     if sta =='HADA':
+         sta_lat = HADA_loc[0]
+         sta_lon = HADA_loc[1]
+     if sta =='SINA':
+         sta_lat = SINA_loc[0]
+         sta_lon = SINA_loc[1]
+    
+     tr.stats.distance = gps2dist_azimuth(sta_lat, sta_lon,eq_lat, eq_lon)[0]
+
+ # To check the result, you can print the distance with stations.
+ for tr in st:
+    print(tr.stats.station, tr.stats.distance)
+
+.. note::
+ 
+ | As the mseed file does not contain the location of station, we have to get the information from the station list.
+ | We also have to save the calculated distance into the metadata, as the value is empty initially. 
+
+4.3 TauP travel time
+********************
+
+.. code::
+
+ from obspy import taup
+ # velocity model configuration 
+ model = taup.TauPyModel(model="iasp91")
+
+ p_time = []
+ s_time = []
+ sta = []
+ for tr in st:
+     # Get the station location for the input 
+     station_coordinate = str(tr.stats.station)+"_loc"
+     
+     p_arrival ,s_arrival = model.get_travel_times_geo(source_depth_in_km=eq_dep,
+						source_latitude_in_deg=eq_lat,
+						source_longitude_in_deg=eq_lon,
+						receiver_latitude_in_deg=float(eval(station_coordinate)[0]),
+						receiver_longitude_in_deg=float(eval(station_coordinate)[1]),
+						phase_list=["p","s"])
+     print(p_arrival, s_arrival)
+     # Append lists by stations, p & s arrivals 
+     sta.append(tr.stats.station)
+     p_time.append(p_arrival.time)
+     s_time.append(s_arrival.time)
+
+
+
+4.4 Output the TauP result as text file for further processing
+**************************************************************
+
+As we are handling the data with more than 1 station, it is better for us to save the TauP result in a txt file. 
+
+.. code::
+
+ # Make a table using pandas and save it to the text file 
+ import pandas as pd
+ # List to pandas.dataframe 
+ Station = pd.DataFrame(sta)
+ P_arrival = pd.DataFrame(p_time)
+ S_arrival = pd.DataFrame(s_time)
+
+ # Combine the column together and make a table 
+ tauP_result = pd.concat([Station, P_arrival, S_arrival], axis=1)
+
+ # Output the table as a text file
+ tauP_result.to_csv('taup_result.txt',sep=' ', index=False, header=False)
+ print(tauP_result[0])
+
+
+.. note:: 
+
+ | Pandas is a python library which is used to analyse data.
+
+``pd.DataFrame`` Data structure
+
+``pd.concat`` concatenate pandas objects along a particular axis with optional set logic along the other axes
+
+``pd.to_csv`` write object to a comma-separated values (csv) file
+
+
+4.5 Trim and filter data
+************************
+
+.. code::
+
+ # Trim the waveform data - shorter time range
+ st.trim(origin_time, origin_time + p_time[0]+150)
+ # Filter the waveform 
+ st.detrend('linear')
+ st.filter('bandpass', freqmin=2, freqmax=15)
+
+4.6 Section Plot
+****************
+
+You can first use the plot function in obspy.
+
+.. code::
+
+ fig = plt.figure(figsize=(8,6))
+ # Plot the section plot 
+
+ st.plot(type='section', recordstart=0, recordlength=60, time_down=True, linewidth=.5, grid_linewidth=.5, show=False, fig=fig)
+
+.. image: section.png
+   :width: 70%
+
+Then you can add more components in the plot. For example, station name, calculated P - and S wave arrival time.
+
+.. code::
+
+ # Add more components onto the section plot 
+ import numpy as np
+
+ ax = fig.axes[0]
+ # Add title 
+ ax.set_title('Waveform cross-section plot')
+
+ # Add station names next to the waveforms 
+ for tr in st:
+     ax.text((tr.stats.distance / 1e3)+1, 1, tr.stats.station, rotation=270,va="top", ha="center", zorder=10)
+
+ # Load the tauP output text file 
+ ps_pick = np.loadtxt('taup_result.txt', dtype=str)
+ # Mark the P & S arrival onto the waveform plot 
+
+ for tr in st:
+     # Find the P & S arrivals by stations 
+     sta = tr.stats.station
+     print(ps_pick[ps_pick[:,0] == sta,1 ])
+    
+     # Y-axis
+     p_pick = float(ps_pick[ps_pick[:,0] == sta,1 ])
+     s_pick = float(ps_pick[ps_pick[:,0] == sta,2 ])
+     # Offset (x-axis) in km 
+     offset = tr.stats.distance/1e3
+     # Make the scatter plot 
+     ax.scatter(offset,p_pick, c ='b', marker = '_',s=150)
+     ax.scatter(offset,s_pick, c ='r', marker = '_',s=150) 
+  
+ # plot again 
+
+ st.plot(type='section', recordstart=0, recordlength=60, time_down=True, linewidth=.5, grid_linewidth=.5, show=False, fig=fig)
+
+ # Save the figure 
+ # dpi = how many pixels the figure comprises 
+ fig.savefig('section_plot.pdf',dpi=500)
+
+.. image:: section_taup.png
+   :width: 70%
+
+The section plot is just a recap of the previous section. Let's have a try!!
+

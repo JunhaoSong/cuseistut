@@ -75,6 +75,24 @@
 <li class="toctree-l3"><a class="reference internal" href="#seismic-phases-in-seismogram">2.9 Seismic Phases in seismogram</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#taup">3 TauP</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#source-configuration">3.1 Source Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#receiver-configuration">3.2 Receiver Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#travel-time-calculation">3.3 Travel Time Calculation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#method-1">Method 1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#method-2">Method 2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#visualise-the-result">3.4 Visualise the result</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#section-plot">4 Section Plot</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#get-the-waveform-data-with-more-than-1-station">4.1 Get the waveform data with more than 1 station</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#calculate-the-great-circle-distance-from-stations-to-earthquake">4.2 Calculate the great circle distance from stations to earthquake</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#taup-travel-time">4.3 TauP travel time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#output-the-taup-result-as-text-file-for-further-processing">4.4 Output the TauP result as text file for further processing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#trim-and-filter-data">4.5 Trim and filter data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id1">4.6 Section Plot</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -546,6 +564,276 @@ Compare the results with the previous plots.</p>
 <p>We will introduce the picking method in next section!</p>
 </section>
 </section>
+<hr class="docutils" />
+<section id="taup">
+<h2>3 TauP<a class="headerlink" href="#taup" title="Permalink to this headline"></a></h2>
+<p>TauP is a toolkit to calculate the seismic travel time calculator. It handles many types of velocity models and calculate times for virtually any seismic phase with a phase parser.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Seismic velocity model is the velocity profile of P and S waves along depth. IASP91 model is commonly used.</p>
+</div>
+<section id="source-configuration">
+<h3>3.1 Source Configuration<a class="headerlink" href="#source-configuration" title="Permalink to this headline"></a></h3>
+<p>Input the information of the source (earthquake)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">eq_lat</span> <span class="o">=</span> <span class="o">-</span><span class="mf">8.624</span>
+<span class="n">eq_lon</span> <span class="o">=</span> <span class="mf">123.202</span>
+<span class="n">eq_dep</span> <span class="o">=</span> <span class="mf">171.9</span>
+</pre></div>
+</div>
+</section>
+<section id="receiver-configuration">
+<h3>3.2 Receiver Configuration<a class="headerlink" href="#receiver-configuration" title="Permalink to this headline"></a></h3>
+<p>Input the information of the receiver (station)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sta_lat</span> <span class="o">=</span> <span class="o">-</span><span class="mf">8.4882</span>
+<span class="n">sta_lon</span> <span class="o">=</span> <span class="mf">123.2696</span>
+</pre></div>
+</div>
+</section>
+<section id="travel-time-calculation">
+<h3>3.3 Travel Time Calculation<a class="headerlink" href="#travel-time-calculation" title="Permalink to this headline"></a></h3>
+<p>There are 2 methods to calculate the travel time.</p>
+</section>
+<section id="method-1">
+<h3>Method 1<a class="headerlink" href="#method-1" title="Permalink to this headline"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">obspy.geodetics</span> <span class="kn">import</span> <span class="n">locations2degrees</span>
+
+<span class="k">for</span> <span class="n">tr</span> <span class="ow">in</span> <span class="n">st</span><span class="p">:</span>
+    <span class="c1"># calculate the distance in degree between the source and receiver</span>
+    <span class="n">deg_distance</span> <span class="o">=</span> <span class="n">locations2degrees</span><span class="p">(</span><span class="n">sta_lat</span><span class="p">,</span> <span class="n">sta_lon</span><span class="p">,</span><span class="n">eq_lat</span><span class="p">,</span> <span class="n">eq_lon</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">deg_distance</span><span class="p">)</span>
+
+
+    <span class="c1"># Get the arrivals using the model configured</span>
+    <span class="n">arrivals</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_travel_times</span><span class="p">(</span><span class="n">source_depth_in_km</span><span class="o">=</span><span class="n">eq_dep</span><span class="p">,</span> <span class="n">distance_in_degree</span><span class="o">=</span><span class="n">deg_distance</span><span class="p">,</span> <span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">location2degrees</span></code> calculate the great circle distance between 2 points on a spherical earth</p>
+<p><code class="docutils literal notranslate"><span class="pre">model.get_travel_times</span></code> get the travel times of the phases</p>
+</section>
+<section id="method-2">
+<h3>Method 2<a class="headerlink" href="#method-2" title="Permalink to this headline"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">p_arrival</span><span class="p">,</span><span class="n">s_arrival</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_travel_times_geo</span><span class="p">(</span><span class="n">source_depth_in_km</span><span class="o">=</span><span class="n">eq_dep</span><span class="p">,</span>
+                                        <span class="n">source_latitude_in_deg</span><span class="o">=</span><span class="n">eq_lat</span><span class="p">,</span>
+                                        <span class="n">source_longitude_in_deg</span><span class="o">=</span><span class="n">eq_lon</span><span class="p">,</span>
+                                        <span class="n">receiver_latitude_in_deg</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">sta_lat</span><span class="p">),</span>
+                                        <span class="n">receiver_longitude_in_deg</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">sta_lon</span><span class="p">),</span>
+                                        <span class="n">phase_list</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;p&quot;</span><span class="p">,</span><span class="s2">&quot;s&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">model.get_travel_times_geo</span></code> get the travel times of the phases given geographical data</p>
+<p>Then you can get the travel time of P - and S waves.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">p_arrival</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">s_arrival</span><span class="p">)</span>
+
+<span class="c1">#Output P - and S waves arrival time(s)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">p_arrival</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">s_arrival</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="visualise-the-result">
+<h3>3.4 Visualise the result<a class="headerlink" href="#visualise-the-result" title="Permalink to this headline"></a></h3>
+<p>Plot the theoretical travel time onto the waveform.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import matplotlib module</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">matplotlib.dates</span> <span class="kn">import</span> <span class="n">date2num</span>
+
+<span class="c1"># Make figure</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">st</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">)</span>
+
+<span class="c1"># Axis of the plot</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="c1"># Add vertical line across the axes</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">date2num</span><span class="p">((</span><span class="n">origin_time</span><span class="o">+</span><span class="n">p_arrival</span><span class="o">.</span><span class="n">time</span><span class="p">)</span><span class="o">.</span><span class="n">datetime</span><span class="p">),</span><span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">date2num</span><span class="p">((</span><span class="n">origin_time</span><span class="o">+</span><span class="n">s_arrival</span><span class="o">.</span><span class="n">time</span><span class="p">)</span><span class="o">.</span><span class="n">datetime</span><span class="p">),</span><span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;taup_single_waveform.png&#39;</span><span class="p">,</span><span class="n">dpi</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/taup_waveform.png"><img alt="../_images/taup_waveform.png" src="../_images/taup_waveform.png" style="width: 60%;" /></a>
+</section>
+</section>
+<hr class="docutils" />
+<section id="section-plot">
+<h2>4 Section Plot<a class="headerlink" href="#section-plot" title="Permalink to this headline"></a></h2>
+<p>Plot a record section.</p>
+<section id="get-the-waveform-data-with-more-than-1-station">
+<h3>4.1 Get the waveform data with more than 1 station<a class="headerlink" href="#get-the-waveform-data-with-more-than-1-station" title="Permalink to this headline"></a></h3>
+<p>For our example, station ‘BAOP’, ‘HADA’, ‘SINA’ ‘BKOR’ and ‘ALRB’ are located near the epicentre of the earthquake.
+It is expected that these 5 stations can record the event well.</p>
+<a class="reference internal image-reference" href="../_images/section_station.png"><img alt="../_images/section_station.png" src="../_images/section_station.png" style="width: 60%;" /></a>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set up a list for bulk request</span>
+<span class="n">bulk</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;YS&#39;</span><span class="p">,</span> <span class="s1">&#39;BAOP&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;BHZ&#39;</span><span class="p">,</span> <span class="n">origin_time</span><span class="p">,</span> <span class="n">origin_time</span><span class="o">+</span><span class="mi">120</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;YS&#39;</span><span class="p">,</span> <span class="s1">&#39;HADA&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;BHZ&#39;</span><span class="p">,</span> <span class="n">origin_time</span><span class="p">,</span> <span class="n">origin_time</span><span class="o">+</span><span class="mi">120</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;YS&#39;</span><span class="p">,</span> <span class="s1">&#39;SINA&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;BHZ&#39;</span><span class="p">,</span> <span class="n">origin_time</span><span class="p">,</span> <span class="n">origin_time</span><span class="o">+</span><span class="mi">120</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;YS&#39;</span><span class="p">,</span> <span class="s1">&#39;BKOR&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;BHZ&#39;</span><span class="p">,</span> <span class="n">origin_time</span><span class="p">,</span> <span class="n">origin_time</span><span class="o">+</span><span class="mi">120</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;YS&#39;</span><span class="p">,</span> <span class="s1">&#39;ALRB&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;BHZ&#39;</span><span class="p">,</span> <span class="n">origin_time</span><span class="p">,</span> <span class="n">origin_time</span><span class="o">+</span><span class="mi">120</span><span class="p">)]</span>
+
+<span class="n">st</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_waveforms_bulk</span><span class="p">(</span><span class="n">bulk</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">get_waveforms_bulk</span></code> send a bulk request for waveforms to the server</p>
+</section>
+<section id="calculate-the-great-circle-distance-from-stations-to-earthquake">
+<h3>4.2 Calculate the great circle distance from stations to earthquake<a class="headerlink" href="#calculate-the-great-circle-distance-from-stations-to-earthquake" title="Permalink to this headline"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Input the coordinates of stations</span>
+<span class="n">ALRB_loc</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">8.2194</span><span class="p">,</span> <span class="mf">124.4115</span><span class="p">]</span>
+<span class="n">BAOP_loc</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">8.4882</span><span class="p">,</span> <span class="mf">123.2696</span><span class="p">]</span>
+<span class="n">BKOR_loc</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">8.4868</span><span class="p">,</span> <span class="mf">122.5509</span><span class="p">]</span>
+<span class="n">HADA_loc</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">8.3722</span><span class="p">,</span> <span class="mf">123.5454</span><span class="p">]</span>
+<span class="n">SINA_loc</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">8.1838</span><span class="p">,</span> <span class="mf">122.9124</span><span class="p">]</span>
+
+<span class="c1"># Loop, get the station coordinates and calculate the distance</span>
+<span class="k">for</span> <span class="n">tr</span> <span class="ow">in</span> <span class="n">st</span><span class="p">:</span>
+    <span class="n">sta</span> <span class="o">=</span> <span class="n">tr</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">station</span>
+    <span class="k">if</span> <span class="n">sta</span> <span class="o">==</span> <span class="s1">&#39;ALRB&#39;</span><span class="p">:</span>
+        <span class="n">sta_lat</span> <span class="o">=</span> <span class="n">ALRB_loc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">sta_lon</span> <span class="o">=</span> <span class="n">ALRB_loc</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">sta</span> <span class="o">==</span> <span class="s1">&#39;BAOP&#39;</span><span class="p">:</span>
+        <span class="n">sta_lat</span> <span class="o">=</span> <span class="n">BAOP_loc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">sta_lon</span> <span class="o">=</span> <span class="n">BAOP_loc</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">sta</span> <span class="o">==</span><span class="s1">&#39;BKOR&#39;</span><span class="p">:</span>
+        <span class="n">sta_lat</span> <span class="o">=</span> <span class="n">BKOR_loc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">sta_lon</span> <span class="o">=</span> <span class="n">BKOR_loc</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">sta</span> <span class="o">==</span><span class="s1">&#39;HADA&#39;</span><span class="p">:</span>
+        <span class="n">sta_lat</span> <span class="o">=</span> <span class="n">HADA_loc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">sta_lon</span> <span class="o">=</span> <span class="n">HADA_loc</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">sta</span> <span class="o">==</span><span class="s1">&#39;SINA&#39;</span><span class="p">:</span>
+        <span class="n">sta_lat</span> <span class="o">=</span> <span class="n">SINA_loc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">sta_lon</span> <span class="o">=</span> <span class="n">SINA_loc</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">tr</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">distance</span> <span class="o">=</span> <span class="n">gps2dist_azimuth</span><span class="p">(</span><span class="n">sta_lat</span><span class="p">,</span> <span class="n">sta_lon</span><span class="p">,</span><span class="n">eq_lat</span><span class="p">,</span> <span class="n">eq_lon</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># To check the result, you can print the distance with stations.</span>
+<span class="k">for</span> <span class="n">tr</span> <span class="ow">in</span> <span class="n">st</span><span class="p">:</span>
+   <span class="nb">print</span><span class="p">(</span><span class="n">tr</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">station</span><span class="p">,</span> <span class="n">tr</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">distance</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<div class="line-block">
+<div class="line">As the mseed file does not contain the location of station, we have to get the information from the station list.</div>
+<div class="line">We also have to save the calculated distance into the metadata, as the value is empty initially.</div>
+</div>
+</div>
+</section>
+<section id="taup-travel-time">
+<h3>4.3 TauP travel time<a class="headerlink" href="#taup-travel-time" title="Permalink to this headline"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">obspy</span> <span class="kn">import</span> <span class="n">taup</span>
+<span class="c1"># velocity model configuration</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">taup</span><span class="o">.</span><span class="n">TauPyModel</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;iasp91&quot;</span><span class="p">)</span>
+
+<span class="n">p_time</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">s_time</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">sta</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">tr</span> <span class="ow">in</span> <span class="n">st</span><span class="p">:</span>
+    <span class="c1"># Get the station location for the input</span>
+    <span class="n">station_coordinate</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">tr</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">station</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;_loc&quot;</span>
+
+    <span class="n">p_arrival</span> <span class="p">,</span><span class="n">s_arrival</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_travel_times_geo</span><span class="p">(</span><span class="n">source_depth_in_km</span><span class="o">=</span><span class="n">eq_dep</span><span class="p">,</span>
+                                               <span class="n">source_latitude_in_deg</span><span class="o">=</span><span class="n">eq_lat</span><span class="p">,</span>
+                                               <span class="n">source_longitude_in_deg</span><span class="o">=</span><span class="n">eq_lon</span><span class="p">,</span>
+                                               <span class="n">receiver_latitude_in_deg</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">station_coordinate</span><span class="p">)[</span><span class="mi">0</span><span class="p">]),</span>
+                                               <span class="n">receiver_longitude_in_deg</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">station_coordinate</span><span class="p">)[</span><span class="mi">1</span><span class="p">]),</span>
+                                               <span class="n">phase_list</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;p&quot;</span><span class="p">,</span><span class="s2">&quot;s&quot;</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">p_arrival</span><span class="p">,</span> <span class="n">s_arrival</span><span class="p">)</span>
+    <span class="c1"># Append lists by stations, p &amp; s arrivals</span>
+    <span class="n">sta</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tr</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">station</span><span class="p">)</span>
+    <span class="n">p_time</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p_arrival</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
+    <span class="n">s_time</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s_arrival</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="output-the-taup-result-as-text-file-for-further-processing">
+<h3>4.4 Output the TauP result as text file for further processing<a class="headerlink" href="#output-the-taup-result-as-text-file-for-further-processing" title="Permalink to this headline"></a></h3>
+<p>As we are handling the data with more than 1 station, it is better for us to save the TauP result in a txt file.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make a table using pandas and save it to the text file</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="c1"># List to pandas.dataframe</span>
+<span class="n">Station</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">sta</span><span class="p">)</span>
+<span class="n">P_arrival</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">p_time</span><span class="p">)</span>
+<span class="n">S_arrival</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">s_time</span><span class="p">)</span>
+
+<span class="c1"># Combine the column together and make a table</span>
+<span class="n">tauP_result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">Station</span><span class="p">,</span> <span class="n">P_arrival</span><span class="p">,</span> <span class="n">S_arrival</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Output the table as a text file</span>
+<span class="n">tauP_result</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;taup_result.txt&#39;</span><span class="p">,</span><span class="n">sep</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tauP_result</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<div class="line-block">
+<div class="line">Pandas is a python library which is used to analyse data.</div>
+</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">pd.DataFrame</span></code> Data structure</p>
+<p><code class="docutils literal notranslate"><span class="pre">pd.concat</span></code> concatenate pandas objects along a particular axis with optional set logic along the other axes</p>
+<p><code class="docutils literal notranslate"><span class="pre">pd.to_csv</span></code> write object to a comma-separated values (csv) file</p>
+</section>
+<section id="trim-and-filter-data">
+<h3>4.5 Trim and filter data<a class="headerlink" href="#trim-and-filter-data" title="Permalink to this headline"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Trim the waveform data - shorter time range</span>
+<span class="n">st</span><span class="o">.</span><span class="n">trim</span><span class="p">(</span><span class="n">origin_time</span><span class="p">,</span> <span class="n">origin_time</span> <span class="o">+</span> <span class="n">p_time</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mi">150</span><span class="p">)</span>
+<span class="c1"># Filter the waveform</span>
+<span class="n">st</span><span class="o">.</span><span class="n">detrend</span><span class="p">(</span><span class="s1">&#39;linear&#39;</span><span class="p">)</span>
+<span class="n">st</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="s1">&#39;bandpass&#39;</span><span class="p">,</span> <span class="n">freqmin</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">freqmax</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="id1">
+<h3>4.6 Section Plot<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h3>
+<p>You can first use the plot function in obspy.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+<span class="c1"># Plot the section plot</span>
+
+<span class="n">st</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;section&#39;</span><span class="p">,</span> <span class="n">recordstart</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">recordlength</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">time_down</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">.5</span><span class="p">,</span> <span class="n">grid_linewidth</span><span class="o">=</span><span class="mf">.5</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Then you can add more components in the plot. For example, station name, calculated P - and S wave arrival time.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Add more components onto the section plot</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="c1"># Add title</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Waveform cross-section plot&#39;</span><span class="p">)</span>
+
+<span class="c1"># Add station names next to the waveforms</span>
+<span class="k">for</span> <span class="n">tr</span> <span class="ow">in</span> <span class="n">st</span><span class="p">:</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">((</span><span class="n">tr</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">distance</span> <span class="o">/</span> <span class="mf">1e3</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">tr</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">station</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">270</span><span class="p">,</span><span class="n">va</span><span class="o">=</span><span class="s2">&quot;top&quot;</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="c1"># Load the tauP output text file</span>
+<span class="n">ps_pick</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s1">&#39;taup_result.txt&#39;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
+<span class="c1"># Mark the P &amp; S arrival onto the waveform plot</span>
+
+<span class="k">for</span> <span class="n">tr</span> <span class="ow">in</span> <span class="n">st</span><span class="p">:</span>
+    <span class="c1"># Find the P &amp; S arrivals by stations</span>
+    <span class="n">sta</span> <span class="o">=</span> <span class="n">tr</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">station</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">ps_pick</span><span class="p">[</span><span class="n">ps_pick</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">sta</span><span class="p">,</span><span class="mi">1</span> <span class="p">])</span>
+
+    <span class="c1"># Y-axis</span>
+    <span class="n">p_pick</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">ps_pick</span><span class="p">[</span><span class="n">ps_pick</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">sta</span><span class="p">,</span><span class="mi">1</span> <span class="p">])</span>
+    <span class="n">s_pick</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">ps_pick</span><span class="p">[</span><span class="n">ps_pick</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">sta</span><span class="p">,</span><span class="mi">2</span> <span class="p">])</span>
+    <span class="c1"># Offset (x-axis) in km</span>
+    <span class="n">offset</span> <span class="o">=</span> <span class="n">tr</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">distance</span><span class="o">/</span><span class="mf">1e3</span>
+    <span class="c1"># Make the scatter plot</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">offset</span><span class="p">,</span><span class="n">p_pick</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;_&#39;</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">offset</span><span class="p">,</span><span class="n">s_pick</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;_&#39;</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+
+<span class="c1"># plot again</span>
+
+<span class="n">st</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;section&#39;</span><span class="p">,</span> <span class="n">recordstart</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">recordlength</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">time_down</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">.5</span><span class="p">,</span> <span class="n">grid_linewidth</span><span class="o">=</span><span class="mf">.5</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">)</span>
+
+<span class="c1"># Save the figure</span>
+<span class="c1"># dpi = how many pixels the figure comprises</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;section_plot.pdf&#39;</span><span class="p">,</span><span class="n">dpi</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/section_taup.png"><img alt="../_images/section_taup.png" src="../_images/section_taup.png" style="width: 70%;" /></a>
+<p>The section plot is just a recap of the previous section. Let’s have a try!!</p>
+</section>
+</section>
 </section>
 
 
@@ -560,7 +848,7 @@ Compare the results with the previous plots.</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2021-2022, CUSeisTut team.
-      <span class="lastupdated">Last updated on 2022-02-21.
+      <span class="lastupdated">Last updated on 2022-02-23.
       </span></p>
   </div>
 
