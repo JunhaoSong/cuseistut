@@ -69,7 +69,11 @@
 <li class="toctree-l3"><a class="reference internal" href="#get-waveforms">2.3 Get waveforms</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#meta-data">2.4 Meta data</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#plot-the-waveforms">2.5 Plot the waveforms</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#detrend-data">2.6 Detrend Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#waveform-cross-section-plot">2.6 Waveform Cross-section Plot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#get-the-waveform-data-with-more-than-1-station">2.6.1 Get the waveform data with more than 1 station</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#calculate-the-great-circle-distance-from-stations-to-earthquake">2.6.2 Calculate the great circle distance from stations to earthquake</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plot-the-waveform-cross-section-plot">2.6.3 Plot the waveform cross-section plot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#detrend-filter-data">2.7 Detrend / Filter Data</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#filter-data">2.7 Filter Data</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#waveform-rotation">2.8 Waveform rotation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#seismic-phases-in-seismogram">2.9 Seismic Phases in seismogram</a></li>
@@ -85,14 +89,14 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#section-plot">4 Section Plot</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#get-the-waveform-data-with-more-than-1-station">4.1 Get the waveform data with more than 1 station</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#calculate-the-great-circle-distance-from-stations-to-earthquake">4.2 Calculate the great circle distance from stations to earthquake</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#taup-travel-time">4.3 TauP travel time</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#output-the-taup-result-as-text-file-for-further-processing">4.4 Output the TauP result as text file for further processing</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#trim-and-filter-data">4.5 Trim and filter data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id1">4.6 Section Plot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id1">4.1 Waveform cross-section plot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#taup-travel-time">4.2 TauP travel time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#output-the-taup-result-as-text-file-for-further-processing">4.3 Output the TauP result as text file for further processing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#trim-and-filter-data">4.4 Trim and filter data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#add-more-components-on-your-plot">4.5 Add more components on your plot</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#exercises">5 Exercises</a></li>
 </ul>
 </li>
 </ul>
@@ -172,7 +176,7 @@ $ conda install obspy=1.2
 <li><p>UTC DateTime</p></li>
 <li><p>Basic Seismic Data Processing</p></li>
 <li><p>Theoreotical Travel Time Calculation</p></li>
-<li><p>Cross-section waveforms plot</p></li>
+<li><p>Cross-section Plot with TauP arrivals</p></li>
 </ol>
 <p>Developed by LAU Tsz Lam Zoe under the instructions of Junhao SONG, Han CHEN, and Suli Yao.</p>
 </section>
@@ -288,11 +292,14 @@ $ conda install obspy=1.2
 </div>
 </div>
 <p>Input the origin time, coordinates and magnitude of the selected event.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">origin_time</span> <span class="o">=</span> <span class="n">UTCDateTime</span><span class="p">(</span><span class="s2">&quot;2015-08-11T16:22:15.200000&quot;</span><span class="p">)</span>
-<span class="n">event_longitude</span> <span class="o">=</span> <span class="mf">123.202</span>
-<span class="n">event_latitude</span> <span class="o">=</span> <span class="o">-</span><span class="mf">8.624</span>
-<span class="n">event_depth</span> <span class="o">=</span> <span class="mf">171.9</span>
-<span class="n">event_magnitude</span> <span class="o">=</span> <span class="mf">3.9</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">obspy</span> <span class="kn">import</span> <span class="n">UTCDateTime</span>
+<span class="n">origin_time</span> <span class="o">=</span> <span class="n">UTCDateTime</span><span class="p">(</span><span class="s2">&quot;2015-08-11T16:22:15.200000&quot;</span><span class="p">)</span>
+
+<span class="c1"># Coordinates and the magnitude of the event</span>
+<span class="n">eq_lon</span> <span class="o">=</span> <span class="mf">123.202</span>
+<span class="n">eq_lat</span> <span class="o">=</span> <span class="o">-</span><span class="mf">8.624</span>
+<span class="n">eq_dep</span> <span class="o">=</span> <span class="mf">171.9</span>
+<span class="n">eq_mag</span> <span class="o">=</span> <span class="mf">3.9</span>
 </pre></div>
 </div>
 </section>
@@ -333,6 +340,10 @@ Make sure the selected station is operating during the event.</p>
 <span class="n">stt</span> <span class="o">=</span> <span class="n">origin_time</span>
 <span class="c1"># endtime</span>
 <span class="n">edt</span> <span class="o">=</span> <span class="n">origin_time</span> <span class="o">+</span> <span class="mi">120</span>
+
+<span class="c1"># Get the waveforms from client</span>
+<span class="n">st</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_waveforms</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">sta</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="n">cha</span><span class="p">,</span> <span class="n">stt</span><span class="p">,</span> <span class="n">edt</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -343,17 +354,15 @@ Make sure the selected station is operating during the event.</p>
 </div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">Client()</span></code> to initialize a client object.</p>
-<p>Get the waveforms from client</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">st</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_waveforms</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">sta</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="n">cha</span><span class="p">,</span> <span class="n">stt</span><span class="p">,</span> <span class="n">edt</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
-</pre></div>
-</div>
 <p><code class="docutils literal notranslate"><span class="pre">client.get_waveforms()</span></code> to get the waveform by the corresponding argument from clients.</p>
 </section>
 <section id="meta-data">
 <h3>2.4 Meta data<a class="headerlink" href="#meta-data" title="Permalink to this headline"></a></h3>
 <p>We can print the meta data inside the stream.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">st</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">stats</span><span class="p">)</span>
+
+<span class="c1">#You can print the corresponding attributes by calling them individually.</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">st</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">sampling_rate</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/metadata.png"><img alt="../_images/metadata.png" src="../_images/metadata.png" style="width: 80%;" /></a>
@@ -385,20 +394,15 @@ Make sure the selected station is operating during the event.</p>
 <div class="line">8. <code class="docutils literal notranslate"><span class="pre">baz</span></code> : Back azimuth</div>
 </div>
 </div></blockquote>
-<p>You can print the corresponding attributes by calling them individually.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">st</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">sampling_rate</span><span class="p">)</span>
-</pre></div>
-</div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>For <code class="docutils literal notranslate"><span class="pre">gcarc</span></code> and <code class="docutils literal notranslate"><span class="pre">bac</span></code> , they are available in sac filed. You can print them by:</p>
+<p>For <code class="docutils literal notranslate"><span class="pre">gcarc</span></code> and <code class="docutils literal notranslate"><span class="pre">bac</span></code> , they are available in sac file. You can print them by:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">st</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">sac</span><span class="o">.</span><span class="n">gcarc</span><span class="p">)</span>
+
+<span class="c1"># If the header value is empty, you can assign value into the header.</span>
+<span class="n">st</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">sac</span><span class="o">.</span><span class="n">gcarc</span> <span class="o">=</span> <span class="mi">10000</span>
 </pre></div>
 </div>
-</div>
-<p>If the header value is empty, you can assign value into the header.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">st</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">network</span> <span class="o">=</span> <span class="s1">&#39;IU&#39;</span>
-</pre></div>
 </div>
 </section>
 <section id="plot-the-waveforms">
@@ -410,26 +414,109 @@ Make sure the selected station is operating during the event.</p>
 </div>
 <a class="reference internal image-reference" href="../_images/plot_raw.png"><img alt="../_images/plot_raw.png" src="../_images/plot_raw.png" style="width: 80%;" /></a>
 <a class="reference internal image-reference" href="../_images/spectrogram_raw.png"><img alt="../_images/spectrogram_raw.png" src="../_images/spectrogram_raw.png" style="width: 80%;" /></a>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Spectrogram is a frequency content of a seismogram. You can check the energy level of the waves over time.</p>
+</div>
 </section>
-<section id="detrend-data">
-<h3>2.6 Detrend Data<a class="headerlink" href="#detrend-data" title="Permalink to this headline"></a></h3>
+<section id="waveform-cross-section-plot">
+<h3>2.6 Waveform Cross-section Plot<a class="headerlink" href="#waveform-cross-section-plot" title="Permalink to this headline"></a></h3>
+<p>Plot a record section.</p>
+</section>
+<section id="get-the-waveform-data-with-more-than-1-station">
+<h3>2.6.1 Get the waveform data with more than 1 station<a class="headerlink" href="#get-the-waveform-data-with-more-than-1-station" title="Permalink to this headline"></a></h3>
+<p>For our example, station ‘BAOP’, ‘HADA’, ‘SINA’ ‘BKOR’ and ‘ALRB’ are located near the epicentre of the earthquake.
+It is expected that these 5 stations can record the event well.</p>
+<a class="reference internal image-reference" href="../_images/section_station.png"><img alt="../_images/section_station.png" src="../_images/section_station.png" style="width: 60%;" /></a>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set up a list for bulk request</span>
+<span class="n">bulk</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;YS&#39;</span><span class="p">,</span> <span class="s1">&#39;BAOP&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;BHZ&#39;</span><span class="p">,</span> <span class="n">origin_time</span><span class="p">,</span> <span class="n">origin_time</span><span class="o">+</span><span class="mi">120</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;YS&#39;</span><span class="p">,</span> <span class="s1">&#39;HADA&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;BHZ&#39;</span><span class="p">,</span> <span class="n">origin_time</span><span class="p">,</span> <span class="n">origin_time</span><span class="o">+</span><span class="mi">120</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;YS&#39;</span><span class="p">,</span> <span class="s1">&#39;SINA&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;BHZ&#39;</span><span class="p">,</span> <span class="n">origin_time</span><span class="p">,</span> <span class="n">origin_time</span><span class="o">+</span><span class="mi">120</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;YS&#39;</span><span class="p">,</span> <span class="s1">&#39;BKOR&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;BHZ&#39;</span><span class="p">,</span> <span class="n">origin_time</span><span class="p">,</span> <span class="n">origin_time</span><span class="o">+</span><span class="mi">120</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;YS&#39;</span><span class="p">,</span> <span class="s1">&#39;ALRB&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;BHZ&#39;</span><span class="p">,</span> <span class="n">origin_time</span><span class="p">,</span> <span class="n">origin_time</span><span class="o">+</span><span class="mi">120</span><span class="p">)]</span>
+
+<span class="n">st_bulk</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_waveforms_bulk</span><span class="p">(</span><span class="n">bulk</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">get_waveforms_bulk</span></code> send a bulk request for waveforms to the server</p>
+</section>
+<section id="calculate-the-great-circle-distance-from-stations-to-earthquake">
+<h3>2.6.2 Calculate the great circle distance from stations to earthquake<a class="headerlink" href="#calculate-the-great-circle-distance-from-stations-to-earthquake" title="Permalink to this headline"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Input the coordinates of stations</span>
+<span class="n">ALRB_loc</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">8.2194</span><span class="p">,</span> <span class="mf">124.4115</span><span class="p">]</span>
+<span class="n">BAOP_loc</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">8.4882</span><span class="p">,</span> <span class="mf">123.2696</span><span class="p">]</span>
+<span class="n">BKOR_loc</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">8.4868</span><span class="p">,</span> <span class="mf">122.5509</span><span class="p">]</span>
+<span class="n">HADA_loc</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">8.3722</span><span class="p">,</span> <span class="mf">123.5454</span><span class="p">]</span>
+<span class="n">SINA_loc</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">8.1838</span><span class="p">,</span> <span class="mf">122.9124</span><span class="p">]</span>
+
+<span class="kn">from</span> <span class="nn">obspy.geodetics</span> <span class="kn">import</span> <span class="n">gps2dist_azimuth</span>
+
+<span class="c1"># Loop, get the station coordinates and calculate the distance</span>
+<span class="k">for</span> <span class="n">tr</span> <span class="ow">in</span> <span class="n">st_bulk</span><span class="p">:</span>
+    <span class="n">sta</span> <span class="o">=</span> <span class="n">tr</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">station</span>
+    <span class="k">if</span> <span class="n">sta</span> <span class="o">==</span> <span class="s1">&#39;ALRB&#39;</span><span class="p">:</span>
+        <span class="n">sta_lat</span> <span class="o">=</span> <span class="n">ALRB_loc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">sta_lon</span> <span class="o">=</span> <span class="n">ALRB_loc</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">sta</span> <span class="o">==</span> <span class="s1">&#39;BAOP&#39;</span><span class="p">:</span>
+        <span class="n">sta_lat</span> <span class="o">=</span> <span class="n">BAOP_loc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">sta_lon</span> <span class="o">=</span> <span class="n">BAOP_loc</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">sta</span> <span class="o">==</span><span class="s1">&#39;BKOR&#39;</span><span class="p">:</span>
+        <span class="n">sta_lat</span> <span class="o">=</span> <span class="n">BKOR_loc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">sta_lon</span> <span class="o">=</span> <span class="n">BKOR_loc</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">sta</span> <span class="o">==</span><span class="s1">&#39;HADA&#39;</span><span class="p">:</span>
+        <span class="n">sta_lat</span> <span class="o">=</span> <span class="n">HADA_loc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">sta_lon</span> <span class="o">=</span> <span class="n">HADA_loc</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">sta</span> <span class="o">==</span><span class="s1">&#39;SINA&#39;</span><span class="p">:</span>
+        <span class="n">sta_lat</span> <span class="o">=</span> <span class="n">SINA_loc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">sta_lon</span> <span class="o">=</span> <span class="n">SINA_loc</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">tr</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">distance</span> <span class="o">=</span> <span class="n">gps2dist_azimuth</span><span class="p">(</span><span class="n">sta_lat</span><span class="p">,</span> <span class="n">sta_lon</span><span class="p">,</span><span class="n">eq_lat</span><span class="p">,</span> <span class="n">eq_lon</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># To check the result, you can print the distance with stations.</span>
+<span class="k">for</span> <span class="n">tr</span> <span class="ow">in</span> <span class="n">st_bulk</span><span class="p">:</span>
+   <span class="nb">print</span><span class="p">(</span><span class="n">tr</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">station</span><span class="p">,</span> <span class="n">tr</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">distance</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">gps2dist_azimuth</span></code> calculate the distance between two geographic points and forward and backward azimuths between these points</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<div class="line-block">
+<div class="line">As the mseed file does not contain the location of station, we have to get the information from the station list.</div>
+<div class="line">We also have to save the calculated distance into the metadata, as the value is empty initially.</div>
+</div>
+</div>
+</section>
+<section id="plot-the-waveform-cross-section-plot">
+<h3>2.6.3 Plot the waveform cross-section plot<a class="headerlink" href="#plot-the-waveform-cross-section-plot" title="Permalink to this headline"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">st_bulk</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;section&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">plot(type='section')</span></code> a record section can be plotted</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We can get the apparent velocity of P - and S - waves from the plot.
+Besides, it is also a good way for us to recognise different seismic phases.</p>
+</div>
+</section>
+<section id="detrend-filter-data">
+<h3>2.7 Detrend / Filter Data<a class="headerlink" href="#detrend-filter-data" title="Permalink to this headline"></a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">detrend()</span></code> to remove a trend from the trace.</p>
 <p>There are many methods listed for detrend function.</p>
 <p>To better visualise and demonstrate the effect of detrend, we will provide you some examples.
 Please download the following waveform data.</p>
-<p><strong>2.6.1 Remove Mean</strong></p>
+<p><strong>2.7.1 Remove Mean</strong></p>
 <p>You can download the waveform file here. <a class="reference download internal" download="" href="../_downloads/ca8189fd374c579ff8d627ff2e8c32ad/PA01.bhy"><code class="xref download docutils literal notranslate"><span class="pre">PA01.bhy</span></code></a>
 We first read the downloaded waveform file.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">obspy</span> <span class="kn">import</span> <span class="n">read</span>
 <span class="n">rmean_raw</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="s1">&#39;PA01.bhy&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p><code class="docutils literal notranslate"><span class="pre">read</span></code> Read waveform files into an ObsPy Stream object.</p>
-<p>Plot the waveform without any processing and copy the stream.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rmean_raw</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+
+<span class="c1"># Plot the waveform without any processing and copy the stream.</span>
+<span class="n">rmean_raw</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 <span class="n">rmean_processed</span> <span class="o">=</span> <span class="n">rmean_raw</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 </pre></div>
 </div>
+<p><code class="docutils literal notranslate"><span class="pre">read</span></code> Read waveform files into an ObsPy Stream object.</p>
 <p><code class="docutils literal notranslate"><span class="pre">copy()</span></code> Copy the stream</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
@@ -440,10 +527,9 @@ We first read the downloaded waveform file.</p>
 <p>We detrend the waveforms and plot it again.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rmean_processed</span><span class="o">.</span><span class="n">detrend</span><span class="p">(</span><span class="s2">&quot;demean&quot;</span><span class="p">)</span>
 <span class="n">rmean_processed</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-</pre></div>
-</div>
-<p>Compare the raw waveforms and processed waveforms.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="c1"># You can compare the raw and processed waveforms by overlapping them.</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
 <span class="k">for</span> <span class="n">tr</span> <span class="ow">in</span> <span class="n">rmean</span><span class="p">:</span>
@@ -466,89 +552,84 @@ The procedures are the same with remove mean.</p>
 <a class="reference internal image-reference" href="../_images/linear_shift.png"><img alt="../_images/linear_shift.png" src="../_images/linear_shift.png" style="width: 80%;" /></a>
 <p>After detrend, you can plot the waveform plot and spectrogram again.
 Compare the results with the previous plots.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">st</span><span class="o">.</span><span class="n">detrend</span><span class="p">(</span><span class="s2">&quot;linear&quot;</span><span class="p">)</span>
-<span class="n">st</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-</pre></div>
-</div>
 <a class="reference internal image-reference" href="../_images/plot_detrend.png"><img alt="../_images/plot_detrend.png" src="../_images/plot_detrend.png" style="width: 80%;" /></a>
-<a class="reference internal image-reference" href="../_images/spectrogram_detrend.png"><img alt="../_images/spectrogram_detrend.png" src="../_images/spectrogram_detrend.png" style="width: 80%;" /></a>
 </section>
 <section id="filter-data">
 <h3>2.7 Filter Data<a class="headerlink" href="#filter-data" title="Permalink to this headline"></a></h3>
-<p>You can apply different filters to filter the data. For example, “bandpass”, “highness” and “lowpass”.</p>
-<p>To further understand the effects of different filter, you can download the waveform filehere <a class="reference download internal" download="" href="../_downloads/881e2827993b1aa8f4bd514be27cdb13/20170604050016-PG06.z"><code class="xref download docutils literal notranslate"><span class="pre">20170604050016-PG06.z</span></code></a> for practice.</p>
+<p>The purpose of filtering data is to remove the noise so that we can identify the phases easier in the filtered waveforms.</p>
+<p>You can apply different filters to filter the data. For example, “bandpass”, “highpass” and “lowpass”.</p>
+<p>To further understand the effects of different filter, you can download the waveform file here <a class="reference download internal" download="" href="../_downloads/f8d227956308cf17f1a5895ed72c5094/PA03.bhz"><code class="xref download docutils literal notranslate"><span class="pre">PA03.bhz</span></code></a> for practice.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">obspy</span> <span class="kn">import</span> <span class="n">read</span>
 
 <span class="c1"># Read the waveform file</span>
-<span class="n">mag</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="s1">&#39;./20170604050016-PG06.z&#39;</span><span class="p">)</span>
+<span class="n">raw_data</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="s1">&#39;./PA03.bhz&#39;</span><span class="p">)</span>
+
 
 <span class="c1"># Plot the raw waveform</span>
-<span class="n">mag</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">starttime</span><span class="o">=</span><span class="n">start_time</span><span class="p">,</span><span class="n">endtime</span><span class="o">=</span><span class="n">start_time</span><span class="o">+</span><span class="mi">80</span><span class="p">)</span>
+<span class="n">raw_data</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="n">raw_data</span><span class="o">.</span><span class="n">spectrogram</span><span class="p">()</span>
 
 <span class="c1"># Copy the waveform for further processing</span>
-<span class="n">mag_processed_low</span> <span class="o">=</span> <span class="n">mag</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">processed_low</span> <span class="o">=</span> <span class="n">raw_data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
 <span class="c1"># Filter the waveform with lowpass filter</span>
-<span class="n">mag_processed_low</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="s2">&quot;lowpass&quot;</span><span class="p">,</span><span class="n">freq</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">processed_low</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="s2">&quot;lowpass&quot;</span><span class="p">,</span><span class="n">freq</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="c1"># Plot the waveform and spectrogram to see the difference</span>
-<span class="n">mag_processed_low</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">starttime</span><span class="o">=</span><span class="n">start_time</span><span class="p">,</span><span class="n">endtime</span><span class="o">=</span><span class="n">start_time</span><span class="o">+</span><span class="mi">80</span><span class="p">)</span>
-<span class="n">mag_processed_low</span><span class="o">.</span><span class="n">spectrogram</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;lowpass&#39;</span><span class="p">)</span>
+<span class="n">processed_low</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">starttime</span><span class="o">=</span><span class="n">start_time</span><span class="p">,</span><span class="n">endtime</span><span class="o">=</span><span class="n">start_time</span><span class="o">+</span><span class="mi">80</span><span class="p">)</span>
+<span class="n">processed_low</span><span class="o">.</span><span class="n">spectrogram</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;lowpass&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>You can try with different filters using the above code.</p>
 <p><strong>Summary</strong></p>
 <p>Here is the comparison using different filters</p>
-<a class="reference internal image-reference" href="../_images/mag_comparison1.png"><img alt="../_images/mag_comparison1.png" src="../_images/mag_comparison1.png" style="width: 60%;" /></a>
-<a class="reference internal image-reference" href="../_images/mag_comparison2.png"><img alt="../_images/mag_comparison2.png" src="../_images/mag_comparison2.png" style="width: 60%;" /></a>
+<a class="reference internal image-reference" href="../_images/waveform_raw.png"><img alt="../_images/waveform_raw.png" src="../_images/waveform_raw.png" style="width: 40%;" /></a>
+<a class="reference internal image-reference" href="../_images/waveform_low.png"><img alt="../_images/waveform_low.png" src="../_images/waveform_low.png" style="width: 40%;" /></a>
+<a class="reference internal image-reference" href="../_images/spec_raw.png"><img alt="../_images/spec_raw.png" src="../_images/spec_raw.png" style="width: 40%;" /></a>
+<a class="reference internal image-reference" href="../_images/spec_low.png"><img alt="../_images/spec_low.png" src="../_images/spec_low.png" style="width: 40%;" /></a>
+<a class="reference internal image-reference" href="../_images/waveform_band.png"><img alt="../_images/waveform_band.png" src="../_images/waveform_band.png" style="width: 40%;" /></a>
+<a class="reference internal image-reference" href="../_images/waveform_high.png"><img alt="../_images/waveform_high.png" src="../_images/waveform_high.png" style="width: 40%;" /></a>
+<a class="reference internal image-reference" href="../_images/spec_band.png"><img alt="../_images/spec_band.png" src="../_images/spec_band.png" style="width: 40%;" /></a>
+<a class="reference internal image-reference" href="../_images/spec_high.png"><img alt="../_images/spec_high.png" src="../_images/spec_high.png" style="width: 40%;" /></a>
 <p>Then, you can decide which filter to be used in this tutorial.</p>
 </section>
 <section id="waveform-rotation">
 <h3>2.8 Waveform rotation<a class="headerlink" href="#waveform-rotation" title="Permalink to this headline"></a></h3>
 <p>We can rotate the North - East components of a seismogram to radial and transverse components.</p>
-<p>Get the waveform of the North - East components</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Input station informations</span>
-<span class="c1"># network</span>
-<span class="n">net</span> <span class="o">=</span> <span class="s1">&#39;YS&#39;</span>
-<span class="c1"># station</span>
-<span class="n">sta</span> <span class="o">=</span> <span class="s1">&#39;BAOP&#39;</span>
-<span class="c1"># location</span>
-<span class="n">loc</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-<span class="c1"># channel</span>
-<span class="n">cha</span> <span class="o">=</span> <span class="s1">&#39;BH*&#39;</span>
+<p>After rotation you can identify SV and SH of shear waves, Love waves and Rayleigh waves.</p>
+<p>You can download the waveform file here. <a class="reference download internal" download="" href="../_downloads/fb4569d393f3ded515fff174dcdd895f/BINY.N"><code class="xref download docutils literal notranslate"><span class="pre">BINY.N</span></code></a> and <a class="reference download internal" download="" href="../_downloads/78cc94143bd4cd8ba49db204efcdc253/BINY.E"><code class="xref download docutils literal notranslate"><span class="pre">BINY.E</span></code></a>
+The procedures are the same with remove mean.</p>
+<p>Read the waveform of the North - East components</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">obspy</span> <span class="kn">import</span> <span class="n">read</span>
 
-<span class="c1"># starttime</span>
-<span class="n">stt</span> <span class="o">=</span> <span class="n">origin_time</span>
-<span class="c1"># endtime</span>
-<span class="n">edt</span> <span class="o">=</span> <span class="n">origin_time</span> <span class="o">+</span> <span class="mi">120</span>
-<span class="n">st_N</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_waveforms</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">sta</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="s1">&#39;BH1&#39;</span><span class="p">,</span> <span class="n">stt</span><span class="p">,</span> <span class="n">edt</span><span class="p">)</span>
-<span class="n">st_E</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_waveforms</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">sta</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="s1">&#39;BH2&#39;</span><span class="p">,</span> <span class="n">stt</span><span class="p">,</span> <span class="n">edt</span><span class="p">)</span>
+<span class="c1"># Read the North-East components</span>
+<span class="n">rotation_N</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="s1">&#39;BINY.N&#39;</span><span class="p">)</span>
+
+<span class="c1"># Read the South-West components</span>
+<span class="n">rotation_E</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="s1">&#39;BINY.E&#39;</span><span class="p">)</span>
+
+<span class="c1"># print out the meta data</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">rotation_N</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">stats</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Get the data of the North - East components.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">tr1</span> <span class="ow">in</span> <span class="n">st_N</span><span class="p">:</span>
-  <span class="n">north</span> <span class="o">=</span> <span class="n">tr1</span><span class="o">.</span><span class="n">data</span>
-<span class="k">for</span> <span class="n">tr2</span> <span class="ow">in</span> <span class="n">st_E</span><span class="p">:</span>
-  <span class="n">east</span> <span class="o">=</span> <span class="n">tr2</span><span class="o">.</span><span class="n">data</span>
+<p>Get the data of the North - East components and the back azimuth.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># The data of North -East components</span>
+<span class="n">north</span> <span class="o">=</span> <span class="n">rotation_N</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">data</span>
+
+<span class="n">east</span> <span class="o">=</span> <span class="n">rotation_E</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">data</span>
+
+<span class="c1"># Get the back azimuth.</span>
+<span class="n">Baz</span> <span class="o">=</span> <span class="n">rotation_N</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">sac</span><span class="o">.</span><span class="n">baz</span>
 </pre></div>
 </div>
-<p>Calculate the back azimuth.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">obspy.geodetics</span> <span class="kn">import</span> <span class="n">gps2dist_azimuth</span>
-<span class="c1"># Receiver = station received the signals</span>
-<span class="n">sta_lat</span> <span class="o">=</span> <span class="o">-</span><span class="mf">8.4882</span>
-<span class="n">sta_lon</span> <span class="o">=</span> <span class="mf">123.2696</span>
-
-<span class="c1"># Input the information of the source(earthquake)</span>
-<span class="n">eq_lat</span> <span class="o">=</span> <span class="o">-</span><span class="mf">8.624</span>
-<span class="n">eq_lon</span> <span class="o">=</span> <span class="mf">123.202</span>
-<span class="n">eq_dep</span> <span class="o">=</span> <span class="mf">171.9</span>
-
-<span class="n">back_azimuth_st2</span><span class="o">=</span><span class="n">gps2dist_azimuth</span><span class="p">(</span><span class="n">eq_lat</span><span class="p">,</span> <span class="n">eq_lon</span><span class="p">,</span><span class="n">sta_lat</span><span class="p">,</span> <span class="n">sta_lon</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mf">6378137.0</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="mf">0.0033528106647474805</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
-</pre></div>
-</div>
-<p><code class="docutils literal notranslate"><span class="pre">gps2dist_azimuth</span></code> calculate the back azimuth using the coordinates of the source and receiver</p>
 <p>Rotate and Plot the radial and transverse components.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Radial</span><span class="p">,</span> <span class="n">Transverse</span> <span class="o">=</span> <span class="n">rotate</span><span class="o">.</span><span class="n">rotate_ne_rt</span><span class="p">(</span><span class="n">north</span><span class="p">,</span><span class="n">east</span><span class="p">,</span><span class="n">back_azimuth_st2</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">obspy.signal</span> <span class="kn">import</span> <span class="n">rotate</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="c1"># Rotation</span>
+<span class="n">Radial</span><span class="p">,</span> <span class="n">Transverse</span> <span class="o">=</span> <span class="n">rotate</span><span class="o">.</span><span class="n">rotate_ne_rt</span><span class="p">(</span><span class="n">north</span><span class="p">,</span><span class="n">east</span><span class="p">,</span><span class="n">Baz</span><span class="p">)</span>
+
+<span class="c1"># Plot the result</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Radial</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Transverse</span><span class="p">)</span>
 </pre></div>
@@ -572,6 +653,7 @@ Compare the results with the previous plots.</p>
 <p class="admonition-title">Note</p>
 <p>Seismic velocity model is the velocity profile of P and S waves along depth. IASP91 model is commonly used.</p>
 </div>
+<p>TauP can provide us a reference for identifying different phases. We can also compare it with the real arrivals, the difference between actual and theoretical arrival may interpret as a site effect.</p>
 <section id="source-configuration">
 <h3>3.1 Source Configuration<a class="headerlink" href="#source-configuration" title="Permalink to this headline"></a></h3>
 <p>Input the information of the source (earthquake)</p>
@@ -595,7 +677,11 @@ Compare the results with the previous plots.</p>
 </section>
 <section id="method-1">
 <h3>Method 1<a class="headerlink" href="#method-1" title="Permalink to this headline"></a></h3>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">obspy.geodetics</span> <span class="kn">import</span> <span class="n">locations2degrees</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">obspy.taup</span> <span class="kn">import</span> <span class="n">TauPyModel</span>
+<span class="c1"># Import the velocity model</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">TauPyModel</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;iasp91&quot;</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">obspy.geodetics</span> <span class="kn">import</span> <span class="n">locations2degrees</span>
 
 <span class="k">for</span> <span class="n">tr</span> <span class="ow">in</span> <span class="n">st</span><span class="p">:</span>
     <span class="c1"># calculate the distance in degree between the source and receiver</span>
@@ -649,20 +735,16 @@ Compare the results with the previous plots.</p>
 <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;taup_single_waveform.png&#39;</span><span class="p">,</span><span class="n">dpi</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/taup_waveform.png"><img alt="../_images/taup_waveform.png" src="../_images/taup_waveform.png" style="width: 60%;" /></a>
+<a class="reference internal image-reference" href="../_images/taup_single_waveform.png"><img alt="../_images/taup_single_waveform.png" src="../_images/taup_single_waveform.png" style="width: 60%;" /></a>
 </section>
 </section>
 <hr class="docutils" />
 <section id="section-plot">
 <h2>4 Section Plot<a class="headerlink" href="#section-plot" title="Permalink to this headline"></a></h2>
-<p>Plot a record section.</p>
-<section id="get-the-waveform-data-with-more-than-1-station">
-<h3>4.1 Get the waveform data with more than 1 station<a class="headerlink" href="#get-the-waveform-data-with-more-than-1-station" title="Permalink to this headline"></a></h3>
-<p>For our example, station ‘BAOP’, ‘HADA’, ‘SINA’ ‘BKOR’ and ‘ALRB’ are located near the epicentre of the earthquake.
-It is expected that these 5 stations can record the event well.</p>
-<a class="reference internal image-reference" href="../_images/section_station.png"><img alt="../_images/section_station.png" src="../_images/section_station.png" style="width: 60%;" /></a>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set up a list for bulk request</span>
-<span class="n">bulk</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;YS&#39;</span><span class="p">,</span> <span class="s1">&#39;BAOP&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;BHZ&#39;</span><span class="p">,</span> <span class="n">origin_time</span><span class="p">,</span> <span class="n">origin_time</span><span class="o">+</span><span class="mi">120</span><span class="p">),</span>
+<section id="id1">
+<h3>4.1 Waveform cross-section plot<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h3>
+<p>We have introduce how to make a waveform cross-section plot in 2.6. For this section, we would like to add the calculated TauP arrivals onto to waveform cross-section plot.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bulk</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;YS&#39;</span><span class="p">,</span> <span class="s1">&#39;BAOP&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;BHZ&#39;</span><span class="p">,</span> <span class="n">origin_time</span><span class="p">,</span> <span class="n">origin_time</span><span class="o">+</span><span class="mi">120</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;YS&#39;</span><span class="p">,</span> <span class="s1">&#39;HADA&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;BHZ&#39;</span><span class="p">,</span> <span class="n">origin_time</span><span class="p">,</span> <span class="n">origin_time</span><span class="o">+</span><span class="mi">120</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;YS&#39;</span><span class="p">,</span> <span class="s1">&#39;SINA&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;BHZ&#39;</span><span class="p">,</span> <span class="n">origin_time</span><span class="p">,</span> <span class="n">origin_time</span><span class="o">+</span><span class="mi">120</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;YS&#39;</span><span class="p">,</span> <span class="s1">&#39;BKOR&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;BHZ&#39;</span><span class="p">,</span> <span class="n">origin_time</span><span class="p">,</span> <span class="n">origin_time</span><span class="o">+</span><span class="mi">120</span><span class="p">),</span>
@@ -670,13 +752,8 @@ It is expected that these 5 stations can record the event well.</p>
 
 <span class="n">st</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_waveforms_bulk</span><span class="p">(</span><span class="n">bulk</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
-</pre></div>
-</div>
-<p><code class="docutils literal notranslate"><span class="pre">get_waveforms_bulk</span></code> send a bulk request for waveforms to the server</p>
-</section>
-<section id="calculate-the-great-circle-distance-from-stations-to-earthquake">
-<h3>4.2 Calculate the great circle distance from stations to earthquake<a class="headerlink" href="#calculate-the-great-circle-distance-from-stations-to-earthquake" title="Permalink to this headline"></a></h3>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Input the coordinates of stations</span>
+
+<span class="c1"># Input the coordinates of stations</span>
 <span class="n">ALRB_loc</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">8.2194</span><span class="p">,</span> <span class="mf">124.4115</span><span class="p">]</span>
 <span class="n">BAOP_loc</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">8.4882</span><span class="p">,</span> <span class="mf">123.2696</span><span class="p">]</span>
 <span class="n">BKOR_loc</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">8.4868</span><span class="p">,</span> <span class="mf">122.5509</span><span class="p">]</span>
@@ -709,24 +786,18 @@ It is expected that these 5 stations can record the event well.</p>
    <span class="nb">print</span><span class="p">(</span><span class="n">tr</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">station</span><span class="p">,</span> <span class="n">tr</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">distance</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<div class="line-block">
-<div class="line">As the mseed file does not contain the location of station, we have to get the information from the station list.</div>
-<div class="line">We also have to save the calculated distance into the metadata, as the value is empty initially.</div>
-</div>
-</div>
 </section>
 <section id="taup-travel-time">
-<h3>4.3 TauP travel time<a class="headerlink" href="#taup-travel-time" title="Permalink to this headline"></a></h3>
+<h3>4.2 TauP travel time<a class="headerlink" href="#taup-travel-time" title="Permalink to this headline"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">obspy</span> <span class="kn">import</span> <span class="n">taup</span>
+
 <span class="c1"># velocity model configuration</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">taup</span><span class="o">.</span><span class="n">TauPyModel</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;iasp91&quot;</span><span class="p">)</span>
 
 <span class="n">p_time</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">s_time</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">sta</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">tr</span> <span class="ow">in</span> <span class="n">st</span><span class="p">:</span>
+<span class="k">for</span> <span class="n">tr</span> <span class="ow">in</span> <span class="n">st_bulk</span><span class="p">:</span>
     <span class="c1"># Get the station location for the input</span>
     <span class="n">station_coordinate</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">tr</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">station</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;_loc&quot;</span>
 
@@ -743,9 +814,10 @@ It is expected that these 5 stations can record the event well.</p>
     <span class="n">s_time</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s_arrival</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>The goal for us is to get the P - and S wave arrival of each station and save them into lists so that we can handle the result later.</p>
 </section>
 <section id="output-the-taup-result-as-text-file-for-further-processing">
-<h3>4.4 Output the TauP result as text file for further processing<a class="headerlink" href="#output-the-taup-result-as-text-file-for-further-processing" title="Permalink to this headline"></a></h3>
+<h3>4.3 Output the TauP result as text file for further processing<a class="headerlink" href="#output-the-taup-result-as-text-file-for-further-processing" title="Permalink to this headline"></a></h3>
 <p>As we are handling the data with more than 1 station, it is better for us to save the TauP result in a txt file.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make a table using pandas and save it to the text file</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -773,7 +845,7 @@ It is expected that these 5 stations can record the event well.</p>
 <p><code class="docutils literal notranslate"><span class="pre">pd.to_csv</span></code> write object to a comma-separated values (csv) file</p>
 </section>
 <section id="trim-and-filter-data">
-<h3>4.5 Trim and filter data<a class="headerlink" href="#trim-and-filter-data" title="Permalink to this headline"></a></h3>
+<h3>4.4 Trim and filter data<a class="headerlink" href="#trim-and-filter-data" title="Permalink to this headline"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Trim the waveform data - shorter time range</span>
 <span class="n">st</span><span class="o">.</span><span class="n">trim</span><span class="p">(</span><span class="n">origin_time</span><span class="p">,</span> <span class="n">origin_time</span> <span class="o">+</span> <span class="n">p_time</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mi">150</span><span class="p">)</span>
 <span class="c1"># Filter the waveform</span>
@@ -781,16 +853,10 @@ It is expected that these 5 stations can record the event well.</p>
 <span class="n">st</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="s1">&#39;bandpass&#39;</span><span class="p">,</span> <span class="n">freqmin</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">freqmax</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
 </pre></div>
 </div>
+<p><code class="docutils literal notranslate"><span class="pre">trim()</span></code> cut all traces with given start time and end time</p>
 </section>
-<section id="id1">
-<h3>4.6 Section Plot<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h3>
-<p>You can first use the plot function in obspy.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
-<span class="c1"># Plot the section plot</span>
-
-<span class="n">st</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;section&#39;</span><span class="p">,</span> <span class="n">recordstart</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">recordlength</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">time_down</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">.5</span><span class="p">,</span> <span class="n">grid_linewidth</span><span class="o">=</span><span class="mf">.5</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">)</span>
-</pre></div>
-</div>
+<section id="add-more-components-on-your-plot">
+<h3>4.5 Add more components on your plot<a class="headerlink" href="#add-more-components-on-your-plot" title="Permalink to this headline"></a></h3>
 <p>Then you can add more components in the plot. For example, station name, calculated P - and S wave arrival time.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Add more components onto the section plot</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -820,19 +886,45 @@ It is expected that these 5 stations can record the event well.</p>
     <span class="c1"># Make the scatter plot</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">offset</span><span class="p">,</span><span class="n">p_pick</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;_&#39;</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">offset</span><span class="p">,</span><span class="n">s_pick</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;_&#39;</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
-
-<span class="c1"># plot again</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">axes.set_title</span></code> set a title for the axes</p>
+<p><code class="docutils literal notranslate"><span class="pre">axes.text</span></code> add text to the axes</p>
+<p><code class="docutils literal notranslate"><span class="pre">np.loadtxt</span></code> load the data from the text file</p>
+<p><code class="docutils literal notranslate"><span class="pre">axes.scatter</span></code> a scatter plot of y vs. X with varying marker size and/or colour</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># plot again</span>
 
 <span class="n">st</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;section&#39;</span><span class="p">,</span> <span class="n">recordstart</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">recordlength</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">time_down</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">.5</span><span class="p">,</span> <span class="n">grid_linewidth</span><span class="o">=</span><span class="mf">.5</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">)</span>
 
 <span class="c1"># Save the figure</span>
 <span class="c1"># dpi = how many pixels the figure comprises</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;section_plot.pdf&#39;</span><span class="p">,</span><span class="n">dpi</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;section_plot.png&#39;</span><span class="p">,</span><span class="n">dpi</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/section_taup.png"><img alt="../_images/section_taup.png" src="../_images/section_taup.png" style="width: 70%;" /></a>
 <p>The section plot is just a recap of the previous section. Let’s have a try!!</p>
 </section>
+</section>
+<hr class="docutils" />
+<section id="exercises">
+<h2>5 Exercises<a class="headerlink" href="#exercises" title="Permalink to this headline"></a></h2>
+<p>Here is the event information of a magnitude 7.7 earthquake occurred in 2018.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<div class="line-block">
+<div class="line">Origin time: 2017/07/17 23:34:13.870 (UTC)</div>
+<div class="line">Location (lat/lon/dep): 54.4715| 168.8148|  10.99</div>
+<div class="line">Magnitude: mww,7.7,us</div>
+<div class="line">Region: KOMANDORSKIYE OSTROVA REGION</div>
+</div>
+</div>
+<ol class="arabic simple">
+<li><p>The above is an earthquake with magnitude 7.3, try to find a station that was operating during the event and download the waveform data. (10 marks)</p></li>
+<li><p>Visualize the waveforms and the frequency content of the phases (10 marks)</p></li>
+<li><p>Make filter to highlight the phases of the seismic trace. and Plot the waveform again with clear P- and S-waves arrivals (20 marks)</p></li>
+<li><p>Try to identify the Love and Rayleigh waves and estimate their arrivals. (30 marks)</p></li>
+<li><p>Plot a cross-section with title(5) , station names(5) , P - and S - wave arrival(10). And estimate the apparent velocity of  P and S wave(10). (30 marks)</p></li>
+</ol>
 </section>
 </section>
 
@@ -848,7 +940,7 @@ It is expected that these 5 stations can record the event well.</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2021-2022, CUSeisTut team.
-      <span class="lastupdated">Last updated on 2022-02-23.
+      <span class="lastupdated">Last updated on 2022-02-25.
       </span></p>
   </div>
 

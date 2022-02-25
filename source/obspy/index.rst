@@ -42,7 +42,7 @@ We will introduce how to request, read, visualize, and further process seismic d
 #. UTC DateTime
 #. Basic Seismic Data Processing
 #. Theoreotical Travel Time Calculation
-#. Cross-section waveforms plot
+#. Cross-section Plot with TauP arrivals
 
 Developed by LAU Tsz Lam Zoe under the instructions of Junhao SONG, Han CHEN, and Suli Yao.
 
@@ -180,11 +180,14 @@ Input the origin time, coordinates and magnitude of the selected event.
 
 .. code::
  
+ from obspy import UTCDateTime
  origin_time = UTCDateTime("2015-08-11T16:22:15.200000")
- event_longitude = 123.202
- event_latitude = -8.624
- event_depth = 171.9
- event_magnitude = 3.9
+
+ # Coordinates and the magnitude of the event 
+ eq_lon = 123.202
+ eq_lat = -8.624
+ eq_dep = 171.9
+ eq_mag = 3.9
 
 2.2 Choose a station
 ********************
@@ -226,18 +229,15 @@ Import the web service providers and input station information.
  # endtime
  edt = origin_time + 120
 
+ # Get the waveforms from client
+ st = client.get_waveforms(net, sta, loc, cha, stt, edt)
+ print(st)
+
 .. note::
   | FDSN web services for data access to different web service providers.
   | IRIS is one of the web service providers which is commonly used.
 
 ``Client()`` to initialize a client object. 
-
-Get the waveforms from client
-
-.. code::
-
- st = client.get_waveforms(net, sta, loc, cha, stt, edt)
- print(st)
 
 ``client.get_waveforms()`` to get the waveform by the corresponding argument from clients.
 
@@ -249,6 +249,9 @@ We can print the meta data inside the stream.
 .. code::
 
  print(st[0].stats)
+
+ #You can print the corresponding attributes by calling them individually.
+ print(st[0].stats.sampling_rate)
 
 .. image:: metadata.png
    :width: 80%
@@ -273,27 +276,17 @@ There are some default attributes.
 
  | 8. ``baz`` : Back azimuth
 
-You can print the corresponding attributes by calling them individually.
-
-.. code::
-
- print(st[0].stats.sampling_rate)
 
 .. Tip::
 
- For ``gcarc`` and ``bac`` , they are available in sac filed. You can print them by: 
+ For ``gcarc`` and ``bac`` , they are available in sac file. You can print them by: 
 
  .. code::
 
    print(st[0].stats.sac.gcarc)
-
-
-If the header value is empty, you can assign value into the header.
-
-.. code::
-
- st[0].stats.network = 'IU'
-
+   
+   # If the header value is empty, you can assign value into the header.
+   st[0].stats.sac.gcarc = 10000
 
 2.5 Plot the waveforms
 **********************
@@ -311,8 +304,106 @@ Here we plot the waveforms without any preprocessing procedure.
 .. image:: spectrogram_raw.png
    :width: 80%
 
-2.6 Detrend Data
-****************
+.. note::
+
+ Spectrogram is a frequency content of a seismogram. You can check the energy level of the waves over time. 
+
+2.6 Waveform Cross-section Plot
+*******************************
+
+Plot a record section.
+
+2.6.1 Get the waveform data with more than 1 station
+****************************************************
+
+For our example, station 'BAOP', 'HADA', 'SINA' 'BKOR' and 'ALRB' are located near the epicentre of the earthquake.
+It is expected that these 5 stations can record the event well. 
+
+.. image:: section_station.png
+   :width: 60%
+
+.. code::
+ 
+ # Set up a list for bulk request
+ bulk = [('YS', 'BAOP', '', 'BHZ', origin_time, origin_time+120), 
+         ('YS', 'HADA', '', 'BHZ', origin_time, origin_time+120), 
+         ('YS', 'SINA', '', 'BHZ', origin_time, origin_time+120), 
+         ('YS', 'BKOR', '', 'BHZ', origin_time, origin_time+120), 
+         ('YS', 'ALRB', '', 'BHZ', origin_time, origin_time+120)]
+
+ st_bulk = client.get_waveforms_bulk(bulk)
+ print(st)
+
+
+``get_waveforms_bulk`` send a bulk request for waveforms to the server
+
+
+2.6.2 Calculate the great circle distance from stations to earthquake
+*********************************************************************
+
+.. code::
+
+ # Input the coordinates of stations 
+ ALRB_loc = [-8.2194, 124.4115]
+ BAOP_loc = [-8.4882, 123.2696]
+ BKOR_loc = [-8.4868, 122.5509]
+ HADA_loc = [-8.3722, 123.5454]
+ SINA_loc = [-8.1838, 122.9124]
+ 
+ from obspy.geodetics import gps2dist_azimuth
+
+ # Loop, get the station coordinates and calculate the distance 
+ for tr in st_bulk:
+     sta = tr.stats.station
+     if sta == 'ALRB':
+         sta_lat = ALRB_loc[0]
+         sta_lon = ALRB_loc[1]
+     if sta == 'BAOP':
+         sta_lat = BAOP_loc[0]
+         sta_lon = BAOP_loc[1]
+     if sta =='BKOR':
+         sta_lat = BKOR_loc[0]
+         sta_lon = BKOR_loc[1]
+     if sta =='HADA':
+         sta_lat = HADA_loc[0]
+         sta_lon = HADA_loc[1]
+     if sta =='SINA':
+         sta_lat = SINA_loc[0]
+         sta_lon = SINA_loc[1]
+    
+     tr.stats.distance = gps2dist_azimuth(sta_lat, sta_lon,eq_lat, eq_lon)[0]
+
+ # To check the result, you can print the distance with stations.
+ for tr in st_bulk:
+    print(tr.stats.station, tr.stats.distance)
+
+``gps2dist_azimuth`` calculate the distance between two geographic points and forward and backward azimuths between these points
+
+.. note::
+ 
+ | As the mseed file does not contain the location of station, we have to get the information from the station list.
+ | We also have to save the calculated distance into the metadata, as the value is empty initially. 
+
+2.6.3 Plot the waveform cross-section plot
+******************************************
+
+.. code::
+
+ st_bulk.plot(type='section')
+
+``plot(type='section')`` a record section can be plotted
+
+.. image: st_bulk_raw.png
+   :width: 70%
+
+.. note::
+
+ We can get the apparent velocity of P - and S - waves from the plot.
+ Besides, it is also a good way for us to recognise different seismic phases.
+
+2.7 Detrend / Filter Data
+*************************
+
 
 ``detrend()`` to remove a trend from the trace. 
 
@@ -321,24 +412,22 @@ There are many methods listed for detrend function.
 To better visualise and demonstrate the effect of detrend, we will provide you some examples.
 Please download the following waveform data. 
 
-**2.6.1 Remove Mean**
+**2.7.1 Remove Mean**
 
 You can download the waveform file here. :download:`PA01.bhy <./PA01.bhy>`
 We first read the downloaded waveform file.
 
 .. code::
 
-  from obspy import read
-  rmean_raw = read('PA01.bhy')
+ from obspy import read
+ rmean_raw = read('PA01.bhy')
+
+ # Plot the waveform without any processing and copy the stream.
+ rmean_raw.plot()
+ rmean_processed = rmean_raw.copy()
+
 
 ``read`` Read waveform files into an ObsPy Stream object.
-
-Plot the waveform without any processing and copy the stream.
-
-.. code::
-
-  rmean_raw.plot()
-  rmean_processed = rmean_raw.copy()
 
 ``copy()`` Copy the stream
 
@@ -350,25 +439,22 @@ We detrend the waveforms and plot it again.
 
 .. code::
 
-  rmean_processed.detrend("demean")
-  rmean_processed.plot()
+ rmean_processed.detrend("demean")
+ rmean_processed.plot()
 
-Compare the raw waveforms and processed waveforms. 
+ # You can compare the raw and processed waveforms by overlapping them. 
+ import matplotlib.pyplot as plt
 
-.. code::
+ plt.figure(figsize=(13,5))
+ for tr in rmean:
+     data1 = tr.data
+ plt.plot(data1,color='red',label='raw')
 
-  import matplotlib.pyplot as plt
+ for tr in rmean_test:
+     data2 = tr.data
+ plt.plot(data2,color='blue',label='removed mean')
 
-  plt.figure(figsize=(13,5))
-  for tr in rmean:
-      data1 = tr.data
-  plt.plot(data1,color='red',label='raw')
-
-  for tr in rmean_test:
-      data2 = tr.data
-  plt.plot(data2,color='blue',label='removed mean')
-
-  plt.legend()
+ plt.legend()
 
 Here is the result. 
 
@@ -389,44 +475,39 @@ The procedures are the same with remove mean.
 After detrend, you can plot the waveform plot and spectrogram again.
 Compare the results with the previous plots. 
 
-.. code::
-
- st.detrend("linear")
- st.plot()
-
-
 .. image:: plot_detrend.png
-   :width: 80%
-
-.. image:: spectrogram_detrend.png
    :width: 80%
 
 2.7 Filter Data
 ***************
 
-You can apply different filters to filter the data. For example, "bandpass", "highness" and "lowpass". 
+The purpose of filtering data is to remove the noise so that we can identify the phases easier in the filtered waveforms.
 
-To further understand the effects of different filter, you can download the waveform filehere :download:`20170604050016-PG06.z <./20170604050016-PG06.z>` for practice. 
+You can apply different filters to filter the data. For example, "bandpass", "highpass" and "lowpass". 
+
+To further understand the effects of different filter, you can download the waveform file here :download:`PA03.bhz <./PA03.bhz>` for practice. 
 
 .. code::
 
   from obspy import read
 
   # Read the waveform file
-  mag = read('./20170604050016-PG06.z')
+  raw_data = read('./PA03.bhz')
   
+ 
   # Plot the raw waveform
-  mag.plot(starttime=start_time,endtime=start_time+80)
-
+  raw_data.plot()
+  raw_data.spectrogram()
+ 
   # Copy the waveform for further processing
-  mag_processed_low = mag.copy()
+  processed_low = raw_data.copy()
 
   # Filter the waveform with lowpass filter
-  mag_processed_low.filter("lowpass",freq=1)
+  processed_low.filter("lowpass",freq=1)
 
   # Plot the waveform and spectrogram to see the difference
-  mag_processed_low.plot(starttime=start_time,endtime=start_time+80)
-  mag_processed_low.spectrogram(title='lowpass')
+  processed_low.plot(starttime=start_time,endtime=start_time+80)
+  processed_low.spectrogram(title='lowpass')
 
 You can try with different filters using the above code. 
 
@@ -434,74 +515,76 @@ You can try with different filters using the above code.
 
 Here is the comparison using different filters
 
-.. image:: mag_comparison1.png
-   :width: 60%
+.. image:: waveform_raw.png
+   :width: 40%
+.. image:: waveform_low.png
+   :width: 40%
+.. image:: spec_raw.png
+   :width: 40%
+.. image:: spec_low.png
+   :width: 40%
 
-.. image:: mag_comparison2.png
-   :width: 60%
+.. image:: waveform_band.png
+   :width: 40%
+.. image:: waveform_high.png
+   :width: 40%
+.. image:: spec_band.png
+   :width: 40%
+.. image:: spec_high.png
+   :width: 40%
 
 Then, you can decide which filter to be used in this tutorial.
 
 2.8 Waveform rotation
 *********************
 
-We can rotate the North - East components of a seismogram to radial and transverse components.
+We can rotate the North - East components of a seismogram to radial and transverse components. 
 
-Get the waveform of the North - East components
+After rotation you can identify SV and SH of shear waves, Love waves and Rayleigh waves. 
 
-.. code::
+You can download the waveform file here. :download:`BINY.N <./BINY.N>` and :download:`BINY.E <./BINY.E>`
+The procedures are the same with remove mean.
 
-  # Input station informations
-  # network
-  net = 'YS'
-  # station
-  sta = 'BAOP'
-  # location
-  loc = ''
-  # channel
-  cha = 'BH*'
-
-  # starttime
-  stt = origin_time
-  # endtime
-  edt = origin_time + 120
-  st_N = client.get_waveforms(net, sta, loc, 'BH1', stt, edt)
-  st_E = client.get_waveforms(net, sta, loc, 'BH2', stt, edt)
-
-Get the data of the North - East components.
+Read the waveform of the North - East components
 
 .. code::
 
-  for tr1 in st_N:
-    north = tr1.data
-  for tr2 in st_E:
-    east = tr2.data
+ from obspy import read
+ 
+ # Read the North-East components
+ rotation_N = read('BINY.N')
+ 
+ # Read the South-West components
+ rotation_E = read('BINY.E')
 
-Calculate the back azimuth.
+ # print out the meta data
+ print(rotation_N[0].stats)
+
+Get the data of the North - East components and the back azimuth.
 
 .. code::
 
-  from obspy.geodetics import gps2dist_azimuth
-  # Receiver = station received the signals 
-  sta_lat = -8.4882
-  sta_lon = 123.2696
+ # The data of North -East components
+ north = rotation_N[0].data
+ 
+ east = rotation_E[0].data
 
-  # Input the information of the source(earthquake)
-  eq_lat = -8.624
-  eq_lon = 123.202
-  eq_dep = 171.9
-
-  back_azimuth_st2=gps2dist_azimuth(eq_lat, eq_lon,sta_lat, sta_lon, a=6378137.0, f=0.0033528106647474805)[2]
-
-``gps2dist_azimuth`` calculate the back azimuth using the coordinates of the source and receiver
+ # Get the back azimuth.
+ Baz = rotation_N[0].stats.sac.baz
 
 Rotate and Plot the radial and transverse components.
 
 .. code::
 
-  Radial, Transverse = rotate.rotate_ne_rt(north,east,back_azimuth_st2)
-  plt.plot(Radial)
-  plt.plot(Transverse)
+ from obspy.signal import rotate
+ import matplotlib.pyplot as plt
+ 
+ # Rotation
+ Radial, Transverse = rotate.rotate_ne_rt(north,east,Baz)
+
+ # Plot the result
+ plt.plot(Radial)
+ plt.plot(Transverse)
 
 ``rotate.rotate_ne_rt`` rotate waveforms from North - East components to radial and transverse component
 
@@ -531,6 +614,8 @@ TauP is a toolkit to calculate the seismic travel time calculator. It handles ma
 .. note::
 
  Seismic velocity model is the velocity profile of P and S waves along depth. IASP91 model is commonly used.
+
+TauP can provide us a reference for identifying different phases. We can also compare it with the real arrivals, the difference between actual and theoretical arrival may interpret as a site effect. 
 
 3.1 Source Configuration
 ************************
@@ -562,6 +647,10 @@ Method 1
 ********
 
 .. code::
+
+ from obspy.taup import TauPyModel
+ # Import the velocity model 
+ model = TauPyModel(model="iasp91")
 
  from obspy.geodetics import locations2degrees
 
@@ -624,7 +713,7 @@ Plot the theoretical travel time onto the waveform.
  plt.show()
  fig.savefig('taup_single_waveform.png',dpi=500)
 
-.. image:: taup_waveform.png
+.. image:: taup_single_waveform.png
    :width: 60%
 
 
@@ -633,46 +722,30 @@ Plot the theoretical travel time onto the waveform.
 4 Section Plot
 ----------------------------
 
-Plot a record section.
+4.1 Waveform cross-section plot
+*******************************
 
-4.1 Get the waveform data with more than 1 station
-**************************************************
-
-For our example, station 'BAOP', 'HADA', 'SINA' 'BKOR' and 'ALRB' are located near the epicentre of the earthquake.
-It is expected that these 5 stations can record the event well. 
-
-.. image:: section_station.png
-   :width: 60%
+We have introduce how to make a waveform cross-section plot in 2.6. For this section, we would like to add the calculated TauP arrivals onto to waveform cross-section plot. 
 
 .. code::
- 
- # Set up a list for bulk request
- bulk = [('YS', 'BAOP', '', 'BHZ', origin_time, origin_time+120), 
-         ('YS', 'HADA', '', 'BHZ', origin_time, origin_time+120), 
-         ('YS', 'SINA', '', 'BHZ', origin_time, origin_time+120), 
-         ('YS', 'BKOR', '', 'BHZ', origin_time, origin_time+120), 
+
+ bulk = [('YS', 'BAOP', '', 'BHZ', origin_time, origin_time+120),
+         ('YS', 'HADA', '', 'BHZ', origin_time, origin_time+120),
+         ('YS', 'SINA', '', 'BHZ', origin_time, origin_time+120),
+         ('YS', 'BKOR', '', 'BHZ', origin_time, origin_time+120),
          ('YS', 'ALRB', '', 'BHZ', origin_time, origin_time+120)]
 
  st = client.get_waveforms_bulk(bulk)
  print(st)
 
-
-``get_waveforms_bulk`` send a bulk request for waveforms to the server
-
-
-4.2 Calculate the great circle distance from stations to earthquake
-*******************************************************************
-
-.. code::
-
- # Input the coordinates of stations 
+ # Input the coordinates of stations
  ALRB_loc = [-8.2194, 124.4115]
  BAOP_loc = [-8.4882, 123.2696]
  BKOR_loc = [-8.4868, 122.5509]
  HADA_loc = [-8.3722, 123.5454]
  SINA_loc = [-8.1838, 122.9124]
 
- # Loop, get the station coordinates and calculate the distance 
+ # Loop, get the station coordinates and calculate the distance
  for tr in st:
      sta = tr.stats.station
      if sta == 'ALRB':
@@ -690,31 +763,27 @@ It is expected that these 5 stations can record the event well.
      if sta =='SINA':
          sta_lat = SINA_loc[0]
          sta_lon = SINA_loc[1]
-    
+
      tr.stats.distance = gps2dist_azimuth(sta_lat, sta_lon,eq_lat, eq_lon)[0]
 
  # To check the result, you can print the distance with stations.
  for tr in st:
     print(tr.stats.station, tr.stats.distance)
 
-.. note::
- 
- | As the mseed file does not contain the location of station, we have to get the information from the station list.
- | We also have to save the calculated distance into the metadata, as the value is empty initially. 
-
-4.3 TauP travel time
+4.2 TauP travel time
 ********************
 
 .. code::
 
  from obspy import taup
+
  # velocity model configuration 
  model = taup.TauPyModel(model="iasp91")
 
  p_time = []
  s_time = []
  sta = []
- for tr in st:
+ for tr in st_bulk:
      # Get the station location for the input 
      station_coordinate = str(tr.stats.station)+"_loc"
      
@@ -731,8 +800,9 @@ It is expected that these 5 stations can record the event well.
      s_time.append(s_arrival.time)
 
 
+The goal for us is to get the P - and S wave arrival of each station and save them into lists so that we can handle the result later. 
 
-4.4 Output the TauP result as text file for further processing
+4.3 Output the TauP result as text file for further processing
 **************************************************************
 
 As we are handling the data with more than 1 station, it is better for us to save the TauP result in a txt file. 
@@ -765,7 +835,7 @@ As we are handling the data with more than 1 station, it is better for us to sav
 ``pd.to_csv`` write object to a comma-separated values (csv) file
 
 
-4.5 Trim and filter data
+4.4 Trim and filter data
 ************************
 
 .. code::
@@ -776,20 +846,10 @@ As we are handling the data with more than 1 station, it is better for us to sav
  st.detrend('linear')
  st.filter('bandpass', freqmin=2, freqmax=15)
 
-4.6 Section Plot
-****************
+``trim()`` cut all traces with given start time and end time
 
-You can first use the plot function in obspy.
-
-.. code::
-
- fig = plt.figure(figsize=(8,6))
- # Plot the section plot 
-
- st.plot(type='section', recordstart=0, recordlength=60, time_down=True, linewidth=.5, grid_linewidth=.5, show=False, fig=fig)
-
-.. image: section.png
-   :width: 70%
+4.5 Add more components on your plot
+************************************
 
 Then you can add more components in the plot. For example, station name, calculated P - and S wave arrival time.
 
@@ -823,17 +883,51 @@ Then you can add more components in the plot. For example, station name, calcula
      # Make the scatter plot 
      ax.scatter(offset,p_pick, c ='b', marker = '_',s=150)
      ax.scatter(offset,s_pick, c ='r', marker = '_',s=150) 
-  
+ 
+``axes.set_title`` set a title for the axes
+
+``axes.text`` add text to the axes
+
+``np.loadtxt`` load the data from the text file
+
+``axes.scatter`` a scatter plot of y vs. X with varying marker size and/or colour
+
+.. code::
+
  # plot again 
 
  st.plot(type='section', recordstart=0, recordlength=60, time_down=True, linewidth=.5, grid_linewidth=.5, show=False, fig=fig)
 
  # Save the figure 
  # dpi = how many pixels the figure comprises 
- fig.savefig('section_plot.pdf',dpi=500)
+ fig.savefig('section_plot.png',dpi=500)
 
 .. image:: section_taup.png
    :width: 70%
 
 The section plot is just a recap of the previous section. Let's have a try!!
+
+----------------------------
+
+5 Exercises
+----------------------------
+
+Here is the event information of a magnitude 7.7 earthquake occurred in 2018.
+
+.. note::
+
+ | Origin time: 2017/07/17 23:34:13.870 (UTC)
+ | Location (lat/lon/dep): 54.4715| 168.8148|  10.99
+ | Magnitude: mww,7.7,us
+ | Region: KOMANDORSKIYE OSTROVA REGION
+
+1. The above is an earthquake with magnitude 7.3, try to find a station that was operating during the event and download the waveform data. (10 marks)
+
+2. Visualize the waveforms and the frequency content of the phases (10 marks)
+
+3. Make filter to highlight the phases of the seismic trace. and Plot the waveform again with clear P- and S-waves arrivals (20 marks)
+
+4. Try to identify the Love and Rayleigh waves and estimate their arrivals. (30 marks)
+
+5. Plot a cross-section with title(5) , station names(5) , P - and S - wave arrival(10). And estimate the apparent velocity of  P and S wave(10). (30 marks)
 
