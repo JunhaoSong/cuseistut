@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Deep Learning &mdash; CUSeisTut</title>
+  <title>Ambient noise cross correlation &mdash; CUSeisTut</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
@@ -18,8 +18,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="List of developers" href="../appendix/index.html" />
-    <link rel="prev" title="Ambient noise cross correlation" href="../cro_cor/index.html" /> 
+    <link rel="next" title="Deep Learning" href="../AI/index.html" />
+    <link rel="prev" title="Python ObsPy Tutorial" href="../obspy/index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -51,12 +51,17 @@
 <li class="toctree-l1"><a class="reference internal" href="../obspy/index.html">Python ObsPy Tutorial</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Intermediate level</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../cro_cor/index.html">Ambient noise cross correlation</a></li>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Ambient noise cross correlation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#why">why?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how">How?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#results">results</a></li>
+</ul>
+</li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Advanced level</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Deep Learning</a></li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../AI/index.html">Deep Learning</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Appendix</span></p>
 <ul>
@@ -78,9 +83,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Deep Learning</li>
+      <li>Ambient noise cross correlation</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/AI/index.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/cro_cor/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -88,17 +93,34 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="deep-learning">
-<h1>Deep Learning<a class="headerlink" href="#deep-learning" title="Permalink to this headline"></a></h1>
-<p>Under development, coming soon…</p>
+  <div class="section" id="ambient-noise-cross-correlation">
+<h1>Ambient noise cross correlation<a class="headerlink" href="#ambient-noise-cross-correlation" title="Permalink to this headline"></a></h1>
+<p>In this tutorial, we will introduce why and how to compute cross-correlation functions (CCFs) from seismic ambient noise data.</p>
+<div class="section" id="why">
+<h2>why?<a class="headerlink" href="#why" title="Permalink to this headline"></a></h2>
+<p>CCF -&gt; EGF</p>
+</div>
+<div class="section" id="how">
+<h2>How?<a class="headerlink" href="#how" title="Permalink to this headline"></a></h2>
+<ol class="arabic simple">
+<li><p>cut and preprocess data</p></li>
+<li><p>perform normalization</p></li>
+<li><p>perform cross correlation</p></li>
+</ol>
+</div>
+<div class="section" id="results">
+<h2>results<a class="headerlink" href="#results" title="Permalink to this headline"></a></h2>
+<p>Here is a figure from <a class="reference external" href="https://www.science.org/doi/10.1126/science.1108339">this paper</a></p>
+<a class="reference internal image-reference" href="https://www.science.org/cms/10.1126/science.1108339/asset/287ef0b7-5c19-40f9-ab5d-3cb6aac92cfb/assets/graphic/307_1615_f1.jpeg"><img alt="https://www.science.org/cms/10.1126/science.1108339/asset/287ef0b7-5c19-40f9-ab5d-3cb6aac92cfb/assets/graphic/307_1615_f1.jpeg" src="https://www.science.org/cms/10.1126/science.1108339/asset/287ef0b7-5c19-40f9-ab5d-3cb6aac92cfb/assets/graphic/307_1615_f1.jpeg" style="width: 90%;" /></a>
+</div>
 </div>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../cro_cor/index.html" class="btn btn-neutral float-left" title="Ambient noise cross correlation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../appendix/index.html" class="btn btn-neutral float-right" title="List of developers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../obspy/index.html" class="btn btn-neutral float-left" title="Python ObsPy Tutorial" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../AI/index.html" class="btn btn-neutral float-right" title="Deep Learning" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

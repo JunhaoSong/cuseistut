@@ -39,7 +39,7 @@ This document is developed and maintained by `CUHK Seismology LAB <http://www.cu
    :caption: Intermediate level
    :hidden:
 
-   Cro_Cor/index
+   cro_cor/index
 
 .. toctree::
    :caption: Advanced level
