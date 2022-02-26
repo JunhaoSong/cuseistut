@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Python ObsPy Tutorial &mdash; CUSeisTut</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -138,17 +137,17 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="python-obspy-tutorial">
+  <div class="section" id="python-obspy-tutorial">
 <h1>Python ObsPy Tutorial<a class="headerlink" href="#python-obspy-tutorial" title="Permalink to this headline"></a></h1>
-<section id="brief-introduction">
+<div class="section" id="brief-introduction">
 <h2>Brief introduction<a class="headerlink" href="#brief-introduction" title="Permalink to this headline"></a></h2>
-<section id="what-is-obspy">
+<div class="section" id="what-is-obspy">
 <h3>What is ObsPy?<a class="headerlink" href="#what-is-obspy" title="Permalink to this headline"></a></h3>
 <p><strong>ObsPy</strong> is an open-source project dedicated to provide a <strong>Python</strong> framework for <strong>processing seismological data</strong>. It provides parsers for common file formats, clients to access data centers and seismological signal processing routines which allow the manipulation of seismological time series (copied from ObsPy Github page).</p>
 <a class="reference internal image-reference" href="../_images/obspy_logo.png"><img alt="../_images/obspy_logo.png" src="../_images/obspy_logo.png" style="width: 50%;" /></a>
 <p>We assume that you already have some experience of using Python. If not, you are suggested to read this <a class="reference external" href="https://docs.obspy.org/tutorial/code_snippets/python_introduction.html">small, incomplete introduction to the Python programming language</a>.</p>
-</section>
-<section id="how-to-install-obspy">
+</div>
+<div class="section" id="how-to-install-obspy">
 <h3>How to install ObsPy<a class="headerlink" href="#how-to-install-obspy" title="Permalink to this headline"></a></h3>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -168,8 +167,8 @@ $ conda install obspy=1.2
 <p class="admonition-title">Warning</p>
 <p>Exclude $ sign and start without whitespace!</p>
 </div>
-</section>
-<section id="contents-of-this-tutorial">
+</div>
+<div class="section" id="contents-of-this-tutorial">
 <h3>Contents of this tutorial<a class="headerlink" href="#contents-of-this-tutorial" title="Permalink to this headline"></a></h3>
 <p>We will introduce how to request, read, visualize, and further process seismic data using a few basic <code class="docutils literal notranslate"><span class="pre">functions</span></code> in the ObsPy <code class="docutils literal notranslate"><span class="pre">module</span></code>. it includes:</p>
 <ol class="arabic simple">
@@ -179,14 +178,14 @@ $ conda install obspy=1.2
 <li><p>Cross-section Plot with TauP arrivals</p></li>
 </ol>
 <p>Developed by LAU Tsz Lam Zoe under the instructions of Junhao SONG, Han CHEN, and Suli Yao.</p>
-</section>
-</section>
+</div>
+</div>
 <hr class="docutils" />
-<section id="utc-date-time">
+<div class="section" id="utc-date-time">
 <h2>1 UTC Date Time<a class="headerlink" href="#utc-date-time" title="Permalink to this headline"></a></h2>
 <p>Now let’s introduce the UTC DateTime format.</p>
 <p>The UTC DateTime is a Coordinated Universal Time. Usually we could see that HKT (UTC+8) or BJT (UTC+8), which means that Hong Kong or Beijing time is 8 hours earlier than UTC time. We usually use UTC Datetime to present the origin time of an earthquake. Seismic time-series data like digital seismograms also use UTC Datetime to present the time of each sample.</p>
-<section id="datetime-initialization">
+<div class="section" id="datetime-initialization">
 <h3>1.1 DateTime Initialization<a class="headerlink" href="#datetime-initialization" title="Permalink to this headline"></a></h3>
 <p>First in the terminal, type <code class="docutils literal notranslate"><span class="pre">python</span></code> and then type <code class="docutils literal notranslate"><span class="pre">enter</span></code>:</p>
 <p><strong>Method 1</strong></p>
@@ -216,8 +215,8 @@ $ conda install obspy=1.2
 <div class="line">Method 1 &amp; 2 are examples. You can explore others <a class="reference external" href="https://docs.obspy.org/packages/autogen/obspy.core.utcdatetime.UTCDateTime.html#obspy.core.utcdatetime.UTCDateTime">here</a>.</div>
 </div>
 </div>
-</section>
-<section id="datetime-attribute-access">
+</div>
+<div class="section" id="datetime-attribute-access">
 <h3>1.2 DateTime Attribute Access<a class="headerlink" href="#datetime-attribute-access" title="Permalink to this headline"></a></h3>
 <p>Now we can assign the UTCDateTime object to a variable “time”.</p>
 <p>. code:</p>
@@ -259,8 +258,8 @@ $ conda install obspy=1.2
 <div class="line">The reference time: “1970-01-01”</div>
 </div>
 </div>
-</section>
-<section id="handling-time-differences">
+</div>
+<div class="section" id="handling-time-differences">
 <h3>1.3 Handling time differences<a class="headerlink" href="#handling-time-differences" title="Permalink to this headline"></a></h3>
 <p>Calculate the time difference or add seconds into original “time”</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;print(time - UTCDateTime(&quot;2012-09-07&quot;))</span>
@@ -271,16 +270,16 @@ $ conda install obspy=1.2
 </pre></div>
 </div>
 <p>Clearly, we can see that “time2” is 1 hour (3600 seconds) later than “time”.</p>
-</section>
-</section>
+</div>
+</div>
 <hr class="docutils" />
-<section id="basic-seismic-data-processing">
+<div class="section" id="basic-seismic-data-processing">
 <h2>2 Basic Seismic Data Processing<a class="headerlink" href="#basic-seismic-data-processing" title="Permalink to this headline"></a></h2>
-<section id="flow-chart">
+<div class="section" id="flow-chart">
 <h3>Flow chart<a class="headerlink" href="#flow-chart" title="Permalink to this headline"></a></h3>
 <a class="reference internal image-reference" href="../_images/flowchart.png"><img alt="../_images/flowchart.png" src="../_images/flowchart.png" style="width: 100%;" /></a>
-</section>
-<section id="choose-an-event">
+</div>
+<div class="section" id="choose-an-event">
 <h3>2.1 Choose an event<a class="headerlink" href="#choose-an-event" title="Permalink to this headline"></a></h3>
 <p>You can select one event in the event list.</p>
 <div class="admonition note">
@@ -302,8 +301,8 @@ $ conda install obspy=1.2
 <span class="n">eq_mag</span> <span class="o">=</span> <span class="mf">3.9</span>
 </pre></div>
 </div>
-</section>
-<section id="choose-a-station">
+</div>
+<div class="section" id="choose-a-station">
 <h3>2.2 Choose a station<a class="headerlink" href="#choose-a-station" title="Permalink to this headline"></a></h3>
 <p>Choose one station from the station list.
 Make sure the selected station is operating during the event.</p>
@@ -317,8 +316,8 @@ Make sure the selected station is operating during the event.</p>
 <div class="line">YS|BAOP||BHZ|-8.4882|123.2696|67.0|0.0|0.0|-90.0|Nanometrics Trillium 120 Sec Response/Taurus Stand|1.19642E9|0.3|m/s|50.0|2014-10-31T00:00:00|2016-12-31T23:59:59</div>
 </div>
 </div>
-</section>
-<section id="get-waveforms">
+</div>
+<div class="section" id="get-waveforms">
 <h3>2.3 Get waveforms<a class="headerlink" href="#get-waveforms" title="Permalink to this headline"></a></h3>
 <p>Import the web service providers and input station information.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">obspy.clients.fdsn</span> <span class="kn">import</span> <span class="n">Client</span>
@@ -355,8 +354,8 @@ Make sure the selected station is operating during the event.</p>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">Client()</span></code> to initialize a client object.</p>
 <p><code class="docutils literal notranslate"><span class="pre">client.get_waveforms()</span></code> to get the waveform by the corresponding argument from clients.</p>
-</section>
-<section id="meta-data">
+</div>
+<div class="section" id="meta-data">
 <h3>2.4 Meta data<a class="headerlink" href="#meta-data" title="Permalink to this headline"></a></h3>
 <p>We can print the meta data inside the stream.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">st</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">stats</span><span class="p">)</span>
@@ -404,8 +403,8 @@ Make sure the selected station is operating during the event.</p>
 </pre></div>
 </div>
 </div>
-</section>
-<section id="plot-the-waveforms">
+</div>
+<div class="section" id="plot-the-waveforms">
 <h3>2.5 Plot the waveforms<a class="headerlink" href="#plot-the-waveforms" title="Permalink to this headline"></a></h3>
 <p>Here we plot the waveforms without any preprocessing procedure.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">st</span><span class="o">.</span><span class="n">plot</span><span class="p">();</span>
@@ -418,12 +417,12 @@ Make sure the selected station is operating during the event.</p>
 <p class="admonition-title">Note</p>
 <p>Spectrogram is a frequency content of a seismogram. You can check the energy level of the waves over time.</p>
 </div>
-</section>
-<section id="waveform-cross-section-plot">
+</div>
+<div class="section" id="waveform-cross-section-plot">
 <h3>2.6 Waveform Cross-section Plot<a class="headerlink" href="#waveform-cross-section-plot" title="Permalink to this headline"></a></h3>
 <p>Plot a record section.</p>
-</section>
-<section id="get-the-waveform-data-with-more-than-1-station">
+</div>
+<div class="section" id="get-the-waveform-data-with-more-than-1-station">
 <h3>2.6.1 Get the waveform data with more than 1 station<a class="headerlink" href="#get-the-waveform-data-with-more-than-1-station" title="Permalink to this headline"></a></h3>
 <p>For our example, station ‘BAOP’, ‘HADA’, ‘SINA’ ‘BKOR’ and ‘ALRB’ are located near the epicentre of the earthquake.
 It is expected that these 5 stations can record the event well.</p>
@@ -440,8 +439,8 @@ It is expected that these 5 stations can record the event well.</p>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">get_waveforms_bulk</span></code> send a bulk request for waveforms to the server</p>
-</section>
-<section id="calculate-the-great-circle-distance-from-stations-to-earthquake">
+</div>
+<div class="section" id="calculate-the-great-circle-distance-from-stations-to-earthquake">
 <h3>2.6.2 Calculate the great circle distance from stations to earthquake<a class="headerlink" href="#calculate-the-great-circle-distance-from-stations-to-earthquake" title="Permalink to this headline"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Input the coordinates of stations</span>
 <span class="n">ALRB_loc</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">8.2194</span><span class="p">,</span> <span class="mf">124.4115</span><span class="p">]</span>
@@ -486,8 +485,8 @@ It is expected that these 5 stations can record the event well.</p>
 <div class="line">We also have to save the calculated distance into the metadata, as the value is empty initially.</div>
 </div>
 </div>
-</section>
-<section id="plot-the-waveform-cross-section-plot">
+</div>
+<div class="section" id="plot-the-waveform-cross-section-plot">
 <h3>2.6.3 Plot the waveform cross-section plot<a class="headerlink" href="#plot-the-waveform-cross-section-plot" title="Permalink to this headline"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">st_bulk</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;section&#39;</span><span class="p">)</span>
 </pre></div>
@@ -498,8 +497,8 @@ It is expected that these 5 stations can record the event well.</p>
 <p>We can get the apparent velocity of P - and S - waves from the plot.
 Besides, it is also a good way for us to recognise different seismic phases.</p>
 </div>
-</section>
-<section id="detrend-filter-data">
+</div>
+<div class="section" id="detrend-filter-data">
 <h3>2.7 Detrend / Filter Data<a class="headerlink" href="#detrend-filter-data" title="Permalink to this headline"></a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">detrend()</span></code> to remove a trend from the trace.</p>
 <p>There are many methods listed for detrend function.</p>
@@ -553,8 +552,8 @@ The procedures are the same with remove mean.</p>
 <p>After detrend, you can plot the waveform plot and spectrogram again.
 Compare the results with the previous plots.</p>
 <a class="reference internal image-reference" href="../_images/plot_detrend.png"><img alt="../_images/plot_detrend.png" src="../_images/plot_detrend.png" style="width: 80%;" /></a>
-</section>
-<section id="filter-data">
+</div>
+<div class="section" id="filter-data">
 <h3>2.7 Filter Data<a class="headerlink" href="#filter-data" title="Permalink to this headline"></a></h3>
 <p>The purpose of filtering data is to remove the noise so that we can identify the phases easier in the filtered waveforms.</p>
 <p>You can apply different filters to filter the data. For example, “bandpass”, “highpass” and “lowpass”.</p>
@@ -592,8 +591,8 @@ Compare the results with the previous plots.</p>
 <a class="reference internal image-reference" href="../_images/spec_band.png"><img alt="../_images/spec_band.png" src="../_images/spec_band.png" style="width: 40%;" /></a>
 <a class="reference internal image-reference" href="../_images/spec_high.png"><img alt="../_images/spec_high.png" src="../_images/spec_high.png" style="width: 40%;" /></a>
 <p>Then, you can decide which filter to be used in this tutorial.</p>
-</section>
-<section id="waveform-rotation">
+</div>
+<div class="section" id="waveform-rotation">
 <h3>2.8 Waveform rotation<a class="headerlink" href="#waveform-rotation" title="Permalink to this headline"></a></h3>
 <p>We can rotate the North - East components of a seismogram to radial and transverse components.</p>
 <p>After rotation you can identify SV and SH of shear waves, Love waves and Rayleigh waves.</p>
@@ -637,16 +636,16 @@ The procedures are the same with remove mean.</p>
 <p><code class="docutils literal notranslate"><span class="pre">rotate.rotate_ne_rt</span></code> rotate waveforms from North - East components to radial and transverse component</p>
 <a class="reference internal image-reference" href="../_images/rotate_radial.png"><img alt="../_images/rotate_radial.png" src="../_images/rotate_radial.png" style="width: 55%;" /></a>
 <a class="reference internal image-reference" href="../_images/rotate_transverse.png"><img alt="../_images/rotate_transverse.png" src="../_images/rotate_transverse.png" style="width: 55%;" /></a>
-</section>
-<section id="seismic-phases-in-seismogram">
+</div>
+<div class="section" id="seismic-phases-in-seismogram">
 <h3>2.9 Seismic Phases in seismogram<a class="headerlink" href="#seismic-phases-in-seismogram" title="Permalink to this headline"></a></h3>
 <p>Many seismic phases can be presented in the seismogram. For beginners, we can focus on P - and S - waves. Here is the demonstration of picking P - and S - waves in a teleseismic earthquake.</p>
 <a class="reference internal image-reference" href="../_images/Teleseismic_phase.png"><img alt="../_images/Teleseismic_phase.png" src="../_images/Teleseismic_phase.png" style="width: 65%;" /></a>
 <p>We will introduce the picking method in next section!</p>
-</section>
-</section>
+</div>
+</div>
 <hr class="docutils" />
-<section id="taup">
+<div class="section" id="taup">
 <h2>3 TauP<a class="headerlink" href="#taup" title="Permalink to this headline"></a></h2>
 <p>TauP is a toolkit to calculate the seismic travel time calculator. It handles many types of velocity models and calculate times for virtually any seismic phase with a phase parser.</p>
 <div class="admonition note">
@@ -654,7 +653,7 @@ The procedures are the same with remove mean.</p>
 <p>Seismic velocity model is the velocity profile of P and S waves along depth. IASP91 model is commonly used.</p>
 </div>
 <p>TauP can provide us a reference for identifying different phases. We can also compare it with the real arrivals, the difference between actual and theoretical arrival may interpret as a site effect.</p>
-<section id="source-configuration">
+<div class="section" id="source-configuration">
 <h3>3.1 Source Configuration<a class="headerlink" href="#source-configuration" title="Permalink to this headline"></a></h3>
 <p>Input the information of the source (earthquake)</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">eq_lat</span> <span class="o">=</span> <span class="o">-</span><span class="mf">8.624</span>
@@ -662,20 +661,20 @@ The procedures are the same with remove mean.</p>
 <span class="n">eq_dep</span> <span class="o">=</span> <span class="mf">171.9</span>
 </pre></div>
 </div>
-</section>
-<section id="receiver-configuration">
+</div>
+<div class="section" id="receiver-configuration">
 <h3>3.2 Receiver Configuration<a class="headerlink" href="#receiver-configuration" title="Permalink to this headline"></a></h3>
 <p>Input the information of the receiver (station)</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sta_lat</span> <span class="o">=</span> <span class="o">-</span><span class="mf">8.4882</span>
 <span class="n">sta_lon</span> <span class="o">=</span> <span class="mf">123.2696</span>
 </pre></div>
 </div>
-</section>
-<section id="travel-time-calculation">
+</div>
+<div class="section" id="travel-time-calculation">
 <h3>3.3 Travel Time Calculation<a class="headerlink" href="#travel-time-calculation" title="Permalink to this headline"></a></h3>
 <p>There are 2 methods to calculate the travel time.</p>
-</section>
-<section id="method-1">
+</div>
+<div class="section" id="method-1">
 <h3>Method 1<a class="headerlink" href="#method-1" title="Permalink to this headline"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">obspy.taup</span> <span class="kn">import</span> <span class="n">TauPyModel</span>
 <span class="c1"># Import the velocity model</span>
@@ -695,8 +694,8 @@ The procedures are the same with remove mean.</p>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">location2degrees</span></code> calculate the great circle distance between 2 points on a spherical earth</p>
 <p><code class="docutils literal notranslate"><span class="pre">model.get_travel_times</span></code> get the travel times of the phases</p>
-</section>
-<section id="method-2">
+</div>
+<div class="section" id="method-2">
 <h3>Method 2<a class="headerlink" href="#method-2" title="Permalink to this headline"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">p_arrival</span><span class="p">,</span><span class="n">s_arrival</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_travel_times_geo</span><span class="p">(</span><span class="n">source_depth_in_km</span><span class="o">=</span><span class="n">eq_dep</span><span class="p">,</span>
                                         <span class="n">source_latitude_in_deg</span><span class="o">=</span><span class="n">eq_lat</span><span class="p">,</span>
@@ -714,8 +713,8 @@ The procedures are the same with remove mean.</p>
 <span class="nb">print</span><span class="p">(</span><span class="n">p_arrival</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">s_arrival</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
 </pre></div>
 </div>
-</section>
-<section id="visualise-the-result">
+</div>
+<div class="section" id="visualise-the-result">
 <h3>3.4 Visualise the result<a class="headerlink" href="#visualise-the-result" title="Permalink to this headline"></a></h3>
 <p>Plot the theoretical travel time onto the waveform.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import matplotlib module</span>
@@ -736,12 +735,12 @@ The procedures are the same with remove mean.</p>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/taup_single_waveform.png"><img alt="../_images/taup_single_waveform.png" src="../_images/taup_single_waveform.png" style="width: 60%;" /></a>
-</section>
-</section>
+</div>
+</div>
 <hr class="docutils" />
-<section id="section-plot">
+<div class="section" id="section-plot">
 <h2>4 Section Plot<a class="headerlink" href="#section-plot" title="Permalink to this headline"></a></h2>
-<section id="id1">
+<div class="section" id="id1">
 <h3>4.1 Waveform cross-section plot<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h3>
 <p>We have introduce how to make a waveform cross-section plot in 2.6. For this section, we would like to add the calculated TauP arrivals onto to waveform cross-section plot.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bulk</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;YS&#39;</span><span class="p">,</span> <span class="s1">&#39;BAOP&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;BHZ&#39;</span><span class="p">,</span> <span class="n">origin_time</span><span class="p">,</span> <span class="n">origin_time</span><span class="o">+</span><span class="mi">120</span><span class="p">),</span>
@@ -786,8 +785,8 @@ The procedures are the same with remove mean.</p>
    <span class="nb">print</span><span class="p">(</span><span class="n">tr</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">station</span><span class="p">,</span> <span class="n">tr</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">distance</span><span class="p">)</span>
 </pre></div>
 </div>
-</section>
-<section id="taup-travel-time">
+</div>
+<div class="section" id="taup-travel-time">
 <h3>4.2 TauP travel time<a class="headerlink" href="#taup-travel-time" title="Permalink to this headline"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">obspy</span> <span class="kn">import</span> <span class="n">taup</span>
 
@@ -815,8 +814,8 @@ The procedures are the same with remove mean.</p>
 </pre></div>
 </div>
 <p>The goal for us is to get the P - and S wave arrival of each station and save them into lists so that we can handle the result later.</p>
-</section>
-<section id="output-the-taup-result-as-text-file-for-further-processing">
+</div>
+<div class="section" id="output-the-taup-result-as-text-file-for-further-processing">
 <h3>4.3 Output the TauP result as text file for further processing<a class="headerlink" href="#output-the-taup-result-as-text-file-for-further-processing" title="Permalink to this headline"></a></h3>
 <p>As we are handling the data with more than 1 station, it is better for us to save the TauP result in a txt file.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make a table using pandas and save it to the text file</span>
@@ -843,8 +842,8 @@ The procedures are the same with remove mean.</p>
 <p><code class="docutils literal notranslate"><span class="pre">pd.DataFrame</span></code> Data structure</p>
 <p><code class="docutils literal notranslate"><span class="pre">pd.concat</span></code> concatenate pandas objects along a particular axis with optional set logic along the other axes</p>
 <p><code class="docutils literal notranslate"><span class="pre">pd.to_csv</span></code> write object to a comma-separated values (csv) file</p>
-</section>
-<section id="trim-and-filter-data">
+</div>
+<div class="section" id="trim-and-filter-data">
 <h3>4.4 Trim and filter data<a class="headerlink" href="#trim-and-filter-data" title="Permalink to this headline"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Trim the waveform data - shorter time range</span>
 <span class="n">st</span><span class="o">.</span><span class="n">trim</span><span class="p">(</span><span class="n">origin_time</span><span class="p">,</span> <span class="n">origin_time</span> <span class="o">+</span> <span class="n">p_time</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mi">150</span><span class="p">)</span>
@@ -854,8 +853,8 @@ The procedures are the same with remove mean.</p>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">trim()</span></code> cut all traces with given start time and end time</p>
-</section>
-<section id="add-more-components-on-your-plot">
+</div>
+<div class="section" id="add-more-components-on-your-plot">
 <h3>4.5 Add more components on your plot<a class="headerlink" href="#add-more-components-on-your-plot" title="Permalink to this headline"></a></h3>
 <p>Then you can add more components in the plot. For example, station name, calculated P - and S wave arrival time.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Add more components onto the section plot</span>
@@ -903,10 +902,10 @@ The procedures are the same with remove mean.</p>
 </div>
 <a class="reference internal image-reference" href="../_images/section_taup.png"><img alt="../_images/section_taup.png" src="../_images/section_taup.png" style="width: 70%;" /></a>
 <p>The section plot is just a recap of the previous section. Let’s have a try!!</p>
-</section>
-</section>
+</div>
+</div>
 <hr class="docutils" />
-<section id="exercises">
+<div class="section" id="exercises">
 <h2>5 Exercises<a class="headerlink" href="#exercises" title="Permalink to this headline"></a></h2>
 <p>Here is the event information of a magnitude 7.7 earthquake occurred in 2018.</p>
 <div class="admonition note">
@@ -925,8 +924,8 @@ The procedures are the same with remove mean.</p>
 <li><p>Try to identify the Love and Rayleigh waves and estimate their arrivals. (30 marks)</p></li>
 <li><p>Plot a cross-section with title(5) , station names(5) , P - and S - wave arrival(10). And estimate the apparent velocity of  P and S wave(10). (30 marks)</p></li>
 </ol>
-</section>
-</section>
+</div>
+</div>
 
 
            </div>
@@ -940,7 +939,7 @@ The procedures are the same with remove mean.</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2021-2022, CUSeisTut team.
-      <span class="lastupdated">Last updated on 2022-02-25.
+      <span class="lastupdated">Last updated on 2022-02-26.
       </span></p>
   </div>
 
