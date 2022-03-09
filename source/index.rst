@@ -40,6 +40,7 @@ This document is developed and maintained by `CUHK Seismology LAB <http://www.cu
    :hidden:
 
    cro_cor/index
+   eqt/index
 
 .. toctree::
    :caption: Advanced level
