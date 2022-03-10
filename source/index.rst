@@ -39,14 +39,24 @@ This document is developed and maintained by `CUHK Seismology LAB <http://www.cu
    :caption: Intermediate level
    :hidden:
 
-   cro_cor/index
-   eqt/index
+   sta_lta/index
+   hypoinverse/index
 
 .. toctree::
    :caption: Advanced level
    :hidden:
 
-   AI/index
+   eqt/index
+   hypodd/index
+   source_spectra/index
+   pylith_static/index
+   pylith_dynamic/index
+   body_tomo/index
+   surface_tomo/index
+   ambient_tomo/index
+
+
+
 
 .. toctree::
    :caption: Appendix
