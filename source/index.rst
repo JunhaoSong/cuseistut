@@ -40,14 +40,14 @@ This document is developed and maintained by `CUHK Seismology LAB <http://www.cu
    :hidden:
 
    sta_lta/index
-   hypoinverse/index
+   abs_loc/index
 
 .. toctree::
    :caption: Advanced level
    :hidden:
 
    eqt/index
-   hypodd/index
+   dd_loc/index
    source_spectra/index
    pylith_static/index
    pylith_dynamic/index
