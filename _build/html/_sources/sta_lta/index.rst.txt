@@ -1,9 +1,9 @@
 Earthquake Detection STA/LTA
 ============================
 
-Developer: Hui LIU  
+Developer: Hui LIU, Earth Science System Program, CUHK
 
-Tester: Zhangyu SUN & Ng Kai Yin
+Testers: Zhangyu SUN & Ng Kai Yin, Earth Science System Program, CUHK
 
 Brief Introduction
 ------------------
@@ -44,7 +44,7 @@ Activate ObsPy environment
 **************************
 
 .. note::
- | We here assume you have already installed ObsPy package in the opspy envronmrnt on your computer after finishing the previous **Python ObsPy Tutorial**. 
+ | We here assume you have already installed ObsPy package in the opspy environment on your computer after finishing the previous **Python ObsPy Tutorial**. 
 
 Open your terminal and run the following commands.
 
