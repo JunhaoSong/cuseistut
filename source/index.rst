@@ -53,7 +53,7 @@ This document is developed and maintained by `CUHK Seismology LAB <http://www.cu
    pylith_dynamic/index
    body_tomo/index
    surface_tomo/index
-   ambient_tomo/index
+   ambient_tomo/index 
 
 
 
