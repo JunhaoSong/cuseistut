@@ -1,75 +1,38 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Earthquake Transformer Tutorial &mdash; CUSeisTut</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-
-  
-  
-  
-  
-
-  
-  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Double-Difference Earthquake Relocation" href="../dd_loc/index.html" />
     <link rel="prev" title="Earthquake Absolute Location" href="../abs_loc/index.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="../index.html" class="icon icon-home"> CUSeisTut
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
                 0.0.1
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -77,17 +40,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">CUSeisTut</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../intro/index.html">Introduction</a></li>
@@ -138,86 +91,48 @@
 <li class="toctree-l1"><a class="reference external" href="https://docs.google.com/forms/d/e/1FAIpQLScSQIcOtANjTonJDhK4KYmoA6H2lUHou9Mqz1oFCHSTd5wxhQ/viewform?usp=sf_link">Give us feedback here</a></li>
 </ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">CUSeisTut</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../index.html">Docs</a> &raquo;</li>
-        
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
       <li>Earthquake Transformer Tutorial</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="../_sources/eqt/index.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   <section id="earthquake-transformer-tutorial">
-<h1>Earthquake Transformer Tutorial<a class="headerlink" href="#earthquake-transformer-tutorial" title="Permalink to this headline">¶</a></h1>
+<h1>Earthquake Transformer Tutorial<a class="headerlink" href="#earthquake-transformer-tutorial" title="Permalink to this headline"></a></h1>
 <section id="brief-introduction">
-<h2>Brief introduction<a class="headerlink" href="#brief-introduction" title="Permalink to this headline">¶</a></h2>
+<h2>Brief introduction<a class="headerlink" href="#brief-introduction" title="Permalink to this headline"></a></h2>
 <section id="deep-learning-model-for-automatic-detection">
-<h3>Deep learning model for automatic detection<a class="headerlink" href="#deep-learning-model-for-automatic-detection" title="Permalink to this headline">¶</a></h3>
+<h3>Deep learning model for automatic detection<a class="headerlink" href="#deep-learning-model-for-automatic-detection" title="Permalink to this headline"></a></h3>
 <p>The neural network was first applied in seismology to pick arrival phases since 2006. The algorithm of using machine learning in seismology is to build a model and train it with large sets of well - labeled data. After training, the model can predict from a given sets of input which means it can detect the P - and S - waves automatically. We can also obtain the probability of the results so to evaluate the performance.</p>
 <p>There are numerous architecture of deep learning model. In seismology, Convolutional Neural Network (CNN) is commonly used for classifying the features.</p>
 <p>By setting up a robust automatic system, we can enhance the accuracy and efficiency of the earthquake detection.</p>
 </section>
 <section id="what-is-earthquake-transformer-eqt">
-<h3>What is Earthquake Transformer (EQT)<a class="headerlink" href="#what-is-earthquake-transformer-eqt" title="Permalink to this headline">¶</a></h3>
+<h3>What is Earthquake Transformer (EQT)<a class="headerlink" href="#what-is-earthquake-transformer-eqt" title="Permalink to this headline"></a></h3>
 <p><strong>Earthquake Transformer (EQT)</strong> is one of the deep learning model for earthquake detection and phase picking.</p>
 <p>You can refer the architecture of EQT <a class="reference external" href="https://www.nature.com/articles/s41467-020-17591-w">here</a>.</p>
 <p>By using EQT, we can detect the earthquake phases (P &amp; S) automatically. The model has been trained on global seismic data so we can simply apply it in different sites.</p>
 </section>
 <section id="how-to-install-eqt">
-<h3>How to install EQT<a class="headerlink" href="#how-to-install-eqt" title="Permalink to this headline">¶</a></h3>
+<h3>How to install EQT<a class="headerlink" href="#how-to-install-eqt" title="Permalink to this headline"></a></h3>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <div class="line-block">
@@ -242,7 +157,7 @@ $ conda install -c smousavi05 eqtransformer
 </div>
 </section>
 <section id="contents-of-this-tutorial">
-<h3>Contents of this tutorial<a class="headerlink" href="#contents-of-this-tutorial" title="Permalink to this headline">¶</a></h3>
+<h3>Contents of this tutorial<a class="headerlink" href="#contents-of-this-tutorial" title="Permalink to this headline"></a></h3>
 <p>In this tutorial, we will cover:</p>
 <ol class="arabic simple">
 <li><p>Make the station list and Download the data</p></li>
@@ -255,9 +170,9 @@ $ conda install -c smousavi05 eqtransformer
 </section>
 <hr class="docutils" />
 <section id="make-the-station-list-and-download-the-data">
-<h2>1 Make the station list and Download the data<a class="headerlink" href="#make-the-station-list-and-download-the-data" title="Permalink to this headline">¶</a></h2>
+<h2>1 Make the station list and Download the data<a class="headerlink" href="#make-the-station-list-and-download-the-data" title="Permalink to this headline"></a></h2>
 <section id="constrain-the-area-and-the-time-of-interest">
-<h3>1.1 Constrain the area and the time of interest<a class="headerlink" href="#constrain-the-area-and-the-time-of-interest" title="Permalink to this headline">¶</a></h3>
+<h3>1.1 Constrain the area and the time of interest<a class="headerlink" href="#constrain-the-area-and-the-time-of-interest" title="Permalink to this headline"></a></h3>
 <p>It is better for us to constrain a small area of interest, otherwise the downloading time will be extended.</p>
 <p>We will use the example from the ObsPy tutorial. But, we will download the continuous data using EQT this time.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Area of interest</span>
@@ -278,7 +193,7 @@ $ conda install -c smousavi05 eqtransformer
 </div>
 </section>
 <section id="make-station-list">
-<h3>1.2 Make Station list<a class="headerlink" href="#make-station-list" title="Permalink to this headline">¶</a></h3>
+<h3>1.2 Make Station list<a class="headerlink" href="#make-station-list" title="Permalink to this headline"></a></h3>
 <p>Station list contains the information of the stations and it will help to find the waveforms by stations during the detection.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 <span class="n">json_basepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span><span class="s2">&quot;json/station_list.json&quot;</span><span class="p">)</span>
@@ -297,7 +212,7 @@ $ conda install -c smousavi05 eqtransformer
 </div>
 </section>
 <section id="download-data">
-<h3>1.3 Download Data<a class="headerlink" href="#download-data" title="Permalink to this headline">¶</a></h3>
+<h3>1.3 Download Data<a class="headerlink" href="#download-data" title="Permalink to this headline"></a></h3>
 <p>We can download the waveform data directly from the EQT. The file names of the downloaded data must applicable to EQT.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">EQTransformer.utils.downloader</span> <span class="kn">import</span> <span class="n">downloadMseeds</span>
 
@@ -316,7 +231,7 @@ $ conda install -c smousavi05 eqtransformer
 </section>
 <hr class="docutils" />
 <section id="detect-earthquake">
-<h2>2 Detect Earthquake<a class="headerlink" href="#detect-earthquake" title="Permalink to this headline">¶</a></h2>
+<h2>2 Detect Earthquake<a class="headerlink" href="#detect-earthquake" title="Permalink to this headline"></a></h2>
 <p>The idea of detecting earthquake is to input the waveform data and station list, then the model will classify the P - and S - wave together with their corresponding arrival time and save it according to the stations.</p>
 <p>There are many alternative ways to undergo the detection. We here introduce one of the method which is using the preprocessed data (hdf5 files).</p>
 <p>The hdf5 file can handle large datasets by slicing data and shorten the time of reading large chunk of individual waveforms.</p>
@@ -353,7 +268,7 @@ $ conda install -c smousavi05 eqtransformer
 </section>
 <hr class="docutils" />
 <section id="visualise-the-results">
-<h2>3 Visualise the results<a class="headerlink" href="#visualise-the-results" title="Permalink to this headline">¶</a></h2>
+<h2>3 Visualise the results<a class="headerlink" href="#visualise-the-results" title="Permalink to this headline"></a></h2>
 <p><strong>Histogram</strong></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">EQTransformer.utils.plot</span> <span class="kn">import</span> <span class="n">plot_detections</span>
 
@@ -369,7 +284,7 @@ $ conda install -c smousavi05 eqtransformer
 </section>
 <hr class="docutils" />
 <section id="phase-association">
-<h2>4 Phase association<a class="headerlink" href="#phase-association" title="Permalink to this headline">¶</a></h2>
+<h2>4 Phase association<a class="headerlink" href="#phase-association" title="Permalink to this headline"></a></h2>
 <p>Phase association is used to review the detected seismic phases and group them together with the same origin of earthquake.</p>
 <p>After the phase picking process, you can undergo a simple association procedure. This can help you to proceed to the next step (relocation) easily.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">EQTransformer.utils.associator</span> <span class="kn">import</span> <span class="n">run_associator</span>
@@ -399,54 +314,35 @@ $ conda install -c smousavi05 eqtransformer
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="../dd_loc/index.html" class="btn btn-neutral float-right" title="Double-Difference Earthquake Relocation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="../abs_loc/index.html" class="btn btn-neutral float-left" title="Earthquake Absolute Location" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../abs_loc/index.html" class="btn btn-neutral float-left" title="Earthquake Absolute Location" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../dd_loc/index.html" class="btn btn-neutral float-right" title="Double-Difference Earthquake Relocation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &copy; Copyright 2021-2022, CUSeisTut team
-      <span class="lastupdated">
-        Last updated on 2022-03-21.
-      </span>
-
-    </p>
+    <p>&#169; Copyright 2021-2022, CUSeisTut team.
+      <span class="lastupdated">Last updated on 2022-03-21.
+      </span></p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(false);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>
