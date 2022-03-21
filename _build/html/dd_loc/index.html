@@ -1,36 +1,76 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Double-Difference Earthquake Relocation &mdash; CUSeisTut</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Double-Difference Earthquake Relocation &mdash; CUSeisTut</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script src="../_static/js/theme.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Spectral Analysis" href="../source_spectra/index.html" />
     <link rel="prev" title="Earthquake Transformer Tutorial" href="../eqt/index.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+
+   
   <div class="wy-grid-for-nav">
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
+          
+
+          
             <a href="../index.html" class="icon icon-home"> CUSeisTut
+          
+
+          
           </a>
+
+          
+            
+            
               <div class="version">
                 0.0.1
               </div>
+            
+          
+
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -38,23 +78,33 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption"><span class="caption-text">CUSeisTut</span></p>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">CUSeisTut</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../intro/index.html">Introduction</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Entry level</span></p>
+<p class="caption" role="heading"><span class="caption-text">Entry level</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../unix/index.html">Unix commands</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../GMT6/index.html">Generic Mapping Tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../obspy/index.html">Python ObsPy Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Intermediate level</span></p>
+<p class="caption" role="heading"><span class="caption-text">Intermediate level</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../sta_lta/index.html">Earthquake Detection STA/LTA</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../abs_loc/index.html">Earthquake Absolute Location</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Advanced level</span></p>
+<p class="caption" role="heading"><span class="caption-text">Advanced level</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../eqt/index.html">Earthquake Transformer Tutorial</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Double-Difference Earthquake Relocation</a><ul>
@@ -104,39 +154,77 @@
 <li class="toctree-l1"><a class="reference internal" href="../surface_tomo/index.html">Surface Wave Tomography</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../ambient_tomo/index.html">Ambient noise cross correlation</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Appendix</span></p>
+<p class="caption" role="heading"><span class="caption-text">Appendix</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../appendix/index.html">List of developers</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://docs.google.com/forms/d/e/1FAIpQLScSQIcOtANjTonJDhK4KYmoA6H2lUHou9Mqz1oFCHSTd5wxhQ/viewform?usp=sf_link">Give us feedback here</a></li>
 </ul>
 
+            
+          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">CUSeisTut</a>
+        
       </nav>
 
+
       <div class="wy-nav-content">
+        
         <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
       <li>Double-Difference Earthquake Relocation</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
+        
+            
             <a href="../_sources/dd_loc/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-             
-  <div class="section" id="double-difference-earthquake-relocation">
+            
+  <section id="double-difference-earthquake-relocation">
 <h1>Double-Difference Earthquake Relocation<a class="headerlink" href="#double-difference-earthquake-relocation" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="introduction">
+<section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
 <p>Double-difference earthquake relocation algorithm was developed to improve the location accuracy in the presence of measurement uncertainties when we locate earthquakes in the previous tutorial. It is based on the iterative least-square method, using the time difference between observed and predicted phase arrivals for event pairs recorded by a common station, some uncertainties can be canceled to derive high-accuracy hypocenter locations over large distance. Figure below shows a comparison of ~10,000 earthquake locations (left panel) and double-difference locations (right panel) during the 1997 seismic crisis in the Long Valley caldera (Waldhauser, 2001).</p>
 <img alt="../_images/example.png" src="../_images/example.png" />
@@ -153,7 +241,7 @@
 <div class="line">You are strongly encouraged to play around codes in this tutorial and introduce to others, you will find your understanding will be enhanced dramatically during the process.</div>
 </div>
 </div>
-<div class="section" id="contents-of-this-tutorial">
+<section id="contents-of-this-tutorial">
 <h3>Contents of this tutorial<a class="headerlink" href="#contents-of-this-tutorial" title="Permalink to this headline">¶</a></h3>
 <ol class="arabic simple">
 <li><p>Initiation process</p></li>
@@ -162,11 +250,11 @@
 </ol>
 <p><strong>Authors</strong>: ZI Jinping, SONG Zilin, Earth Science Sytem Program, CUHK.
 <strong>Testers</strong>, XIA Zhuoxuan, Earth Science Sytem Program, CUHK.</p>
-</div>
-</div>
-<div class="section" id="initiation">
+</section>
+</section>
+<section id="initiation">
 <h2>Initiation<a class="headerlink" href="#initiation" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="preparation-for-environment">
+<section id="preparation-for-environment">
 <h3>Preparation for Environment<a class="headerlink" href="#preparation-for-environment" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">time</span>
@@ -335,8 +423,8 @@
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="basic-parameters">
+</section>
+<section id="basic-parameters">
 <h3>Basic parameters<a class="headerlink" href="#basic-parameters" title="Permalink to this headline">¶</a></h3>
 <p>Set up station array, earthquake true location, wave-velocity and generate synthetic arrival time.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">stas</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="o">-</span><span class="mi">14</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="o">-</span><span class="mi">8</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">8</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">14</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">20</span><span class="p">,</span><span class="mi">0</span><span class="p">]])</span> <span class="c1"># Station</span>
@@ -430,8 +518,8 @@ z =    8.00 ± 0.0000  km
 t =    0.00 ± 0.0000  s
 </pre></div>
 </div>
-</div>
-<div class="section" id="velocity-error">
+</section>
+<section id="velocity-error">
 <h3>Velocity Error<a class="headerlink" href="#velocity-error" title="Permalink to this headline">¶</a></h3>
 <p>In calculation above, we use the true velocity (<strong>Vtrue</strong>) to conduct the inversion. However, in reality, the velocity we measured more or less differs with the true velocity, thus lead to some bias.</p>
 <div class="admonition note">
@@ -463,8 +551,8 @@ t =   -0.24 ± 0.0204  s
 True location (hyc1_true)  x:  -1 km;  z:  8 km;  t:  0.0000 s
 </pre></div>
 </div>
-</div>
-<div class="section" id="station-delay">
+</section>
+<section id="station-delay">
 <h3>Station Delay<a class="headerlink" href="#station-delay" title="Permalink to this headline">¶</a></h3>
 <p>In near surface, material velocity where stations located might varies and lead to influence on the travel time, we call it <strong>Station delay</strong>. The <strong>River sediments</strong> are generally soft,not fully consolidated mateirals, its velocity is low. A lower velocity will lead to longer travel time, thus the actual arrival time will be later than estimated, here we call it <strong>Positive delay</strong>.</p>
 <p>The <strong>Granite</strong> is igenous rock, its density is high and velocity is fast. A higher velocity will lead to shorter travel time, thus the actual arrival time will be earlier than estimated, we call it
@@ -506,8 +594,8 @@ True location (hyc1_true)  x:  -1 km;  z:  8 km;  t:  0.0000 s
 <span class="n">stas_delay</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span> <span class="p">[</span><span class="mf">0.05</span><span class="p">,</span><span class="mf">0.05</span><span class="p">,</span><span class="mf">0.05</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mf">0.05</span><span class="p">,</span><span class="o">-</span><span class="mf">0.05</span><span class="p">,</span><span class="o">-</span><span class="mf">0.05</span><span class="p">]</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="conduct-inversion-with-delayed-data">
+</section>
+<section id="conduct-inversion-with-delayed-data">
 <h3>Conduct inversion with delayed data<a class="headerlink" href="#conduct-inversion-with-delayed-data" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dobs1_delay</span> <span class="o">=</span> <span class="n">dobs1</span> <span class="o">+</span> <span class="n">stas_delay</span>
 <span class="n">hyc1_abs_delay</span><span class="p">,</span> <span class="n">sigma_m2</span> <span class="o">=</span> <span class="n">iter_loc</span><span class="p">(</span><span class="n">hyc1_init</span><span class="p">,</span><span class="n">stas</span><span class="p">,</span><span class="n">dobs1_delay</span><span class="p">,</span><span class="n">Vp</span><span class="p">)</span>
@@ -532,8 +620,8 @@ t =   -0.24 ± 0.02  s
 True location (hyc1_true)  x:  -1 km;  z:  8 km;  t:  0.0000 s
 </pre></div>
 </div>
-</div>
-<div class="section" id="the-second-event">
+</section>
+<section id="the-second-event">
 <h3>The second event<a class="headerlink" href="#the-second-event" title="Permalink to this headline">¶</a></h3>
 <p>Now we consider another event occurred other same time with event one
 but location a little different</p>
@@ -611,8 +699,8 @@ t =    1.01 ± 0.01  s
 True location (hyc2_true)  x:  1 km;  z:  8.3 km;  t:  1.0000 s
 </pre></div>
 </div>
-</div>
-<div class="section" id="add-picking-noise">
+</section>
+<section id="add-picking-noise">
 <h3>Add Picking Noise<a class="headerlink" href="#add-picking-noise" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mu</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="n">sigma</span> <span class="o">=</span> <span class="mf">0.1</span>
@@ -624,9 +712,9 @@ True location (hyc2_true)  x:  1 km;  z:  8.3 km;  t:  1.0000 s
 <span class="n">dobs2_delay_noise</span> <span class="o">=</span> <span class="n">dobs2_delay</span><span class="o">+</span><span class="n">errors</span>
 </pre></div>
 </div>
-</div>
-</div>
-<div class="section" id="double-difference-method">
+</section>
+</section>
+<section id="double-difference-method">
 <h2>Double Difference Method<a class="headerlink" href="#double-difference-method" title="Permalink to this headline">¶</a></h2>
 <p>The travel-time residual of event <span class="math notranslate nohighlight">\(i\)</span> at station <span class="math notranslate nohighlight">\(k\)</span>:</p>
 <p><span class="math notranslate nohighlight">\(r_k^i=(T_k^i)^{obs}-(T_k^i)^{cal}\)</span> comes from:</p>
@@ -650,7 +738,7 @@ True location (hyc2_true)  x:  1 km;  z:  8.3 km;  t:  1.0000 s
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>`r_k^j=\(T_k^j)^{obs}-(T_k^j)^{cal}`=\sum_{l=1}^2\frac{\partial T_k^j}{\partial x_l^j}\Delta x_l^j +\Delta\tau^j+\int_{s_j}^{r_k}\Delta uds+S_k
 </pre></div>
 </div>
-<div class="section" id="make-difference">
+<section id="make-difference">
 <h3>Make difference<a class="headerlink" href="#make-difference" title="Permalink to this headline">¶</a></h3>
 <div class="math notranslate nohighlight">
 \[r_k^i-r_k^j=\sum_{l=1}^2\frac{\partial T_k^i}{\partial x_l^i}\Delta x_l^i +\Delta\tau^i+\int_{s_i}^{r_k}\Delta uds-
@@ -703,9 +791,9 @@ r_1^1 - r_1^2\\r_2^1 - r_2^2\\\vdots\\r_k^1 - r_k^2\\
 <span class="n">hyc2_dd</span> <span class="o">=</span> <span class="n">hyc2_abs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-</div>
-<div class="section" id="observed-travel-time-difference">
+</section>
+</section>
+<section id="observed-travel-time-difference">
 <h2>1. Observed Travel Time Difference<a class="headerlink" href="#observed-travel-time-difference" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">obs_trav_t1</span> <span class="o">=</span> <span class="n">dobs1_delay</span> <span class="o">-</span> <span class="n">hyc1_dd</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="c1"># Travel time = arrival_time - origin_time</span>
 <span class="n">obs_trav_t2</span> <span class="o">=</span> <span class="n">dobs2_delay</span> <span class="o">-</span> <span class="n">hyc2_dd</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
@@ -716,8 +804,8 @@ r_1^1 - r_1^2\\r_2^1 - r_2^2\\\vdots\\r_k^1 - r_k^2\\
 </pre></div>
 </div>
 <img alt="../_images/output_34_0.png" src="../_images/output_34_0.png" />
-</div>
-<div class="section" id="calculated-travel-time-difference">
+</section>
+<section id="calculated-travel-time-difference">
 <h2>2. Calculated Travel Time Difference<a class="headerlink" href="#calculated-travel-time-difference" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dcal1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nsta</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dobs1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
@@ -734,16 +822,16 @@ r_1^1 - r_1^2\\r_2^1 - r_2^2\\\vdots\\r_k^1 - r_k^2\\
 <span class="n">cal_dt</span> <span class="o">=</span> <span class="n">cal_trav_t1</span> <span class="o">-</span> <span class="n">cal_trav_t2</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="calculate-double-difference">
+</section>
+<section id="calculate-double-difference">
 <h2>3. Calculate Double-Difference<a class="headerlink" href="#calculate-double-difference" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dtdt</span> <span class="o">=</span> <span class="n">obs_dt</span> <span class="o">-</span> <span class="n">cal_dt</span>
 <span class="n">matrix_show</span><span class="p">(</span><span class="n">dtdt</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="../_images/output_38_0.png" src="../_images/output_38_0.png" />
-</div>
-<div class="section" id="build-up-data-kernel-g">
+</section>
+<section id="build-up-data-kernel-g">
 <h2>4. Build Up Data Kernel - G<a class="headerlink" href="#build-up-data-kernel-g" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ncol</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="mi">2</span>           <span class="c1"># Two event, each has 3 parameter (delta x, delta z, delta t)</span>
 <span class="n">G</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nsta</span><span class="p">,</span><span class="n">ncol</span><span class="p">))</span>
@@ -760,8 +848,8 @@ r_1^1 - r_1^2\\r_2^1 - r_2^2\\\vdots\\r_k^1 - r_k^2\\
 </pre></div>
 </div>
 <img alt="../_images/output_41_0.png" src="../_images/output_41_0.png" />
-</div>
-<div class="section" id="check-gtg-inverse-exists">
+</section>
+<section id="check-gtg-inverse-exists">
 <h2>5. Check GTG Inverse Exists<a class="headerlink" href="#check-gtg-inverse-exists" title="Permalink to this headline">¶</a></h2>
 <div class="math notranslate nohighlight">
 \[G\Delta m =\Delta d\]</div>
@@ -782,8 +870,8 @@ have 10 observations to solve for 4 parameters), then:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Error! The determinant is ZERO!!!
 </pre></div>
 </div>
-</div>
-<div class="section" id="add-damp-to-matrix">
+</section>
+<section id="add-damp-to-matrix">
 <h2>6. Add Damp to Matrix<a class="headerlink" href="#add-damp-to-matrix" title="Permalink to this headline">¶</a></h2>
 <p>Determinant equals zero means there is no unique solution to the inverse problem, that is, the constraints in data kernel G is not enough to get a result, more constraints is needed. The common method is to add damp to the data kernel.</p>
 <p>### Damping the kernel Before damping:</p>
@@ -821,8 +909,8 @@ be small. <span class="math notranslate nohighlight">\(\lambda\)</span> controls
 </pre></div>
 </div>
 <img alt="../_images/output_46_0.png" src="../_images/output_46_0.png" />
-</div>
-<div class="section" id="solve-damped-problem">
+</section>
+<section id="solve-damped-problem">
 <h2>7. Solve Damped Problem<a class="headerlink" href="#solve-damped-problem" title="Permalink to this headline">¶</a></h2>
 <p>Step 1:</p>
 <div class="math notranslate nohighlight">
@@ -854,8 +942,8 @@ be small. <span class="math notranslate nohighlight">\(\lambda\)</span> controls
 </pre></div>
 </div>
 <img alt="../_images/output_49_0.png" src="../_images/output_49_0.png" />
-</div>
-<div class="section" id="update-location">
+</section>
+<section id="update-location">
 <h2>8. Update Location<a class="headerlink" href="#update-location" title="Permalink to this headline">¶</a></h2>
 <div class="math notranslate nohighlight">
 \[x_1 = x_1+\Delta x_1\]</div>
@@ -891,8 +979,8 @@ be small. <span class="math notranslate nohighlight">\(\lambda\)</span> controls
 </pre></div>
 </div>
 <img alt="../_images/output_52_0.png" src="../_images/output_52_0.png" />
-</div>
-<div class="section" id="error-analysis">
+</section>
+<section id="error-analysis">
 <h2>9. Error analysis<a class="headerlink" href="#error-analysis" title="Permalink to this headline">¶</a></h2>
 <p>The error in observed data will of couse lead to uncertainties in the earthquake location parameters estimation. Their relationship could be described as:</p>
 <div class="math notranslate nohighlight">
@@ -925,8 +1013,8 @@ t =    0.90 ± 0.56  s
 </div>
 <p><strong>Exercise (5 min)</strong></p>
 <p>Try to modify the <strong>damp</strong> parameter and update the results, how it changes? What is the relationship between <strong>damping factor</strong>, <strong>m</strong>, and <strong>Uncertainty</strong>? Can you explain why?</p>
-</div>
-<div class="section" id="condition-number">
+</section>
+<section id="condition-number">
 <h2>10. Condition Number<a class="headerlink" href="#condition-number" title="Permalink to this headline">¶</a></h2>
 <p>We have realized that the damping factor controls the converge rate, a larger <strong>damping factor</strong> will lead to slow converge rate but small uncertainty; a smaller <strong>damping factor</strong> will lead to fast converge rate but large uncertainty. Then how to choose proper damping factor?</p>
 <p>A good indicator is the <a class="reference external" href="https://en.wikipedia.org/wiki/Condition_number">conditon number</a>. Conditon number quantifies the relationship between solution error and data error. In earthquake double difference location, the condition number should be in the range 40-80.</p>
@@ -939,8 +1027,8 @@ t =    0.90 ± 0.56  s
 </div>
 <p><strong>Exercise: Start Another Iteration</strong></p>
 <p>The error is still high, update the earthquake location and rerun the process to check the location variation.</p>
-</div>
-<div class="section" id="iterative-double-difference-method">
+</section>
+<section id="iterative-double-difference-method">
 <h2>Iterative Double-Difference Method<a class="headerlink" href="#iterative-double-difference-method" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hyc1_loop</span> <span class="o">=</span> <span class="n">hyc1_abs</span>
 <span class="n">hyc2_loop</span> <span class="o">=</span> <span class="n">hyc2_abs</span>
@@ -1127,7 +1215,7 @@ z =    8.41 ± 0.00800  km
 t =    0.88 ± 0.00700  s
 </pre></div>
 </div>
-<div class="section" id="lsqr-algorithm">
+<section id="lsqr-algorithm">
 <h3>LSQR Algorithm<a class="headerlink" href="#lsqr-algorithm" title="Permalink to this headline">¶</a></h3>
 <p>Consider a double difference cluster with 1000 events, we do estimation of time consuming for one iteration. Note the <span class="math notranslate nohighlight">\(G^TG\)</span> dimension is <span class="math notranslate nohighlight">\(4000\times 4000\)</span>, it costs 16 seconds to calculate the inverse and singular value decomposition. What about 10 k events?</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">G</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">4000</span><span class="p">,</span><span class="mi">4000</span><span class="p">)</span>
@@ -1356,9 +1444,9 @@ z =    8.30 ± 0.04760000  km
 t =    0.88 ± 0.00000000  s
 </pre></div>
 </div>
-</div>
-</div>
-<div class="section" id="summary">
+</section>
+</section>
+<section id="summary">
 <h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
 <p>In this tutorial, we first demonstrated the influence of velocity misfit and <strong>Station delay</strong>’s influence on earthquake location results.</p>
 <p>We then introduce the double-difference method, which theoritical diminish the station delay and limit the influence of veloctity misfit. During processing, we: * Set up the data kernel <strong>G</strong> and calculate the double difference array <strong>dtdt</strong> * Add damping to the data kernel to make is stable (<em>determinant not be zero</em>) * Use <strong>conditon number</strong> and use it to guide the selection of damping factor * Comparison shows <strong>double-difference</strong> location lead to location with <strong>better performance</strong></p>
@@ -1368,7 +1456,7 @@ t =    0.88 ± 0.00000000  s
 <div class="line">we use one-layer velocity model for its convenience in find the ray partial derivatives.</div>
 </div>
 </div>
-<div class="section" id="homework">
+<section id="homework">
 <h3>Homework<a class="headerlink" href="#homework" title="Permalink to this headline">¶</a></h3>
 <ol class="arabic">
 <li><p>In the demo example, event origin time is not fully recovered? Could you explain why?(10 points)</p></li>
@@ -1403,45 +1491,64 @@ t =    0.88 ± 0.00000000  s
 </div></blockquote>
 </li>
 </ol>
-</div>
-<div class="section" id="source-code">
+</section>
+<section id="source-code">
 <h3>Source code<a class="headerlink" href="#source-code" title="Permalink to this headline">¶</a></h3>
 <p>Download tutorial code <a class="reference download internal" download="" href="../_downloads/b5f0555e6d6cb2678327be5cac894b40/Relative_Location.zip"><code class="xref download docutils literal notranslate"><span class="pre">here</span></code></a></p>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
            </div>
+           
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../eqt/index.html" class="btn btn-neutral float-left" title="Earthquake Transformer Tutorial" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../source_spectra/index.html" class="btn btn-neutral float-right" title="Spectral Analysis" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../source_spectra/index.html" class="btn btn-neutral float-right" title="Spectral Analysis" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../eqt/index.html" class="btn btn-neutral float-left" title="Earthquake Transformer Tutorial" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
     </div>
+  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2021-2022, CUSeisTut team.
-      <span class="lastupdated">Last updated on 2022-03-21.
-      </span></p>
-  </div>
+    <p>
+        &copy; Copyright 2021-2022, CUSeisTut team
+      <span class="lastupdated">
+        Last updated on 2022-03-21.
+      </span>
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
+
         </div>
       </div>
+
     </section>
+
   </div>
-  <script>
+  
+
+
+  <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(false);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>
