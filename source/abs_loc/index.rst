@@ -1163,7 +1163,9 @@ Hypoinverse is a computer program that processes files of seismic station data f
 
 The Hypoinverse program requires the input of station locations, seismic velocity model, and the phase data. By assuming a trial origin time and hypocentral location for the earthquake, it improves them by iteratively minimizing the least square error of the travel time computed from the input information.
 
-Source code and example
+Environment and example
 ***********************
+For MacOS user,  Xcode is needed to be installed, run ``xcode-select --install`` and wait for finishment.
+
 :download:`HYPOINVERSE example <./Hypoinverse.zip>`
 
