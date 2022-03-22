@@ -66,6 +66,7 @@ Python environment
     import matplotlib.pyplot as plt
     import time
     from matplotlib.patches import Ellipse
+    from mpl_toolkits.mplot3d import Axes3D
 
 .. note::
  | Functions below is important to be defined at first.
