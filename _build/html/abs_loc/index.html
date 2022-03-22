@@ -186,7 +186,7 @@ Using the <span class="math notranslate nohighlight">\(\mathbf{\Delta d}\)</span
 </div>
 <div class="section" id="python-environment-and-model-setup">
 <h2>Python Environment and model Setup<a class="headerlink" href="#python-environment-and-model-setup" title="Permalink to this headline"></a></h2>
-<p>We’ll first generate synthetic arrival times on stations from one earthquake location, which called <strong>Forward Modelling</strong>. We’ll then try to re-generate hypocentral location using these known station arrival times, which called <strong>Inversion</strong>.</p>
+<p>We’ll first generate synthetic arrival times on stations from one earthquake location, which is called <strong>Forward Modelling</strong>. We’ll then try to re-generate hypocentral location using these known station arrival times, which is called <strong>Inversion</strong>. In this tutorial, we use one-layer model to avoid complicated ray-tracing (<code class="docutils literal notranslate"><span class="pre">Snell's</span> <span class="pre">law</span></code>)</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <div class="line-block">
@@ -686,7 +686,7 @@ d_1^{obs} - d_1^{cal}\\d_2^{obs} - d_2^{cal}\\\vdots\\d_i^{obs} - d_i^{cal}\\
 <p>where <span class="math notranslate nohighlight">\(T_i^k\)</span> is the arrrival time, <span class="math notranslate nohighlight">\(o_t\)</span> is the origin
 time. The integral part accounts for time of ray propagation, <span class="math notranslate nohighlight">\(u\)</span>
 is the slowness.</p>
-<p>For 1-D model, <span class="math notranslate nohighlight">\(T_i^k=o_t +\sqrt{x^2+y^2+z^2}/v\)</span>, where
+<p>For one-layer model, <span class="math notranslate nohighlight">\(T_i^k=o_t +\sqrt{x^2+y^2+z^2}/v\)</span>, where
 <span class="math notranslate nohighlight">\(x,y,z\)</span> denotes distance between the source (earthquake location)
 and receiver(station), <span class="math notranslate nohighlight">\(v\)</span> is velocity. Partial derivatives of one-layer model are:</p>
 <div class="math notranslate nohighlight">
@@ -913,7 +913,8 @@ threshold achieved, then istop = 1.</p></li>
 <ol class="arabic simple" start="4">
 <li><p>Re-run the inversion</p></li>
 </ol>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">k</span> <span class="o">=</span> <span class="mi">0</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Vp</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">k</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="n">niter</span> <span class="o">=</span> <span class="mi">10</span>
 <span class="n">hyc_loop</span> <span class="o">=</span> <span class="n">hyc_init</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 <span class="k">while</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">niter</span><span class="p">:</span>
@@ -1114,7 +1115,7 @@ t =   -0.03 ± 0.06  s
 <h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline"></a></h2>
 <div class="section" id="one-layer-model">
 <h3>One layer model<a class="headerlink" href="#one-layer-model" title="Permalink to this headline"></a></h3>
-<p>In the tutorial, we introduced the grid-search method and iterative location method using the one-layer velocity model. The advantage of one-layer is that the ray from source to station is a stright line, it is convenient to calculate the corresponding partial derivatives. In the real earth, the velocity varies due to material, pressure and other fators, the ray path is a curved line, making things more complicated.</p>
+<p>In the tutorial, we introduced the grid-search method and iterative location method using the one-layer velocity model. The advantage of one-layer is that the ray from the source to one station is a stright line, it is convenient to calculate the corresponding partial derivatives. In the real earth, the velocity varies due to material, pressure and other fators, the ray path is a curved line, making things more complicated.</p>
 <img alt="../_images/Ray.png" src="../_images/Ray.png" />
 <p>However, the key process in finding the earthquake locations remain the same:</p>
 <ol class="arabic simple">
@@ -1207,7 +1208,7 @@ t =   -0.00 ± 0.0000  s
 
   <div role="contentinfo">
     <p>&#169; Copyright 2021-2022, CUSeisTut team.
-      <span class="lastupdated">Last updated on 2022-03-22.
+      <span class="lastupdated">Last updated on 2022-03-23.
       </span></p>
   </div>
 

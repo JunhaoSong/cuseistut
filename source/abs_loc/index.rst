@@ -52,7 +52,7 @@ We will introduce how to derive and analyze absolute locations of hypocenters in
 Python Environment and model Setup
 -----------------------------------
 
-We'll first generate synthetic arrival times on stations from one earthquake location, which called **Forward Modelling**. We'll then try to re-generate hypocentral location using these known station arrival times, which called **Inversion**.
+We'll first generate synthetic arrival times on stations from one earthquake location, which is called **Forward Modelling**. We'll then try to re-generate hypocentral location using these known station arrival times, which is called **Inversion**. In this tutorial, we use one-layer model to avoid complicated ray-tracing (``Snell's law``)
 
 .. note::
  | The purpose is that, by comparing the difference between **inverted location** and **true location**, we can: 1. see whether the location process runs properly; 2. conduct error analysis.
@@ -587,7 +587,7 @@ where :math:`T_i^k` is the arrrival time, :math:`o_t` is the origin
 time. The integral part accounts for time of ray propagation, :math:`u`
 is the slowness.
 
-For 1-D model, :math:`T_i^k=o_t +\sqrt{x^2+y^2+z^2}/v`, where
+For one-layer model, :math:`T_i^k=o_t +\sqrt{x^2+y^2+z^2}/v`, where
 :math:`x,y,z` denotes distance between the source (earthquake location)
 and receiver(station), :math:`v` is velocity. Partial derivatives of one-layer model are:
 
@@ -847,6 +847,7 @@ Credit: Wikipedia
 
 .. code::
 
+    Vp = 5
     k = 0
     niter = 10
     hyc_loop = hyc_init.copy()
@@ -1077,7 +1078,7 @@ Summary
 One layer model
 *****************
 
-In the tutorial, we introduced the grid-search method and iterative location method using the one-layer velocity model. The advantage of one-layer is that the ray from source to station is a stright line, it is convenient to calculate the corresponding partial derivatives. In the real earth, the velocity varies due to material, pressure and other fators, the ray path is a curved line, making things more complicated. 
+In the tutorial, we introduced the grid-search method and iterative location method using the one-layer velocity model. The advantage of one-layer is that the ray from the source to one station is a stright line, it is convenient to calculate the corresponding partial derivatives. In the real earth, the velocity varies due to material, pressure and other fators, the ray path is a curved line, making things more complicated. 
 
 .. image:: Ray.png
 
