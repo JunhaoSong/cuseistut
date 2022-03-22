@@ -361,6 +361,7 @@ The grid search method separate the possible earthquake location zone into 3-D g
 
 .. code::
 
+    V = Vp
     sq_errs = np.zeros((nx,ny,nz))    
     ta = time.time()                         # The time before calculation
     for i in range(len(xs)):
@@ -373,7 +374,7 @@ The grid search method separate the possible earthquake location zone into 3-D g
                     sta_y = stas[m,1]
                     sta_z = stas[m,2]
                     dist = np.sqrt((sta_x-x)**2+(sta_y-y)**2+(sta_z-z)**2)
-                    dcal[m,0] = dist/Vp
+                    dcal[m,0] = dist/V
                 sq_err = np.linalg.norm(dobs-dcal)**2
                 sq_errs[i,j,k] = sq_err
     tb = time.time()                         # The time after calculation
@@ -453,6 +454,9 @@ The grid search method separate the possible earthquake location zone into 3-D g
 
 .. image:: output_18_1.png
 
+Exercise
+************
+Modify V=4.9 and redo the grid search, what do you find?
 
 Iterative Method
 -------------------
