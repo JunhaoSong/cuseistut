@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Surface Wave Tomography &mdash; CUSeisTut</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -105,17 +104,17 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="surface-wave-tomography">
+  <div class="section" id="surface-wave-tomography">
 <h1>Surface Wave Tomography<a class="headerlink" href="#surface-wave-tomography" title="Permalink to this headline"></a></h1>
-<section id="introduction-to-surface-waves">
+<div class="section" id="introduction-to-surface-waves">
 <h2>Introduction to surface waves<a class="headerlink" href="#introduction-to-surface-waves" title="Permalink to this headline"></a></h2>
 <p>Unlike body waves that travel through the earth’s interior, surface waves propagate along the earth’s surface. They could be generated from earthquakes and travel more slowly that body waves, but correspond to lower-frequency and higher amplitude in the seismogram. There are two most common types of surface waves in Seismology - Rayleigh waves and Love waves, which are named after their discoverers Lord Rayleigh and August Love.</p>
 <p><strong>Rayleigh waves</strong> (or so called ground roll) move both longitudinally and horizontally and result in elliptical movement, similar to the rolling water waves but against the direction of propagation.</p>
 <a class="reference internal image-reference" href="https://upload.wikimedia.org/wikipedia/commons/1/1e/Rayleigh_wave.jpg"><img alt="https://upload.wikimedia.org/wikipedia/commons/1/1e/Rayleigh_wave.jpg" src="https://upload.wikimedia.org/wikipedia/commons/1/1e/Rayleigh_wave.jpg" style="width: 90%;" /></a>
 <p><strong>Love waves</strong> move horizontally and at the right angles to the direction of propagation, but cannot propagate in water like S-waves. The shear movement of the ground caused by Love waves is more damaging to the man-made structures.</p>
 <a class="reference internal image-reference" href="https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Love_wave.svg/1920px-Love_wave.svg.png"><img alt="https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Love_wave.svg/1920px-Love_wave.svg.png" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Love_wave.svg/1920px-Love_wave.svg.png" style="width: 90%;" /></a>
-</section>
-<section id="surface-waves-observations">
+</div>
+<div class="section" id="surface-waves-observations">
 <h2>Surface waves observations<a class="headerlink" href="#surface-waves-observations" title="Permalink to this headline"></a></h2>
 <p>Here we provide example waveforms showing the surface waves generated from <code class="docutils literal notranslate"><span class="pre">2019</span> <span class="pre">M7.1</span> <span class="pre">Ridgecrest</span> <span class="pre">earthquake</span></code> recorded by <code class="docutils literal notranslate"><span class="pre">IU.HRV</span> <span class="pre">station</span> <span class="pre">located</span> <span class="pre">at</span> <span class="pre">Adam</span> <span class="pre">Dziewonski</span> <span class="pre">Observatory</span> <span class="pre">(Oak</span> <span class="pre">Ridge),</span> <span class="pre">Massachusetts,</span> <span class="pre">USA</span></code>.</p>
 <p>For later use, please first download the <a class="reference download internal" download="" href="../_downloads/93cd80986a1f8f391b5059cedc7d41ad/2019-07-06-mw71-central-california-2.miniseed"><code class="xref download docutils literal notranslate"><span class="pre">waveform</span> <span class="pre">data</span></code></a> of miniSEED format into your local computer. Also make sure that ObsPy is also installed since it’s used for reading and processing waveforms.</p>
@@ -187,8 +186,8 @@
 </div>
 <a class="reference internal image-reference" href="../_images/zrt-waveforms.jpg"><img alt="../_images/zrt-waveforms.jpg" src="../_images/zrt-waveforms.jpg" style="width: 90%;" /></a>
 <p>Clearly, We can see that surface waves arrive after the body waves and have much larger amplitude.</p>
-</section>
-<section id="phase-shift-of-rayleigh-waves">
+</div>
+<div class="section" id="phase-shift-of-rayleigh-waves">
 <h2>Phase shift of Rayleigh waves<a class="headerlink" href="#phase-shift-of-rayleigh-waves" title="Permalink to this headline"></a></h2>
 <p>Because Rayleigh waves correspond to elliptical movement in a vertical plane pointed in the direction in which the waves are travelling, thus the ground motions in radial and vertical directions should have phase shift.</p>
 <p>Here we can apply a narrow bandpass filter to the waveforms and then plot them together to check the abovementioned phase shift phenomenon.</p>
@@ -220,8 +219,8 @@
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/phase-delay.jpg"><img alt="../_images/phase-delay.jpg" src="../_images/phase-delay.jpg" style="width: 90%;" /></a>
-</section>
-<section id="dispersion-of-surface-waves">
+</div>
+<div class="section" id="dispersion-of-surface-waves">
 <h2>Dispersion of surface waves<a class="headerlink" href="#dispersion-of-surface-waves" title="Permalink to this headline"></a></h2>
 <p>Since longer period surface waves would penetrate deeper into higher speed layer, they will travel faster. As a result, velocities at a number of periods are different, this is so called surface wave dispersion.</p>
 <p>For the sake of simplicity, here we only show the dispersion analysis of Love wave by applying few bandpass filters and measure the corresponding group velocity dispersion curve.</p>
@@ -341,14 +340,14 @@
 <li><p>Perform phase delay and dispersion analysis on the requested waveforms.</p></li>
 </ol>
 </div>
-</section>
-<section id="compute-theoretical-dispersion-curve">
+</div>
+<div class="section" id="compute-theoretical-dispersion-curve">
 <h2>Compute theoretical dispersion curve<a class="headerlink" href="#compute-theoretical-dispersion-curve" title="Permalink to this headline"></a></h2>
-</section>
-<section id="invert-observed-dispersion-curve-for-1d-velocity">
+</div>
+<div class="section" id="invert-observed-dispersion-curve-for-1d-velocity">
 <h2>Invert observed dispersion curve for 1D velocity<a class="headerlink" href="#invert-observed-dispersion-curve-for-1d-velocity" title="Permalink to this headline"></a></h2>
-</section>
-</section>
+</div>
+</div>
 
 
            </div>
@@ -362,7 +361,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright 2021-2022, CUSeisTut team.
-      <span class="lastupdated">Last updated on 2022-03-21.
+      <span class="lastupdated">Last updated on 2022-03-22.
       </span></p>
   </div>
 

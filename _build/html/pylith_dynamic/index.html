@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dynamic Earthquake Simulation &mdash; CUSeisTut</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -113,13 +112,13 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="dynamic-earthquake-simulation">
+  <div class="section" id="dynamic-earthquake-simulation">
 <h1>Dynamic Earthquake Simulation<a class="headerlink" href="#dynamic-earthquake-simulation" title="Permalink to this headline"></a></h1>
-<section id="brief-introduction">
+<div class="section" id="brief-introduction">
 <h2>Brief introduction<a class="headerlink" href="#brief-introduction" title="Permalink to this headline"></a></h2>
 <p>Dynamic modeling of earthquakes provides important insights in the physics of earthquake rupture processes. For example, earthquake initiation, propagation, arrest, afterslip, locking, and interseismic stress accumulation can be solved. In particular, dynamic earthquake rupture codes compute the physical earthquake behaviors over short time scales, producing possible earthquake size, fault slip amount, ground motion, and crustal deformation, which are crucial for risk assessment.</p>
 <p>Currently, dynamic rupture simulations are actively used in seismology research for reconstructing well-recorded earthquakes as well as investigating the complex factors controlling earthquakes, such as fault geometry, fault frictional properties, and initial stresses.</p>
-<section id="aim-of-this-module">
+<div class="section" id="aim-of-this-module">
 <h3>Aim of this module<a class="headerlink" href="#aim-of-this-module" title="Permalink to this headline"></a></h3>
 <p>There are different dynamic earthquake rupture codes for a range of code types, including finite element, discontinuous Galerkin finite element, and spectral element methods. In this module, we will focus on <strong>PyLith</strong> which is a finite-element code.</p>
 <p>(details of the problem) - nucleation
@@ -149,9 +148,9 @@ In this tutorial, we are going to conduct a dynamic rupture simulation using a s
 <div class="line">Here we assume that you have already installed and initialized PyLith. If not, you may refer to our module on <cite>static simulations &lt;&gt;</cite>.</div>
 </div>
 </div>
-</section>
-</section>
-<section id="simple-3d-case-study-nepal">
+</div>
+</div>
+<div class="section" id="simple-3d-case-study-nepal">
 <h2>Simple 3D case study - Nepal<a class="headerlink" href="#simple-3d-case-study-nepal" title="Permalink to this headline"></a></h2>
 <div class="line-block">
 <div class="line">1. Download the tutorial package <a class="reference download internal" download="" href="../_downloads/b9d8c98e0d2dcc8eee34c26ce7abb412/pylith_dynamic.tar.gz"><code class="xref download docutils literal notranslate"><span class="pre">pylith_dynamic.tar.gz</span></code></a> and move it to your working directory</div>
@@ -164,7 +163,7 @@ In this tutorial, we are going to conduct a dynamic rupture simulation using a s
 <div class="line">3. <code class="docutils literal notranslate"><span class="pre">ls</span></code> different folders in the directory to familiarize yourself with the different files required for a dynamic simulation</div>
 </div>
 <p>For running the dynamic simulation, you will need configuration files (.cfg) that specifies the problem, mesh (.exo) where the simulation takes place, spatial database files (.spatialdb) that describes the variables in space. Here we have three spatial database files - material property, frictional property, and traction. Since the mesh generating softwares are commercial, only the configuration and spatial database files will be illustrated in the following.</p>
-<section id="basic-structure-of-a-cfg-file">
+<div class="section" id="basic-structure-of-a-cfg-file">
 <h3>Basic structure of a .cfg file<a class="headerlink" href="#basic-structure-of-a-cfg-file" title="Permalink to this headline"></a></h3>
 <p>Now, let’s take a took at the <strong>dynamic_rupture_model.cfg</strong> under the <strong>pylith_dynamic</strong> directory. For a simulation in PyLith, you would need a <strong>configuration file (.cfg)</strong> which specifies the basic parameters of the simulation. Many of the commands are the same with those used in a <cite>static simulation &lt;&gt;</cite> so the following will only introduce some parameters specified for dynamic simulations.</p>
 <div class="line-block">
@@ -193,8 +192,8 @@ In this tutorial, we are going to conduct a dynamic rupture simulation using a s
 <div class="line">For more functions and information, please browse through the <a class="reference download internal" download="" href="../_downloads/cfabbbfae9e8c659ca211702f4bf23e5/pylith-2.2.2_manual.pdf"><code class="xref download docutils literal notranslate"><span class="pre">PyLith</span> <span class="pre">manual</span></code></a>.</div>
 </div>
 </div>
-</section>
-<section id="basic-structure-of-a-spatialdb-file">
+</div>
+<div class="section" id="basic-structure-of-a-spatialdb-file">
 <h3>Basic structure of a .spatialdb file<a class="headerlink" href="#basic-structure-of-a-spatialdb-file" title="Permalink to this headline"></a></h3>
 <p>After knowing what the configuration files do, let’s learn about the spatial database files under the spatialdb directory. The structure and parameter settings of the spatial database files used here are basically the same with those introduced in the <cite>static simulation tutorial &lt;&gt;</cite> but their contents are different, thus <code class="docutils literal notranslate"><span class="pre">value-names</span></code>, <code class="docutils literal notranslate"><span class="pre">value-units</span></code>, and <code class="docutils literal notranslate"><span class="pre">data-dim</span></code> are changed.</p>
 <div class="line-block">
@@ -205,8 +204,8 @@ In this tutorial, we are going to conduct a dynamic rupture simulation using a s
 <div class="line"><strong>2. mat_concrust_1D.spatialdb</strong></div>
 </div>
 <p>This spatial database file specifies the material properties. Here we prescribe depth dependent material properties - density, compressional wave velocity vp, and shear wave velocity vs.</p>
-</section>
-<section id="running-the-dynamic-simulation">
+</div>
+<div class="section" id="running-the-dynamic-simulation">
 <h3>Running the dynamic simulation<a class="headerlink" href="#running-the-dynamic-simulation" title="Permalink to this headline"></a></h3>
 <p>Now that we have a general picture of the files required for our simulation, let’s run the simulation.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd your_working_directory/pylith_dynamic/
@@ -214,12 +213,12 @@ $ pylith dynamic_rupture_model.cfg
 </pre></div>
 </div>
 <p>Now you can wait for the simulation to finish and the current timesteps are displayed in the terminal.</p>
-</section>
-</section>
-<section id="visualizing-results">
+</div>
+</div>
+<div class="section" id="visualizing-results">
 <h2>Visualizing results<a class="headerlink" href="#visualizing-results" title="Permalink to this headline"></a></h2>
 <p>After finishing the simulation, you should be able to see different output files under the <strong>output</strong> directory. In this tutorial, you will how to process the fault output in .h5 format using Python. Hierarchical Data Format (HDF) is a set of file formats (HDF4, HDF5) designed to store and organize large amounts of scientific data. We assume that you already have some experience of using Python and installed h5py. If not, please refer to <cite>our static simulation tutorial &lt;&gt;</cite>.</p>
-<section id="how-to-install-h5py">
+<div class="section" id="how-to-install-h5py">
 <h3>How to install h5py<a class="headerlink" href="#how-to-install-h5py" title="Permalink to this headline"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ conda create --name pylith
 $ conda activate pylith
@@ -340,13 +339,13 @@ will contain either vertex_fields or cell_fields but not both. (Adopted from PyL
 </pre></div>
 </div>
 <p>You should be able to generate the following animation.</p>
-<figure class="align-default">
+<div class="figure align-default">
 <img alt="../_images/updip_fault.gif" src="../_images/updip_fault.gif" />
-</figure>
+</div>
 <p>Figure 6. An animation of the updip slip distribution, slip rate, and traction during the rupture</p>
-</section>
-</section>
-</section>
+</div>
+</div>
+</div>
 
 
            </div>
@@ -360,7 +359,7 @@ will contain either vertex_fields or cell_fields but not both. (Adopted from PyL
 
   <div role="contentinfo">
     <p>&#169; Copyright 2021-2022, CUSeisTut team.
-      <span class="lastupdated">Last updated on 2022-03-21.
+      <span class="lastupdated">Last updated on 2022-03-22.
       </span></p>
   </div>
 

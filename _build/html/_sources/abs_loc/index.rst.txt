@@ -66,6 +66,7 @@ Python environment
     import matplotlib.pyplot as plt
     import time
     from matplotlib.patches import Ellipse
+    from mpl_toolkits.mplot3d import Axes3D
 
 .. note::
  | Functions below is important to be defined at first.
@@ -834,6 +835,7 @@ Credit: Wikipedia
 
     mu = 0        # mean of error
     sigma = 0.1   # standard deviation of error
+    np.random.seed(100)
     errors = np.random.normal(mu,sigma,size=(nsta,1))
     dobs_noise = dobs+errors
 
@@ -1134,11 +1136,11 @@ Play around new station dataset
 Homework
 --------
 
-#. Using the second station dataset (stats_set2), run the inversion, plot the error ellipse and stations, could you conclude relationship between the error ellipse and the stations coverage? Show your codes and results(30 Points)
+#. Using the second station dataset (stats_set2), run the inversion with noise parameters (seed=100, mu=0,sigma=0.1), plot the error ellipse and stations, could you conclude relationship between the error ellipse and the stations coverage? Show your codes and results(30 Points)
 
 #. In order to enhance the Z constraint, you can change the location of one station in station dataset1, what's your plan and why? Show your codes and results (20 points)
 
-#. In previous example, we calculate the :math:`\sigma_d^2=\frac{1}{nobs}\sum_{i=1}^{nobs}({d_i}-\bar{d})^2`, note it is the sum of square error divided by :math:`nobs` (number of observations). There are scientists proposed that the calculation should be :math:`\sigma_d^2=\frac{1}{nobs-k}\sum_{i=1}^{nobs}({d_i}-\bar{d})^2`, where :math:`nobs-k` is called **the number of degrees of freedom**, :math:`k` is the number of parameters determined by the data, in earthquake location process, :math:`k=4` for four paramters (x,y,z,t) are inverted. Try to run the inversion 100 times with random noise :math:`\sigma_{true}=0.1s`, calculate the data standard error using two method, conclude which one is more suitable to present the data standard error. Show your codes and results (30 points)
+#. In previous example, we calculate the :math:`\sigma_d^2=\frac{1}{nobs}\sum_{i=1}^{nobs}({d_i}-\bar{d})^2`, note it is the sum of square error divided by :math:`nobs` (number of observations). There are scientists proposed that the calculation should be :math:`\sigma_d^2=\frac{1}{nobs-k}\sum_{i=1}^{nobs}({d_i}-\bar{d})^2`, where :math:`nobs-k` is called **the number of degrees of freedom**, :math:`k` is the number of parameters determined by the data, in earthquake location process, :math:`k=4` for four paramters (x,y,z,t) are inverted. Try to run the inversion 100 times with random noise :math:`\sigma_{true}=0.1s`, calculate the data standard error using two methods, conclude which one is more consistent with the input noise level. Show your codes and results (30 points)
 
 #. What's your comments and suggestions to this tutorial (10 points)
 
