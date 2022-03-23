@@ -9,6 +9,8 @@ In this session, we introduce the most commonly used iterative earthquake abosol
 
 Theory Background
 ******************
+.. image:: Ray_textbook.jpg
+
 The arrival time recorded by one station could be presented:
 
 .. math::
