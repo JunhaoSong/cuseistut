@@ -25,7 +25,7 @@ we use :math:`\mathbf{d_obs}` to denote the arrival time of each station, then :
 
    \mathbf{Fm_{true}=d_obs}
 
-:math:`\mathbf{F}` is a matrix of size :math:`n\times 4`, the relationship between :math:`\mathbf{m}` and :math:`\mathbf{d}` is non-linear because integral is involved as show in previous equation.
+The relationship between :math:`\mathbf{m}` and :math:`\mathbf{d}` is non-linear because integral is involved as show in previous equation.
 For earthquake parameters that are close to :math:`\mathbf{m_{true}}`, we present it as :math:`\mathbf{m=m_{true}+\Delta{m}}`, the :math:`\mathbf{\Delta m}` will lead to variation in :math:`\mathbf{d_{obs}+\Delta d}`
 
 According to `Taylor Expansion theorem <https://en.wikipedia.org/wiki/Taylor_series>`_, we have:
