@@ -920,9 +920,9 @@ The error in observed data will of couse lead to uncertainties in the earthquake
 
 .. math:: \sigma_m^2=\sigma_d^2(G^TG)^{-1}
 
-The definition is:
+For two parameters, the definition of covariance is:
 
-.. math:: \sigma_{d_{ij}}^2 =  \sum_{k=1}^{K}(d_i^k-\bar{d_i})(d_j^k-\bar{d_j})
+.. math:: \sigma_{xy}}^2 =  \frac{1}{K}\sum_{k=1}^{K}(x^k-\bar{x})(y^k-\bar{y})
 
 .. note::
  | Wanna know how this relationship derived? Page 435 of **An Introduction to Seismology, Earthquakes, and Earth Structure (2003)**
