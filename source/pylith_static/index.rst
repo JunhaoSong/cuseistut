@@ -1,5 +1,5 @@
-Static Stress Change - PyLith
-=============================
+Modeling earthquake using Pylith - static
+=========================================
 
 Brief introduction
 ------------------
@@ -17,7 +17,6 @@ Aim of this module
 In this teaching module, we will focus on solving for the stress change corresponding to a fault slip distribution. 
 
 **Do you know why an earthquake would happen?**
-
 When the stresses on a fault plane overcomes the friction, a sudden slip would occur on the fault, releasing energy in waves that travel through the earth's crust. This is known as an earthquake. Therefore, it is evident that there are stress changes on the fault after an earthquake.
 
 In other words, given a slip distribution caused by an earthquake, there should be a corresponding stress change. This tutorial considers this as a quasi-static problem and aims to solve this problem through numerical simulation. In PyLith, the problem will be solved when the residual of the governing equation approaches zero.
@@ -27,7 +26,7 @@ In this tutorial, we will demonstrate a simple 3D case study. We will prescribe 
 .. image:: mesh.png
    :width: 80%
 
-Figure 1. 3D mesh given in this tutorial with dimensions in kilometers
+figure 1. 3D mesh given in this tutorial with dimensions in kilometers
 
 Then we will run the static simulation to obtain the stress change, so you will learn:
 
@@ -38,12 +37,13 @@ Then we will run the static simulation to obtain the stress change, so you will 
 How to install PyLith?
 **********************
 
-| 1. Download the PyLith package here :download:`pylith-2.2.2-linux-x86_64.tar.gz <./pylith-2.2.2-linux-x86_64.tar.gz>` or from the official website, and then move it into your working directory
+| 1. Download the PyLith package here `pylith-2.2.2-linux-x86_64.tar.gz <https://drive.google.com/file/d/1jSl5wHFriR4tGKiRK3TYZjsWigyh6TAE/view?usp=sharing>`_ , and then move it into your working directory
+
 | 2. Open a terminal and run these commands sequentially
 
 .. warning::
 
-   Excluode $ and start without whitespace!
+   Exclude $ and start without whitespace!
 
 .. code::
 
@@ -90,52 +90,38 @@ Simple 3D case study - Nepal
 
 For running the static simulation, you will need configuration files (.cfg) that specifies the problem, mesh (.exo) where the simulation takes place, spatial database files (.spatialdb) that describes the variables in space. Here we have two spatial database files - one for the material property, and one for the fault slip distribution. Since the mesh generating softwares are commercial, we will only illustrate the structure and some important parameters of the configuration and spatial database files in the following. 
 
-Basic structure of a .cfg file
-******************************
+Basic structure of a configuration (.cfg) file
+**********************************************
 
 Now, let's take a took at the **Nepal_kinematic_model.cfg** under the **pylith_static** directory. For a simulation in PyLith, you would need a **configuration file (.cfg)** which specifies the basic parameters of the simulation.
 
 | **1. Problem**
 
 ``[pylithapp.timedependent.formulation.time_step]`` Settings that control the time of the problem. Note that static, quasi-static, and dynamic simulations are also time dependent problems in PyLith.
-
 ``total_time`` specifies the total time. We adjust the total simulation time to 0 second because we are running a static simulation.
-
 ``dt`` specifies the time step size.
 
-
 ``[pylithapp.mesh_generator.reader]`` Settings that control mesh importing.
-
 ``filename`` specifies the filename of the mesh.
 
-
 ``[pylithapp.timedependent.materials]`` Settings that control the material type.
-
 ``db_properties.iohandler.filename`` specifies the name of the spatial database containing the physical properties for the material.
-
 ``db_properties.query_type`` specifies the type of search query to perform. This parameter can be set to 'linear' or 'nearest'.
 
 | **2. Boundary condition**
 
 ``[pylithapp.timedependent]`` Settings that control the problem, including the spatial dimension of the mesh.
-
 ``bc`` specifies the boundary conditions for different sides of the mesh.
-
 ``bc_dof`` specfies which degrees of freedom are being constrained for the boundary conditions. Note that the Degree of freedoms are: x=0, y=1, and z=2. For instance, ``bc = [2]`` refers to fixed displacement in z direction, and ``bc = [0, 1]`` means fixed displacement in x and y-directions. 
-
 ``label`` specfies the name of the nodeset in ExodusII file from CUBIT/Trelis that defines the boundary.
-
 ``db_initial.label`` specfies the label for the spatial database which is required for informative error messages.
 
 | **3. Faults**
 
 ``interfaces`` specifies an array containing the fault interfaces. Here we have one fault interface so we provide an array containing a single interface.
 
-
 ``[pylithapp.timedependent.interfaces]``
-
 ``fault`` specifies the type of fault interface condition. For this example we want to prescribe the fault slip, so the interface type is set to **FaultCohesiveKin**.
-
 
 ``[pylithapp.timedependent.interfaces.fault]`` 
 
@@ -147,14 +133,11 @@ Now, let's take a took at the **Nepal_kinematic_model.cfg** under the **pylith_s
 
 ``quadrature.cell.dimension`` specifies the dimension of fault cells. The fault cells are 2D in our case.
 
-
 ``[pylithapp.timedependent.interface.fault.eq_scrs.rupture.slip_function]`` Settings for prescribing the coseismic slip distribution on the fault, including the final slip and slip initiation time.
 
 ``slip.iohandler.filename`` specifies the name of the spatial database containing the coseismic slip distribution.
 
 ``slip.query_type`` specifies the type of search query to perform. Here we define the slip to be a spatial database with linear interpolation.
-
-``slip_time`` specifies
 
 ``slip_time.data`` specifies the slip time within an earthquake rupture relative to the origin time.
 
@@ -166,11 +149,9 @@ Settings related to output of the solution over the domain, subdomain (ground su
 
 ``output.station`` specifies the type of output for the stations. 
 
-
 ``[pylithapp.timedependent.formulation.output.domain]`` Settings for domain output.
 
 ``writer.filename`` specifies the filename of domain output.
-
 
 ``[pylithapp.timedependent.formulation.output.station]`` Settings for the station outputs.
 
@@ -186,8 +167,8 @@ Similar output parameters for the fault and the materials.
  | The above only documents the some parameters that we may change specified to our static simulation. Note that under this directory, there is also another configuration file **pylithapp.cfg**. **pylithapp.cfg** is not a self-contained simulation configuration file but it specifies the general parameters common to the simulations under this directory. This file is necessary for running our simulation.
  | For more functions and information, please browse through the :download:`PyLith manual <./pylith-2.2.2_manual.pdf>`. 
 
-Basic structure of a .spatialdb file
-************************************
+Basic structure of a spatial database (.spatialdb) file
+*******************************************************
 
 After knowing what the configuration files do, let's learn about the spatial database files under the spatialdb directory.
 
@@ -200,7 +181,7 @@ This spatial database file specifies the distribution of slip on the fault surfa
 ``SimpleDB`` specifies spatial database files contain a header describing the set of points and then the data with each line listing the
 coordinates of a point followed by the values of the fields for that point.
 
-``num-values`` number of values in the database.
+``num-values`` number of values in the database
 
 ``value-names`` specifies the names and the order of the values as they appear in the data. Note that the names of the values must correspond to the names PyLith requests in querying the database. Here we are having the slip distributions in three different directions - left-lateral (along-strike), reverse (along-dip), and fault-opening (fault-normal).
 
@@ -237,7 +218,7 @@ Congrats on running your first simulation!
 Visualizing results
 -------------------
 
-After finishing the simulation, you should be able to see different output files under the **output** directory. In this tutorial, you will how to process the fault output in .h5 format using Python. Hierarchical Data Format (HDF) is a set of file formats (HDF4, HDF5) designed to store and organize large amounts of scientific data. We assume that you already have some experience of using Python.
+After finishing the simulation, you should be able to see different output files under the **output** directory. In this tutorial, you will learn how to process the fault output in .h5 format using Python. Hierarchical Data Format (HDF) is a set of file formats (HDF4, HDF5) designed to store and organize large amounts of scientific data. We assume that you already have some experience of using Python.
 
 How to install h5py
 *******************
@@ -265,12 +246,12 @@ Please also make sure your have installed matplotlib in your environment. Now, l
    f = h5py.File(filename,'r')
    fields = list(f)
 
-If you check ``fields``, you would realize that there are four fields in this file - geometry, time, topology, and vertex_fields. In this tutorial, we will plot results using data from the vertices under ``geometry``, and the slip and traction change under ``vertex_fields``. For your reference, the figure below illustrates the general layout of a PyLith HDF5 file (extracted from the manual). 
+If you check ``fields``, you would realize that there are four fields in this file - geometry, time, topology, and vertex_fields. In this tutorial, we will plot results using data from the vertices under ``geometry``, and the slip and traction change under ``vertex_fields``. For your reference, the figure below illustrates the general layout of a PyLith HDF5 file (extracted from the :download:`PyLith manual <./pylith-2.2.2_manual.pdf>`). 
 
 .. image:: hdf5_structure.png
-   :width: 100%
+   :width: 80%
 
-Figure 2. General layout of a PyLith HDF5 file. The orange rectangles with rounded corners identify the groups and the blue
+figure 2. General layout of a PyLith HDF5 file. The orange rectangles with rounded corners identify the groups and the blue
 rectangles with sharp corners identify the datasets. The dimensions of the data sets are shown in parentheses. Most HDF5 files
 will contain either vertex_fields or cell_fields but not both. (Adopted from PyLith Manual)
 
@@ -353,6 +334,6 @@ will contain either vertex_fields or cell_fields but not both. (Adopted from PyL
 You should be able to generate the following plot.
 
 .. image:: static_results.png
-   :width: 90%
+   :width: 80%
 
-Figure 3. A plot of the prescribed slip distributions and their corresponding stress changes
+figure 3. A plot of the prescribed slip distributions and their corresponding stress changes

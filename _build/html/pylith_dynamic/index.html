@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dynamic Earthquake Simulation &mdash; CUSeisTut</title>
+  <title>Modeling earthquake using Pylith - dynamic &mdash; CUSeisTut</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
@@ -19,7 +19,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Body Wave Tomography" href="../body_tomo/index.html" />
-    <link rel="prev" title="Static Stress Change - PyLith" href="../pylith_static/index.html" /> 
+    <link rel="prev" title="Modeling earthquake using Pylith - static" href="../pylith_static/index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -60,15 +60,15 @@
 <li class="toctree-l1"><a class="reference internal" href="../eqt/index.html">Earthquake Transformer Tutorial</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../dd_loc/index.html">Double-Difference Earthquake Relocation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../source_spectra/index.html">Spectral Analysis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../pylith_static/index.html">Static Stress Change - PyLith</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Dynamic Earthquake Simulation</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="../pylith_static/index.html">Modeling earthquake using Pylith - static</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Modeling earthquake using Pylith - dynamic</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#brief-introduction">Brief introduction</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#aim-of-this-module">Aim of this module</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#simple-3d-case-study-nepal">Simple 3D case study - Nepal</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#basic-structure-of-a-cfg-file">Basic structure of a .cfg file</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#basic-structure-of-a-spatialdb-file">Basic structure of a .spatialdb file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#basic-structure-of-a-configuration-cfg-file">Basic structure of a configuration (.cfg) file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#basic-structure-of-a-spatial-database-spatialdb-file">Basic structure of a spatial database (.spatialdb) file</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#running-the-dynamic-simulation">Running the dynamic simulation</a></li>
 </ul>
 </li>
@@ -102,7 +102,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Dynamic Earthquake Simulation</li>
+      <li>Modeling earthquake using Pylith - dynamic</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/pylith_dynamic/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -112,8 +112,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="dynamic-earthquake-simulation">
-<h1>Dynamic Earthquake Simulation<a class="headerlink" href="#dynamic-earthquake-simulation" title="Permalink to this headline"></a></h1>
+  <div class="section" id="modeling-earthquake-using-pylith-dynamic">
+<h1>Modeling earthquake using Pylith - dynamic<a class="headerlink" href="#modeling-earthquake-using-pylith-dynamic" title="Permalink to this headline"></a></h1>
 <div class="section" id="brief-introduction">
 <h2>Brief introduction<a class="headerlink" href="#brief-introduction" title="Permalink to this headline"></a></h2>
 <p>Dynamic modeling of earthquakes provides important insights in the physics of earthquake rupture processes. For example, earthquake initiation, propagation, arrest, afterslip, locking, and interseismic stress accumulation can be solved. In particular, dynamic earthquake rupture codes compute the physical earthquake behaviors over short time scales, producing possible earthquake size, fault slip amount, ground motion, and crustal deformation, which are crucial for risk assessment.</p>
@@ -121,21 +121,20 @@
 <div class="section" id="aim-of-this-module">
 <h3>Aim of this module<a class="headerlink" href="#aim-of-this-module" title="Permalink to this headline"></a></h3>
 <p>There are different dynamic earthquake rupture codes for a range of code types, including finite element, discontinuous Galerkin finite element, and spectral element methods. In this module, we will focus on <strong>PyLith</strong> which is a finite-element code.</p>
-<p>(details of the problem) - nucleation
-In this tutorial, we are going to conduct a dynamic rupture simulation using a simple 3D example. As illustrated in the below figure, the inputs of PyLith requires the fault geometry and rock properties, initial stresses, and fault friction.</p>
-<a class="reference internal image-reference" href="../_images/dynamic_requirements.png"><img alt="../_images/dynamic_requirements.png" src="../_images/dynamic_requirements.png" style="width: 100%;" /></a>
-<p>Figure 1. Key ingredients of a dynamic (spontaneous) earthquake rupture simulation (Harris et al. 2018)</p>
-<p>The fault geometry is described by the given mesh. In this example, we will assume the materials to be elastic.For the rock properties, we will use a spatial database to specify a simple depth-dependent material properties, including density, compressional wave velocity vp, and shear wave velocity vs.</p>
-<a class="reference internal image-reference" href="../_images/mesh.png"><img alt="../_images/mesh.png" src="../_images/mesh.png" style="width: 100%;" /></a>
-<p>Figure 2. 3D mesh given in this tutorial with dimensions in kilometers</p>
-<p>There are different fault frictional laws. Here we are going to introduce linear slip-weakening law, which is described by yield strength/stress, initial stress, sliding-friction/dynamic stress, and critical slip distance dc. Yield strength/stress is the maximum stress level that can be applied before the fault slips. Sliding friction is the background stress level. The difference between the initial stress and the yield strength is known as the strength excess. A fault has to overcome this strength excess to allow ruptures.</p>
+<p>In this tutorial, we are going to conduct a dynamic rupture simulation using a simple 3D example. As illustrated in the below figure, the inputs of PyLith requires the fault geometry and rock properties, initial stresses, and fault friction.</p>
+<a class="reference internal image-reference" href="../_images/dynamic_requirements.png"><img alt="../_images/dynamic_requirements.png" src="../_images/dynamic_requirements.png" style="width: 80%;" /></a>
+<p>figure 1. Key ingredients of a dynamic (spontaneous) earthquake rupture simulation (Harris et al. 2018)</p>
+<p>The fault geometry is described by the given mesh. In this example, we will assume the materials to be elastic. For the rock properties, we will use a spatial database to specify a simple depth-dependent material properties, including density, compressional wave velocity (vp), and shear wave velocity (vs).</p>
+<a class="reference internal image-reference" href="../_images/mesh.png"><img alt="../_images/mesh.png" src="../_images/mesh.png" style="width: 80%;" /></a>
+<p>figure 2. 3D mesh given in this tutorial with dimensions in kilometers</p>
+<p>There are different fault frictional laws. Here we are going to introduce the linear slip-weakening law, which is described by yield strength/stress, initial stress, sliding-friction/dynamic stress, and critical slip distance dc. Yield strength/stress is the maximum stress level that can be applied before the fault slips. Sliding friction is the background stress level. The difference between the initial stress and the yield strength is known as the strength excess. A fault has to overcome this strength excess to allow ruptures.</p>
 <a class="reference internal image-reference" href="../_images/linear_slip_weakening.png"><img alt="../_images/linear_slip_weakening.png" src="../_images/linear_slip_weakening.png" style="width: 80%;" /></a>
-<p>Figure 3. Schematic diagram of linear slip-weakening model</p>
+<p>figure 3. Schematic diagram of linear slip-weakening model</p>
 <p>We can also take a look at the equation for the traction on the fault plane using linear slip-weakening law. When the fault slip (d) is within the critical slip distance (dc), the stress level (Tf) decreases linearly from the static (Ts) to dynamic level (Td). When the fault slip exceeds the critical slip distance, the stress level is the same as the sliding friction.</p>
-<a class="reference internal image-reference" href="../_images/linear_slip_weakening_eq.png"><img alt="../_images/linear_slip_weakening_eq.png" src="../_images/linear_slip_weakening_eq.png" style="width: 40%;" /></a>
-<p>In PyLith, we would use friction coefficients to specify the frictional properties of the fault. Yield strength is the product of static coefficient and fault normal traction while sliding friction is the product of dynamic coefficient and fault normal traction. In this example, we are using homogeneous initial stresses and dynamic stress on fault. To initiate the rupture, we lower the yield stress below the initial stress level within a circular zone. You can also visualize the yield strength, initial stress, and dynamic stress as the following plot.</p>
-<a class="reference internal image-reference" href="../_images/nucleation.png"><img alt="../_images/nucleation.png" src="../_images/nucleation.png" style="width: 90%;" /></a>
-<p>Figure 4. Plot of the stresses on the fault in our example</p>
+<a class="reference internal image-reference" href="../_images/linear_slip_weakening_eq.png"><img alt="../_images/linear_slip_weakening_eq.png" src="../_images/linear_slip_weakening_eq.png" style="width: 50%;" /></a>
+<p>In <strong>PyLith</strong>, we would use friction coefficients to specify the frictional properties of the fault. Yield strength is the product of static coefficient and fault normal traction while sliding friction is the product of dynamic coefficient and fault normal traction. In this example, we are using homogeneous initial stresses and dynamic stress on fault. To initiate the rupture, we lower the yield stress below the initial stress level within a circular zone. You can also visualize the yield strength, initial stress, and dynamic stress as the following plot.</p>
+<a class="reference internal image-reference" href="../_images/nucleation.png"><img alt="../_images/nucleation.png" src="../_images/nucleation.png" style="width: 70%;" /></a>
+<p>figure 4. Plot of the stresses on the fault in our example</p>
 <p>Now, you already have a general picture of our problem in this tutorial. In the following, you will learn:</p>
 <div class="line-block">
 <div class="line">1. the input parameters</div>
@@ -145,7 +144,7 @@ In this tutorial, we are going to conduct a dynamic rupture simulation using a s
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <div class="line-block">
-<div class="line">Here we assume that you have already installed and initialized PyLith. If not, you may refer to our module on <cite>static simulations &lt;&gt;</cite>.</div>
+<div class="line">Here we assume that you have already installed and initialized PyLith. If not, you may refer to <a class="reference external" href="https://cuseistut.readthedocs.io/en/latest/pylith_static/index.html">our module on static simulations</a> .</div>
 </div>
 </div>
 </div>
@@ -163,28 +162,29 @@ In this tutorial, we are going to conduct a dynamic rupture simulation using a s
 <div class="line">3. <code class="docutils literal notranslate"><span class="pre">ls</span></code> different folders in the directory to familiarize yourself with the different files required for a dynamic simulation</div>
 </div>
 <p>For running the dynamic simulation, you will need configuration files (.cfg) that specifies the problem, mesh (.exo) where the simulation takes place, spatial database files (.spatialdb) that describes the variables in space. Here we have three spatial database files - material property, frictional property, and traction. Since the mesh generating softwares are commercial, only the configuration and spatial database files will be illustrated in the following.</p>
-<div class="section" id="basic-structure-of-a-cfg-file">
-<h3>Basic structure of a .cfg file<a class="headerlink" href="#basic-structure-of-a-cfg-file" title="Permalink to this headline"></a></h3>
-<p>Now, let’s take a took at the <strong>dynamic_rupture_model.cfg</strong> under the <strong>pylith_dynamic</strong> directory. For a simulation in PyLith, you would need a <strong>configuration file (.cfg)</strong> which specifies the basic parameters of the simulation. Many of the commands are the same with those used in a <cite>static simulation &lt;&gt;</cite> so the following will only introduce some parameters specified for dynamic simulations.</p>
+<div class="section" id="basic-structure-of-a-configuration-cfg-file">
+<h3>Basic structure of a configuration (.cfg) file<a class="headerlink" href="#basic-structure-of-a-configuration-cfg-file" title="Permalink to this headline"></a></h3>
+<p>Now, let’s take a took at the <strong>dynamic_rupture_model.cfg</strong> under the <strong>pylith_dynamic</strong> directory. For a simulation in PyLith, you would need a <strong>configuration file (.cfg)</strong> which specifies the basic parameters of the simulation. Many of the commands are the same with those used in a <a class="reference external" href="https://cuseistut.readthedocs.io/en/latest/pylith_static/index.html">static simulation</a> so the following will only introduce some parameters specified for dynamic simulations.</p>
 <div class="line-block">
 <div class="line"><strong>1. Problem</strong></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">normalizer</span></code> used to nondimensionalize the equations.</p>
-<p><code class="docutils literal notranslate"><span class="pre">shear_wave_speed</span></code> specifies the shear wave speed used to nondimensionalize length and pressure (default is 3.0 km/s).</p>
-<p><code class="docutils literal notranslate"><span class="pre">mass_density</span></code> specifies the mass density to nondimensionalize density and pressure (default is 3.0e+3 kg/m3).</p>
-<p><code class="docutils literal notranslate"><span class="pre">wave_period</span></code> specifies the period of seismic waves used to nondimensionalize time (default is 1.0 s).</p>
+<p>simulations.
+<code class="docutils literal notranslate"><span class="pre">normalizer</span></code> used to nondimensionalize the equations.
+<code class="docutils literal notranslate"><span class="pre">shear_wave_speed</span></code> specifies the shear wave speed used to nondimensionalize length and pressure (default is 3.0 km/s).
+<code class="docutils literal notranslate"><span class="pre">mass_density</span></code> specifies the mass density to nondimensionalize density and pressure (default is 3.0e+3 kg/m3).
+<code class="docutils literal notranslate"><span class="pre">wave_period</span></code> specifies the period of seismic waves used to nondimensionalize time (default is 1.0 s).</p>
 <div class="line-block">
 <div class="line"><strong>2. Boundary condition</strong></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">pylith.bc.AbsorbingDampers</span></code> specifies absorbing boundary condition. Note that this function does not perfectly absorb all incident waves. Please refer to the <cite>manual &lt;pylith-2.2.2_manual.pdf&gt;</cite> for more details.</p>
+<p><code class="docutils literal notranslate"><span class="pre">pylith.bc.AbsorbingDampers</span></code> specifies absorbing boundary condition. Note that this function does not perfectly absorb all incident waves. Please refer to the <a class="reference download internal" download="" href="../_downloads/cfabbbfae9e8c659ca211702f4bf23e5/pylith-2.2.2_manual.pdf"><code class="xref download docutils literal notranslate"><span class="pre">manual</span></code></a> for more details.</p>
 <div class="line-block">
 <div class="line"><strong>3. Faults</strong></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">pylith.faults.FaultCohesiveDyn</span></code> specifies dynamic fault interface.</p>
-<p><code class="docutils literal notranslate"><span class="pre">pylith.friction.SlipWeakening</span></code> specifies linear slip-weakening friction fault constitutive model. There are also other friction models, e.g. rate and state friction, and linear time-weakening friction model.</p>
-<p><code class="docutils literal notranslate"><span class="pre">friction.db_properties.idhandler.filename</span></code> specifies the filename for the friction parameters.</p>
-<p><code class="docutils literal notranslate"><span class="pre">traction_perturbation</span></code> specifies initial tractions on fault surface.</p>
-<p><code class="docutils literal notranslate"><span class="pre">db_initial.data</span></code> specifies the left lateral shear traction, updip shear traction, and normal traction (tension is positive, compression is negative) to be 0 MPa, 55 MPa, -100 MPa.</p>
+<p><code class="docutils literal notranslate"><span class="pre">pylith.faults.FaultCohesiveDyn</span></code> specifies dynamic fault interface.
+<code class="docutils literal notranslate"><span class="pre">pylith.friction.SlipWeakening</span></code> specifies linear slip-weakening friction fault constitutive model. There are also other friction models, e.g. rate and state friction, and linear time-weakening friction model.
+<code class="docutils literal notranslate"><span class="pre">friction.db_properties.idhandler.filename</span></code> specifies the filename for the friction parameters.
+<code class="docutils literal notranslate"><span class="pre">traction_perturbation</span></code> specifies initial tractions on fault surface.
+<code class="docutils literal notranslate"><span class="pre">db_initial.data</span></code> specifies the left lateral shear traction, updip shear traction, and normal traction (tension is positive, compression is negative) to be 0 MPa, 55 MPa, -100 MPa.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <div class="line-block">
@@ -193,9 +193,9 @@ In this tutorial, we are going to conduct a dynamic rupture simulation using a s
 </div>
 </div>
 </div>
-<div class="section" id="basic-structure-of-a-spatialdb-file">
-<h3>Basic structure of a .spatialdb file<a class="headerlink" href="#basic-structure-of-a-spatialdb-file" title="Permalink to this headline"></a></h3>
-<p>After knowing what the configuration files do, let’s learn about the spatial database files under the spatialdb directory. The structure and parameter settings of the spatial database files used here are basically the same with those introduced in the <cite>static simulation tutorial &lt;&gt;</cite> but their contents are different, thus <code class="docutils literal notranslate"><span class="pre">value-names</span></code>, <code class="docutils literal notranslate"><span class="pre">value-units</span></code>, and <code class="docutils literal notranslate"><span class="pre">data-dim</span></code> are changed.</p>
+<div class="section" id="basic-structure-of-a-spatial-database-spatialdb-file">
+<h3>Basic structure of a spatial database (.spatialdb) file<a class="headerlink" href="#basic-structure-of-a-spatial-database-spatialdb-file" title="Permalink to this headline"></a></h3>
+<p>After knowing what the configuration files do, let’s learn about the spatial database files under the spatialdb directory. The structure and parameter settings of the spatial database files used here are basically the same with those introduced in the <a class="reference external" href="https://cuseistut.readthedocs.io/en/latest/pylith_static/index.html">static simulation tutorial</a> but their contents are different, thus <code class="docutils literal notranslate"><span class="pre">value-names</span></code>, <code class="docutils literal notranslate"><span class="pre">value-units</span></code>, and <code class="docutils literal notranslate"><span class="pre">data-dim</span></code> are changed.</p>
 <div class="line-block">
 <div class="line"><strong>1. friction.spatialdb</strong></div>
 </div>
@@ -212,12 +212,12 @@ In this tutorial, we are going to conduct a dynamic rupture simulation using a s
 $ pylith dynamic_rupture_model.cfg
 </pre></div>
 </div>
-<p>Now you can wait for the simulation to finish and the current timesteps are displayed in the terminal.</p>
+<p>Now the current timesteps are displayed in the terminal, and you can wait for the simulation to finish.</p>
 </div>
 </div>
 <div class="section" id="visualizing-results">
 <h2>Visualizing results<a class="headerlink" href="#visualizing-results" title="Permalink to this headline"></a></h2>
-<p>After finishing the simulation, you should be able to see different output files under the <strong>output</strong> directory. In this tutorial, you will how to process the fault output in .h5 format using Python. Hierarchical Data Format (HDF) is a set of file formats (HDF4, HDF5) designed to store and organize large amounts of scientific data. We assume that you already have some experience of using Python and installed h5py. If not, please refer to <cite>our static simulation tutorial &lt;&gt;</cite>.</p>
+<p>After finishing the simulation, you should be able to see different output files under the <strong>output</strong> directory. In this tutorial, you will learn how to process the fault output in .h5 format using Python. Hierarchical Data Format (HDF) is a set of file formats (HDF4, HDF5) designed to store and organize large amounts of scientific data. We assume that you already have some experience of using Python and installed h5py. If not, please refer to <a class="reference external" href="https://cuseistut.readthedocs.io/en/latest/pylith_static/index.html">our static simulation tutorial</a> .</p>
 <div class="section" id="how-to-install-h5py">
 <h3>How to install h5py<a class="headerlink" href="#how-to-install-h5py" title="Permalink to this headline"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ conda create --name pylith
@@ -243,9 +243,9 @@ $ conda install h5py
 <span class="n">fields</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>If you check <code class="docutils literal notranslate"><span class="pre">fields</span></code>, you would realize that there are four fields in this file - geometry, time, topology, and vertex_fields. In this tutorial, we will plot results using data from the vertices under <code class="docutils literal notranslate"><span class="pre">geometry</span></code>, time in <code class="docutils literal notranslate"><span class="pre">time</span></code> as well as the slip, slip rate, and traction under <code class="docutils literal notranslate"><span class="pre">vertex_fields</span></code>. For your reference, the figure below illustrates the general layout of a PyLith HDF5 file (extracted from the manual).</p>
-<a class="reference internal image-reference" href="../_images/hdf5_structure.png"><img alt="../_images/hdf5_structure.png" src="../_images/hdf5_structure.png" style="width: 100%;" /></a>
-<p>Figure 5. General layout of a PyLith HDF5 file. The orange rectangles with rounded corners identify the groups and the blue
+<p>If you check <code class="docutils literal notranslate"><span class="pre">fields</span></code>, you would realize that there are four fields in this file - geometry, time, topology, and vertex_fields. In this tutorial, we will plot results using data from the vertices under <code class="docutils literal notranslate"><span class="pre">geometry</span></code>, time in <code class="docutils literal notranslate"><span class="pre">time</span></code> as well as the slip, slip rate, and traction under <code class="docutils literal notranslate"><span class="pre">vertex_fields</span></code>. For your reference, the figure below illustrates the general layout of a PyLith HDF5 file (extracted from the <a class="reference download internal" download="" href="../_downloads/cfabbbfae9e8c659ca211702f4bf23e5/pylith-2.2.2_manual.pdf"><code class="xref download docutils literal notranslate"><span class="pre">PyLith</span> <span class="pre">manual</span></code></a>).</p>
+<a class="reference internal image-reference" href="../_images/hdf5_structure.png"><img alt="../_images/hdf5_structure.png" src="../_images/hdf5_structure.png" style="width: 80%;" /></a>
+<p>figure 5. General layout of a PyLith HDF5 file. The orange rectangles with rounded corners identify the groups and the blue
 rectangles with sharp corners identify the datasets. The dimensions of the data sets are shown in parentheses. Most HDF5 files
 will contain either vertex_fields or cell_fields but not both. (Adopted from PyLith Manual)</p>
 <div class="line-block">
@@ -342,7 +342,7 @@ will contain either vertex_fields or cell_fields but not both. (Adopted from PyL
 <div class="figure align-default">
 <img alt="../_images/updip_fault.gif" src="../_images/updip_fault.gif" />
 </div>
-<p>Figure 6. An animation of the updip slip distribution, slip rate, and traction during the rupture</p>
+<p>figure 6. An animation of the updip slip distribution, slip rate, and traction during the rupture</p>
 </div>
 </div>
 </div>
@@ -351,7 +351,7 @@ will contain either vertex_fields or cell_fields but not both. (Adopted from PyL
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../pylith_static/index.html" class="btn btn-neutral float-left" title="Static Stress Change - PyLith" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../pylith_static/index.html" class="btn btn-neutral float-left" title="Modeling earthquake using Pylith - static" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="../body_tomo/index.html" class="btn btn-neutral float-right" title="Body Wave Tomography" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
@@ -359,7 +359,7 @@ will contain either vertex_fields or cell_fields but not both. (Adopted from PyL
 
   <div role="contentinfo">
     <p>&#169; Copyright 2021-2022, CUSeisTut team.
-      <span class="lastupdated">Last updated on 2022-03-22.
+      <span class="lastupdated">Last updated on 2022-03-30.
       </span></p>
   </div>
 

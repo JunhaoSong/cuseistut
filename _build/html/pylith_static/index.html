@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Static Stress Change - PyLith &mdash; CUSeisTut</title>
+  <title>Modeling earthquake using Pylith - static &mdash; CUSeisTut</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
@@ -18,7 +18,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Dynamic Earthquake Simulation" href="../pylith_dynamic/index.html" />
+    <link rel="next" title="Modeling earthquake using Pylith - dynamic" href="../pylith_dynamic/index.html" />
     <link rel="prev" title="Spectral Analysis" href="../source_spectra/index.html" /> 
 </head>
 
@@ -60,7 +60,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../eqt/index.html">Earthquake Transformer Tutorial</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../dd_loc/index.html">Double-Difference Earthquake Relocation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../source_spectra/index.html">Spectral Analysis</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Static Stress Change - PyLith</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Modeling earthquake using Pylith - static</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#brief-introduction">Brief introduction</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#what-is-pylith">What is PyLith?</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#aim-of-this-module">Aim of this module</a></li>
@@ -68,8 +68,8 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#simple-3d-case-study-nepal">Simple 3D case study - Nepal</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#basic-structure-of-a-cfg-file">Basic structure of a .cfg file</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#basic-structure-of-a-spatialdb-file">Basic structure of a .spatialdb file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#basic-structure-of-a-configuration-cfg-file">Basic structure of a configuration (.cfg) file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#basic-structure-of-a-spatial-database-spatialdb-file">Basic structure of a spatial database (.spatialdb) file</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#running-the-static-simulation">Running the static simulation</a></li>
 </ul>
 </li>
@@ -79,7 +79,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../pylith_dynamic/index.html">Dynamic Earthquake Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pylith_dynamic/index.html">Modeling earthquake using Pylith - dynamic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../body_tomo/index.html">Body Wave Tomography</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../surface_tomo/index.html">Surface Wave Tomography</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../ambient_tomo/index.html">Ambient noise cross correlation</a></li>
@@ -104,7 +104,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Static Stress Change - PyLith</li>
+      <li>Modeling earthquake using Pylith - static</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/pylith_static/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -114,8 +114,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="static-stress-change-pylith">
-<h1>Static Stress Change - PyLith<a class="headerlink" href="#static-stress-change-pylith" title="Permalink to this headline"></a></h1>
+  <div class="section" id="modeling-earthquake-using-pylith-static">
+<h1>Modeling earthquake using Pylith - static<a class="headerlink" href="#modeling-earthquake-using-pylith-static" title="Permalink to this headline"></a></h1>
 <div class="section" id="brief-introduction">
 <h2>Brief introduction<a class="headerlink" href="#brief-introduction" title="Permalink to this headline"></a></h2>
 <p>Earthquake modeling provides a broad range of possible earthquake scenarios using physics-based models, which is critical for seismic hazard assessment. By incorporating observations and laboratory tests into models, we have better understanding of earthquake behaviors by recreating past earthquakes, and explore the range of potential future earthquakes, thus bridging our knowns and unknowns.</p>
@@ -126,12 +126,12 @@
 <div class="section" id="aim-of-this-module">
 <h3>Aim of this module<a class="headerlink" href="#aim-of-this-module" title="Permalink to this headline"></a></h3>
 <p>In this teaching module, we will focus on solving for the stress change corresponding to a fault slip distribution.</p>
-<p><strong>Do you know why an earthquake would happen?</strong></p>
-<p>When the stresses on a fault plane overcomes the friction, a sudden slip would occur on the fault, releasing energy in waves that travel through the earth’s crust. This is known as an earthquake. Therefore, it is evident that there are stress changes on the fault after an earthquake.</p>
+<p><strong>Do you know why an earthquake would happen?</strong>
+When the stresses on a fault plane overcomes the friction, a sudden slip would occur on the fault, releasing energy in waves that travel through the earth’s crust. This is known as an earthquake. Therefore, it is evident that there are stress changes on the fault after an earthquake.</p>
 <p>In other words, given a slip distribution caused by an earthquake, there should be a corresponding stress change. This tutorial considers this as a quasi-static problem and aims to solve this problem through numerical simulation. In PyLith, the problem will be solved when the residual of the governing equation approaches zero.</p>
 <p>In this tutorial, we will demonstrate a simple 3D case study. We will prescribe the heterogeneous slip distribution on the fault and the fault geometry using the mesh shown in the figure below.</p>
 <a class="reference internal image-reference" href="../_images/mesh1.png"><img alt="../_images/mesh1.png" src="../_images/mesh1.png" style="width: 80%;" /></a>
-<p>Figure 1. 3D mesh given in this tutorial with dimensions in kilometers</p>
+<p>figure 1. 3D mesh given in this tutorial with dimensions in kilometers</p>
 <p>Then we will run the static simulation to obtain the stress change, so you will learn:</p>
 <div class="line-block">
 <div class="line">1. the input parameters,</div>
@@ -142,12 +142,14 @@
 <div class="section" id="how-to-install-pylith">
 <h3>How to install PyLith?<a class="headerlink" href="#how-to-install-pylith" title="Permalink to this headline"></a></h3>
 <div class="line-block">
-<div class="line">1. Download the PyLith package here <code class="xref download docutils literal notranslate"><span class="pre">pylith-2.2.2-linux-x86_64.tar.gz</span></code> or from the official website, and then move it into your working directory</div>
+<div class="line">1. Download the PyLith package here <a class="reference external" href="https://drive.google.com/file/d/1jSl5wHFriR4tGKiRK3TYZjsWigyh6TAE/view?usp=sharing">pylith-2.2.2-linux-x86_64.tar.gz</a> , and then move it into your working directory</div>
+</div>
+<div class="line-block">
 <div class="line">2. Open a terminal and run these commands sequentially</div>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>Excluode $ and start without whitespace!</p>
+<p>Exclude $ and start without whitespace!</p>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ tar xvf pylith-2.2.2-linux-x86_64.tar.gz
 $ cd pylith-2.2.2-linux-x86_64/
@@ -193,34 +195,34 @@ pylithapp: configuration error(s)
 <div class="line">3. <code class="docutils literal notranslate"><span class="pre">ls</span></code> different folders in the directory to familiarize yourself with the different files required for a static simulation</div>
 </div>
 <p>For running the static simulation, you will need configuration files (.cfg) that specifies the problem, mesh (.exo) where the simulation takes place, spatial database files (.spatialdb) that describes the variables in space. Here we have two spatial database files - one for the material property, and one for the fault slip distribution. Since the mesh generating softwares are commercial, we will only illustrate the structure and some important parameters of the configuration and spatial database files in the following.</p>
-<div class="section" id="basic-structure-of-a-cfg-file">
-<h3>Basic structure of a .cfg file<a class="headerlink" href="#basic-structure-of-a-cfg-file" title="Permalink to this headline"></a></h3>
+<div class="section" id="basic-structure-of-a-configuration-cfg-file">
+<h3>Basic structure of a configuration (.cfg) file<a class="headerlink" href="#basic-structure-of-a-configuration-cfg-file" title="Permalink to this headline"></a></h3>
 <p>Now, let’s take a took at the <strong>Nepal_kinematic_model.cfg</strong> under the <strong>pylith_static</strong> directory. For a simulation in PyLith, you would need a <strong>configuration file (.cfg)</strong> which specifies the basic parameters of the simulation.</p>
 <div class="line-block">
 <div class="line"><strong>1. Problem</strong></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">[pylithapp.timedependent.formulation.time_step]</span></code> Settings that control the time of the problem. Note that static, quasi-static, and dynamic simulations are also time dependent problems in PyLith.</p>
-<p><code class="docutils literal notranslate"><span class="pre">total_time</span></code> specifies the total time. We adjust the total simulation time to 0 second because we are running a static simulation.</p>
-<p><code class="docutils literal notranslate"><span class="pre">dt</span></code> specifies the time step size.</p>
-<p><code class="docutils literal notranslate"><span class="pre">[pylithapp.mesh_generator.reader]</span></code> Settings that control mesh importing.</p>
-<p><code class="docutils literal notranslate"><span class="pre">filename</span></code> specifies the filename of the mesh.</p>
-<p><code class="docutils literal notranslate"><span class="pre">[pylithapp.timedependent.materials]</span></code> Settings that control the material type.</p>
-<p><code class="docutils literal notranslate"><span class="pre">db_properties.iohandler.filename</span></code> specifies the name of the spatial database containing the physical properties for the material.</p>
-<p><code class="docutils literal notranslate"><span class="pre">db_properties.query_type</span></code> specifies the type of search query to perform. This parameter can be set to ‘linear’ or ‘nearest’.</p>
+<p><code class="docutils literal notranslate"><span class="pre">[pylithapp.timedependent.formulation.time_step]</span></code> Settings that control the time of the problem. Note that static, quasi-static, and dynamic simulations are also time dependent problems in PyLith.
+<code class="docutils literal notranslate"><span class="pre">total_time</span></code> specifies the total time. We adjust the total simulation time to 0 second because we are running a static simulation.
+<code class="docutils literal notranslate"><span class="pre">dt</span></code> specifies the time step size.</p>
+<p><code class="docutils literal notranslate"><span class="pre">[pylithapp.mesh_generator.reader]</span></code> Settings that control mesh importing.
+<code class="docutils literal notranslate"><span class="pre">filename</span></code> specifies the filename of the mesh.</p>
+<p><code class="docutils literal notranslate"><span class="pre">[pylithapp.timedependent.materials]</span></code> Settings that control the material type.
+<code class="docutils literal notranslate"><span class="pre">db_properties.iohandler.filename</span></code> specifies the name of the spatial database containing the physical properties for the material.
+<code class="docutils literal notranslate"><span class="pre">db_properties.query_type</span></code> specifies the type of search query to perform. This parameter can be set to ‘linear’ or ‘nearest’.</p>
 <div class="line-block">
 <div class="line"><strong>2. Boundary condition</strong></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">[pylithapp.timedependent]</span></code> Settings that control the problem, including the spatial dimension of the mesh.</p>
-<p><code class="docutils literal notranslate"><span class="pre">bc</span></code> specifies the boundary conditions for different sides of the mesh.</p>
-<p><code class="docutils literal notranslate"><span class="pre">bc_dof</span></code> specfies which degrees of freedom are being constrained for the boundary conditions. Note that the Degree of freedoms are: x=0, y=1, and z=2. For instance, <code class="docutils literal notranslate"><span class="pre">bc</span> <span class="pre">=</span> <span class="pre">[2]</span></code> refers to fixed displacement in z direction, and <code class="docutils literal notranslate"><span class="pre">bc</span> <span class="pre">=</span> <span class="pre">[0,</span> <span class="pre">1]</span></code> means fixed displacement in x and y-directions.</p>
-<p><code class="docutils literal notranslate"><span class="pre">label</span></code> specfies the name of the nodeset in ExodusII file from CUBIT/Trelis that defines the boundary.</p>
-<p><code class="docutils literal notranslate"><span class="pre">db_initial.label</span></code> specfies the label for the spatial database which is required for informative error messages.</p>
+<p><code class="docutils literal notranslate"><span class="pre">[pylithapp.timedependent]</span></code> Settings that control the problem, including the spatial dimension of the mesh.
+<code class="docutils literal notranslate"><span class="pre">bc</span></code> specifies the boundary conditions for different sides of the mesh.
+<code class="docutils literal notranslate"><span class="pre">bc_dof</span></code> specfies which degrees of freedom are being constrained for the boundary conditions. Note that the Degree of freedoms are: x=0, y=1, and z=2. For instance, <code class="docutils literal notranslate"><span class="pre">bc</span> <span class="pre">=</span> <span class="pre">[2]</span></code> refers to fixed displacement in z direction, and <code class="docutils literal notranslate"><span class="pre">bc</span> <span class="pre">=</span> <span class="pre">[0,</span> <span class="pre">1]</span></code> means fixed displacement in x and y-directions.
+<code class="docutils literal notranslate"><span class="pre">label</span></code> specfies the name of the nodeset in ExodusII file from CUBIT/Trelis that defines the boundary.
+<code class="docutils literal notranslate"><span class="pre">db_initial.label</span></code> specfies the label for the spatial database which is required for informative error messages.</p>
 <div class="line-block">
 <div class="line"><strong>3. Faults</strong></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">interfaces</span></code> specifies an array containing the fault interfaces. Here we have one fault interface so we provide an array containing a single interface.</p>
-<p><code class="docutils literal notranslate"><span class="pre">[pylithapp.timedependent.interfaces]</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">fault</span></code> specifies the type of fault interface condition. For this example we want to prescribe the fault slip, so the interface type is set to <strong>FaultCohesiveKin</strong>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">[pylithapp.timedependent.interfaces]</span></code>
+<code class="docutils literal notranslate"><span class="pre">fault</span></code> specifies the type of fault interface condition. For this example we want to prescribe the fault slip, so the interface type is set to <strong>FaultCohesiveKin</strong>.</p>
 <p><code class="docutils literal notranslate"><span class="pre">[pylithapp.timedependent.interfaces.fault]</span></code></p>
 <p><code class="docutils literal notranslate"><span class="pre">label</span></code> specifies the name of the nodeset in CUBIT/Trelis that defines the fault interface.</p>
 <p><code class="docutils literal notranslate"><span class="pre">edge</span></code> specifies the name of the nodeset in CUBIT/Trelis marking the buried edges of the fault.</p>
@@ -229,7 +231,6 @@ pylithapp: configuration error(s)
 <p><code class="docutils literal notranslate"><span class="pre">[pylithapp.timedependent.interface.fault.eq_scrs.rupture.slip_function]</span></code> Settings for prescribing the coseismic slip distribution on the fault, including the final slip and slip initiation time.</p>
 <p><code class="docutils literal notranslate"><span class="pre">slip.iohandler.filename</span></code> specifies the name of the spatial database containing the coseismic slip distribution.</p>
 <p><code class="docutils literal notranslate"><span class="pre">slip.query_type</span></code> specifies the type of search query to perform. Here we define the slip to be a spatial database with linear interpolation.</p>
-<p><code class="docutils literal notranslate"><span class="pre">slip_time</span></code> specifies</p>
 <p><code class="docutils literal notranslate"><span class="pre">slip_time.data</span></code> specifies the slip time within an earthquake rupture relative to the origin time.</p>
 <div class="line-block">
 <div class="line"><strong>4. Output</strong></div>
@@ -252,8 +253,8 @@ pylithapp: configuration error(s)
 </div>
 </div>
 </div>
-<div class="section" id="basic-structure-of-a-spatialdb-file">
-<h3>Basic structure of a .spatialdb file<a class="headerlink" href="#basic-structure-of-a-spatialdb-file" title="Permalink to this headline"></a></h3>
+<div class="section" id="basic-structure-of-a-spatial-database-spatialdb-file">
+<h3>Basic structure of a spatial database (.spatialdb) file<a class="headerlink" href="#basic-structure-of-a-spatial-database-spatialdb-file" title="Permalink to this headline"></a></h3>
 <p>After knowing what the configuration files do, let’s learn about the spatial database files under the spatialdb directory.</p>
 <div class="line-block">
 <div class="line"><strong>1. Slip_distribution.spatialdb</strong></div>
@@ -262,7 +263,7 @@ pylithapp: configuration error(s)
 <p><code class="docutils literal notranslate"><span class="pre">SPATIAL.ascii</span> <span class="pre">1</span></code> the magic header for spatial database files in ASCII format.</p>
 <p><code class="docutils literal notranslate"><span class="pre">SimpleDB</span></code> specifies spatial database files contain a header describing the set of points and then the data with each line listing the
 coordinates of a point followed by the values of the fields for that point.</p>
-<p><code class="docutils literal notranslate"><span class="pre">num-values</span></code> number of values in the database.</p>
+<p><code class="docutils literal notranslate"><span class="pre">num-values</span></code> number of values in the database</p>
 <p><code class="docutils literal notranslate"><span class="pre">value-names</span></code> specifies the names and the order of the values as they appear in the data. Note that the names of the values must correspond to the names PyLith requests in querying the database. Here we are having the slip distributions in three different directions - left-lateral (along-strike), reverse (along-dip), and fault-opening (fault-normal).</p>
 <p><code class="docutils literal notranslate"><span class="pre">value-units</span></code> specifies the units of the values in Python syntax (e.g. m, kg/m**3).</p>
 <p><code class="docutils literal notranslate"><span class="pre">num-locs</span></code> specifies the number of locations where values are given.</p>
@@ -288,7 +289,7 @@ $ pylith Nepal_kinematic_model.cfg
 </div>
 <div class="section" id="visualizing-results">
 <h2>Visualizing results<a class="headerlink" href="#visualizing-results" title="Permalink to this headline"></a></h2>
-<p>After finishing the simulation, you should be able to see different output files under the <strong>output</strong> directory. In this tutorial, you will how to process the fault output in .h5 format using Python. Hierarchical Data Format (HDF) is a set of file formats (HDF4, HDF5) designed to store and organize large amounts of scientific data. We assume that you already have some experience of using Python.</p>
+<p>After finishing the simulation, you should be able to see different output files under the <strong>output</strong> directory. In this tutorial, you will learn how to process the fault output in .h5 format using Python. Hierarchical Data Format (HDF) is a set of file formats (HDF4, HDF5) designed to store and organize large amounts of scientific data. We assume that you already have some experience of using Python.</p>
 <div class="section" id="how-to-install-h5py">
 <h3>How to install h5py<a class="headerlink" href="#how-to-install-h5py" title="Permalink to this headline"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ conda create --name pylith
@@ -312,9 +313,9 @@ $ conda install h5py
 <span class="n">fields</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>If you check <code class="docutils literal notranslate"><span class="pre">fields</span></code>, you would realize that there are four fields in this file - geometry, time, topology, and vertex_fields. In this tutorial, we will plot results using data from the vertices under <code class="docutils literal notranslate"><span class="pre">geometry</span></code>, and the slip and traction change under <code class="docutils literal notranslate"><span class="pre">vertex_fields</span></code>. For your reference, the figure below illustrates the general layout of a PyLith HDF5 file (extracted from the manual).</p>
-<a class="reference internal image-reference" href="../_images/hdf5_structure1.png"><img alt="../_images/hdf5_structure1.png" src="../_images/hdf5_structure1.png" style="width: 100%;" /></a>
-<p>Figure 2. General layout of a PyLith HDF5 file. The orange rectangles with rounded corners identify the groups and the blue
+<p>If you check <code class="docutils literal notranslate"><span class="pre">fields</span></code>, you would realize that there are four fields in this file - geometry, time, topology, and vertex_fields. In this tutorial, we will plot results using data from the vertices under <code class="docutils literal notranslate"><span class="pre">geometry</span></code>, and the slip and traction change under <code class="docutils literal notranslate"><span class="pre">vertex_fields</span></code>. For your reference, the figure below illustrates the general layout of a PyLith HDF5 file (extracted from the <a class="reference download internal" download="" href="../_downloads/c67b9dbdf6a39c5971ec0dae6b6bbbfb/pylith-2.2.2_manual.pdf"><code class="xref download docutils literal notranslate"><span class="pre">PyLith</span> <span class="pre">manual</span></code></a>).</p>
+<a class="reference internal image-reference" href="../_images/hdf5_structure1.png"><img alt="../_images/hdf5_structure1.png" src="../_images/hdf5_structure1.png" style="width: 80%;" /></a>
+<p>figure 2. General layout of a PyLith HDF5 file. The orange rectangles with rounded corners identify the groups and the blue
 rectangles with sharp corners identify the datasets. The dimensions of the data sets are shown in parentheses. Most HDF5 files
 will contain either vertex_fields or cell_fields but not both. (Adopted from PyLith Manual)</p>
 <div class="line-block">
@@ -394,8 +395,8 @@ will contain either vertex_fields or cell_fields but not both. (Adopted from PyL
 </pre></div>
 </div>
 <p>You should be able to generate the following plot.</p>
-<a class="reference internal image-reference" href="../_images/static_results.png"><img alt="../_images/static_results.png" src="../_images/static_results.png" style="width: 90%;" /></a>
-<p>Figure 3. A plot of the prescribed slip distributions and their corresponding stress changes</p>
+<a class="reference internal image-reference" href="../_images/static_results.png"><img alt="../_images/static_results.png" src="../_images/static_results.png" style="width: 80%;" /></a>
+<p>figure 3. A plot of the prescribed slip distributions and their corresponding stress changes</p>
 </div>
 </div>
 </div>
@@ -405,14 +406,14 @@ will contain either vertex_fields or cell_fields but not both. (Adopted from PyL
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="../source_spectra/index.html" class="btn btn-neutral float-left" title="Spectral Analysis" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../pylith_dynamic/index.html" class="btn btn-neutral float-right" title="Dynamic Earthquake Simulation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../pylith_dynamic/index.html" class="btn btn-neutral float-right" title="Modeling earthquake using Pylith - dynamic" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2021-2022, CUSeisTut team.
-      <span class="lastupdated">Last updated on 2022-03-22.
+      <span class="lastupdated">Last updated on 2022-03-30.
       </span></p>
   </div>
 

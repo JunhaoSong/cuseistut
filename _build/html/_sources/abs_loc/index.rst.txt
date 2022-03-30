@@ -9,6 +9,8 @@ In this session, we introduce the most commonly used iterative earthquake abosol
 
 Theory Background
 ******************
+.. image:: Ray_textbook.jpg
+
 The arrival time recorded by one station could be presented:
 
 .. math::
@@ -23,7 +25,7 @@ we use :math:`\mathbf{d_obs}` to denote the arrival time of each station, then :
 
    \mathbf{Fm_{true}=d_obs}
 
-:math:`\mathbf{F}` is a matrix of size :math:`n\times 4`, the relationship between :math:`\mathbf{m}` and :math:`\mathbf{d}` is non-linear because integral is involved as show in previous equation.
+The relationship between :math:`\mathbf{m}` and :math:`\mathbf{d}` is non-linear because integral is involved as show in previous equation.
 For earthquake parameters that are close to :math:`\mathbf{m_{true}}`, we present it as :math:`\mathbf{m=m_{true}+\Delta{m}}`, the :math:`\mathbf{\Delta m}` will lead to variation in :math:`\mathbf{d_{obs}+\Delta d}`
 
 According to `Taylor Expansion theorem <https://en.wikipedia.org/wiki/Taylor_series>`_, we have:
@@ -52,7 +54,7 @@ We will introduce how to derive and analyze absolute locations of hypocenters in
 Python Environment and model Setup
 -----------------------------------
 
-We'll first generate synthetic arrival times on stations from one earthquake location, which called **Forward Modelling**. We'll then try to re-generate hypocentral location using these known station arrival times, which called **Inversion**.
+We'll first generate synthetic arrival times on stations from one earthquake location, which is called **Forward Modelling**. We'll then try to re-generate hypocentral location using these known station arrival times, which is called **Inversion**. In this tutorial, we use one-layer model to avoid complicated ray-tracing (``Snell's law``)
 
 .. note::
  | The purpose is that, by comparing the difference between **inverted location** and **true location**, we can: 1. see whether the location process runs properly; 2. conduct error analysis.
@@ -587,7 +589,7 @@ where :math:`T_i^k` is the arrrival time, :math:`o_t` is the origin
 time. The integral part accounts for time of ray propagation, :math:`u`
 is the slowness.
 
-For 1-D model, :math:`T_i^k=o_t +\sqrt{x^2+y^2+z^2}/v`, where
+For one-layer model, :math:`T_i^k=o_t +\sqrt{x^2+y^2+z^2}/v`, where
 :math:`x,y,z` denotes distance between the source (earthquake location)
 and receiver(station), :math:`v` is velocity. Partial derivatives of one-layer model are:
 
@@ -847,6 +849,7 @@ Credit: Wikipedia
 
 .. code::
 
+    Vp = 5
     k = 0
     niter = 10
     hyc_loop = hyc_init.copy()
@@ -917,9 +920,9 @@ The error in observed data will of couse lead to uncertainties in the earthquake
 
 .. math:: \sigma_m^2=\sigma_d^2(G^TG)^{-1}
 
-The definition is:
+For two parameters, the definition of covariance is:
 
-.. math:: \sigma_{d_{ij}}^2 =  \sum_{k=1}^{K}(d_i^k-\bar{d_i})(d_j^k-\bar{d_j})
+.. math:: \sigma_{xy}}^2 =  \frac{1}{K}\sum_{k=1}^{K}(x^k-\bar{x})(y^k-\bar{y})
 
 .. note::
  | Wanna know how this relationship derived? Page 435 of **An Introduction to Seismology, Earthquakes, and Earth Structure (2003)**
@@ -1077,7 +1080,7 @@ Summary
 One layer model
 *****************
 
-In the tutorial, we introduced the grid-search method and iterative location method using the one-layer velocity model. The advantage of one-layer is that the ray from source to station is a stright line, it is convenient to calculate the corresponding partial derivatives. In the real earth, the velocity varies due to material, pressure and other fators, the ray path is a curved line, making things more complicated. 
+In the tutorial, we introduced the grid-search method and iterative location method using the one-layer velocity model. The advantage of one-layer is that the ray from the source to one station is a stright line, it is convenient to calculate the corresponding partial derivatives. In the real earth, the velocity varies due to material, pressure and other fators, the ray path is a curved line, making things more complicated. 
 
 .. image:: Ray.png
 
@@ -1163,7 +1166,9 @@ Hypoinverse is a computer program that processes files of seismic station data f
 
 The Hypoinverse program requires the input of station locations, seismic velocity model, and the phase data. By assuming a trial origin time and hypocentral location for the earthquake, it improves them by iteratively minimizing the least square error of the travel time computed from the input information.
 
-Source code and example
+Environment and example
 ***********************
+For MacOS user,  Xcode is needed to be installed, run ``xcode-select --install`` and wait for finishment.
+
 :download:`HYPOINVERSE example <./Hypoinverse.zip>`
 
