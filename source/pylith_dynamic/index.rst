@@ -1,5 +1,5 @@
-Modeling earthquake using Pylith - dynamic
-==========================================
+Dynamic Rupture Simulation
+==========================
 
 Brief introduction
 ------------------

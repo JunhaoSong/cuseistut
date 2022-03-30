@@ -1,5 +1,5 @@
-Modeling earthquake using Pylith - static
-=========================================
+Static Stress Change - PyLith
+=============================
 
 Brief introduction
 ------------------
