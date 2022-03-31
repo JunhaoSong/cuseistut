@@ -922,7 +922,7 @@ The error in observed data will of couse lead to uncertainties in the earthquake
 
 For two parameters, the definition of covariance is:
 
-.. math:: \sigma_{xy}}^2 =  \frac{1}{K}\sum_{k=1}^{K}(x^k-\bar{x})(y^k-\bar{y})
+.. math:: {\sigma_{xy}}^2 =  \frac{1}{K}\sum_{k=1}^{K}(x^k-\bar{x})(y^k-\bar{y})
 
 .. note::
  | Wanna know how this relationship derived? Page 435 of **An Introduction to Seismology, Earthquakes, and Earth Structure (2003)**

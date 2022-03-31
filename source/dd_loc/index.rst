@@ -27,7 +27,7 @@ Contents of this tutorial
 #. Iterative double-difference method
 
 **Authors**: ZI Jinping, SONG Zilin, Earth Science Sytem Program, CUHK.
-**Testers**, XIA Zhuoxuan, Earth Science Sytem Program, CUHK.
+**Testers**, XIA Zhuoxuan, Sun Zhangyu, Earth Science Sytem Program, CUHK.
 
 Initiation
 ----------
