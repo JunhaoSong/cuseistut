@@ -15,7 +15,7 @@ In this tutorial, we'll go through the powerful earthquake double-difference loc
 #. 2-D X-Z plane rather than 3-D X-Y-Z to decrease complexity 
 #. P arrivals only 
 
-After this tutorial, besides the understanding of key concepts in Double-Difference location, you will also find that model expand from 2-D to 3-D, from one-layer to multi-layers, from P to P&S arrivals, the key processing remains the same.
+After this tutorial, besides the understanding of key concepts in Double-Difference location, you will also find that model expands from 2-D to 3-D, from one-layer to multi-layers, from P to P&S arrivals, the key processing remains the same.
 
 .. note::
  | You are strongly encouraged to play around codes in this tutorial and introduce to others, you will find your understanding will be enhanced dramatically during the process.
@@ -27,6 +27,7 @@ Contents of this tutorial
 #. Iterative double-difference method
 
 **Authors**: ZI Jinping, SONG Zilin, Earth Science Sytem Program, CUHK.
+
 **Testers**, XIA Zhuoxuan, Sun Zhangyu, Earth Science Sytem Program, CUHK.
 
 Initiation
@@ -51,7 +52,14 @@ Preparation for Environment
 
     def iter_loc(hyc_loop,stas,d,V,niter=10):
         """
-        Iterative aboslute earthquake location using least-square method
+        Iterative aboslute earthquake location using least-square method,
+        refer to absolute earthquake location python tutorial.
+        Parameters:
+        | hyc_loop: hypocenter for iteration
+        |     stas: array containing station information
+        |        d: the observed arrival time
+        |        V: the velocity
+        |    niter: maximum number of iteration
         """
         k = 0
         while k <= niter:
@@ -95,7 +103,11 @@ Preparation for Environment
     
     def present_loc_results(hyc,sig_square=None,std_fmt='.2f'):
         """
-        Print earthquake location results
+        Print earthquake location results, refer to absolute earthquake location
+        for reference
+        Parameters:
+        |         hyc: hypocenter
+        |sig_square: squared convariance
         """
         _x = format(np.round(hyc[0],4),format("6.2f"))
         _z = format(np.round(hyc[1],4),format("6.2f"))
@@ -247,9 +259,9 @@ Set up station array, earthquake true location, wave-velocity and generate synth
 .. image:: output_6_0.png
 
 
-The station which records waveform earliest is cloest to the hypocenter, so it is reasonable to start iteration: 
+The station which records the earliest waveform is closest to the hypocenter, so it is reasonable to start iteration: 
 
-1. The same x and y with the cloest station; 
+1. The same x and y with the closest station; 
 2. Initial depth at 5 km; 
 3. Initial origin time 1 sec before the earliest arrival;
 
@@ -268,7 +280,7 @@ The station which records waveform earliest is cloest to the hypocenter, so it i
 .. parsed-literal::
 
     Initial trial parameters  x:  0.0 km;  z:  5.0 km;  t:  0.6125 s
-
+We can also define a function to get the initial location
 .. code::
 
     def get_init_loc(dobs,stas,depth=5,gap_time=1):
@@ -312,10 +324,10 @@ The station which records waveform earliest is cloest to the hypocenter, so it i
 Velocity Error
 ***************
 
-In calculation above, we use the true velocity (**Vtrue**) to conduct the inversion. However, in reality, the velocity we measured more or less differs with the true velocity, thus lead to some bias.
+In the calculation above, we use the true velocity (**Vtrue**) to conduct the inversion. However, in reality, the velocity we measure is more or less different from the true velocity, thus leading to some bias.
 
 .. note::
- | Try to use other velocity value to conduct inversion and check the results, what do features do you find?
+ | Try to use other velocity valueis to conduct the inversion and check the results, what features do you find?
 
 .. code::
 
@@ -323,7 +335,8 @@ In calculation above, we use the true velocity (**Vtrue**) to conduct the invers
     hyc1_abs, sigma_m2 = iter_loc(hyc1_init,stas,dobs1,Vp)
     present_loc_results(hyc1_abs,sigma_m2,std_fmt='.4f')
     print("True location (hyc1_true) ","x: ",hyc1_true[0],"km; ","z: ",hyc1_true[1],"km; ","t: ", format(hyc1_true[2],'.4f')+" s")
-
+.. note::
+ | For the knowledge of iteration location, please refer to the absolute earthquake location tutorial
 .. parsed-literal::
 
     Iteration  0 square error:     1.44386729
@@ -346,9 +359,9 @@ In calculation above, we use the true velocity (**Vtrue**) to conduct the invers
 Station Delay
 **************
 
-In near surface, material velocity where stations located might varies and lead to influence on the travel time, we call it **Station delay**. The **River sediments** are generally soft,not fully consolidated mateirals, its velocity is low. A lower velocity will lead to longer travel time, thus the actual arrival time will be later than estimated, here we call it **Positive delay**.
+In near surface, the material velocity where stations located might vary and lead to influence on the travel time, we call it **Station delay**. The **River sediments** are generally soft composed by not fully consolidated mateirals, their velocities are therefore low. A lower velocity will lead to a longer travel time, thus the actual arrival time will be later than estimated, here we call it **Positive delay**.
 
-The **Granite** is igenous rock, its density is high and velocity is fast. A higher velocity will lead to shorter travel time, thus the actual arrival time will be earlier than estimated, we call it
+The **Granite** is igneous rock, its density is high with fast velocity. A higher velocity will lead to a shorter travel time, thus the actual arrival time will be earlier than estimated, we call it
 **Negative delay**.
 
 In this tutorial, we set value of 0.05s for positive delay and -0.05s for negative delay.
@@ -425,8 +438,7 @@ Conduct inversion with delayed data
 The second event
 *****************
 
-Now we consider another event occurred other same time with event one
-but location a little different
+Now we consider a second event occurred close to the first event
 
 .. code::
 
@@ -514,7 +526,7 @@ but location a little different
 
 Add Picking Noise
 ******************
-
+Add random noise to simulate the phase picking uncertainty
 .. code::
 
     mu = 0
@@ -555,11 +567,11 @@ could be presented via below equation:
 
 :math:`S_k`: station delay 
 
-### Event :math:`j`, station :math:`k` 
+**Event :math:`j`, station :math:`k`** 
 
 The travel-time residual of event :math:`j` at station :math:`k`:
 
-..math::
+.. math::
 
    `r_k^j=\(T_k^j)^{obs}-(T_k^j)^{cal}`=\sum_{l=1}^2\frac{\partial T_k^j}{\partial x_l^j}\Delta x_l^j +\Delta\tau^j+\int_{s_j}^{r_k}\Delta uds+S_k
 
@@ -575,7 +587,7 @@ Noted that station delay :math:`S` is removed.
 
 .. math::  r_k^i-r_k^j = \{(T_k^i)^{obs}-(T_k^i)^{cal}\}-\{(T_k^j)^{obs}-(T_k^j)^{cal}\}
 
-Reorganize lead to
+Reorganizing the equation leads to
 
 .. math:: r_k^i - r_k^j=(T_k^i-T_k^j)^{obs}-(T_k^i-T_k^j)^{cal}
 
@@ -584,7 +596,7 @@ This is the so-called **double-difference**.
 If **two events are close** to each other, then they have similar ray
 paths, that is:
 
-.. math:: \int_{s_i}^{r_k}\Delta uds = \int_{s_j}^{r_k}\Delta uds
+.. math:: \int_{s_i}^{r_k}\Delta uds \approx \int_{s_j}^{r_k}\Delta uds
 
 The velocity anomaly along the ray path is the same for two events. Then we get
 
@@ -601,9 +613,10 @@ The travel time residual
 1. Earthquake location misfit 
 2. Origin time misfit 
 
-While regardless of: 
+and the error sources: 
 1. Station delay 
 2. Velocity variation along ray-path 
+are remove or mitigated by double-difference
 
 An inversion equation could be set up:
 
@@ -628,7 +641,7 @@ Detailed expression is, note the negative signs in the last 3 columns of data ke
 
 **Workflow**
 
-.. image:: DD_Earthquake_location_workflow_new.jpg
+.. image:: DD_Earthquake_location_workflow_new.png
 
 .. code::
 
@@ -738,7 +751,7 @@ have 10 observations to solve for 4 parameters), then:
 6. Add Damp to Matrix
 ---------------------
 
-Determinant equals zero means there is no unique solution to the inverse problem, that is, the constraints in data kernel G is not enough to get a result, more constraints is needed. The common method is to add damp to the data kernel. 
+Determinant equals zero means there is no unique solution to the inverse problem, that is, the constraints in data kernel G are not enough to get a result, more constraints is needed. The common method is to add damp to the data kernel. 
 
 ### Damping the kernel Before damping:
 
@@ -752,7 +765,7 @@ After damping:
 
 .. math::
 
-   I=\begin{bmatrix}
+   \lambda I=\begin{bmatrix}
    \lambda&0&0&0&0&0\\
    0&\lambda&0&0&0&0\\
    0&0&\lambda&0&0&0\\
@@ -769,8 +782,8 @@ After damping:
    \lambda\Delta x_1 &= 0\\ \lambda\Delta z_1 &= 0\\ \lambda\Delta t_1 &= 0\\ \lambda\Delta x_2 &= 0\\ \lambda\Delta z_2 &= 0\\ \lambda\Delta t_2 &= 0
    \end{align}
 
-What does this mean? It means that the solution **SHOULD** be zero. As least square problem solution is a trade-off among constraints(equations), The true meaning is that these value **SHOULD**
-be small. :math:`\lambda` controls the weight(importance) of damping. A large damp will lead to solution more close to zero.
+What does this mean? It means that the solution **SHOULD** be zero. As a least square problem solution is a trade-off among constraints(equations). The true meaning is that these values **SHOULD**
+be small. :math:`\lambda` controls the weight(importance) of damping. A large damp will lead to the solution more close to zero.
 
 .. code::
 
@@ -854,7 +867,7 @@ Step 4:
 
     hyc1_dd = hyc1_dd+m.ravel()[:3]
     hyc2_dd = hyc2_dd+m.ravel()[3:]
-
+We can see the solutions already depart the initial location and move closer to the true location
 .. code::
 
     xmin = min(hyc1_true[0],hyc1_abs[0],hyc1_dd[0])
@@ -879,7 +892,7 @@ Step 4:
 9. Error analysis
 -----------------
 
-The error in observed data will of couse lead to uncertainties in the earthquake location parameters estimation. Their relationship could be described as:
+The error in observed data will of course lead to uncertainties in the estimation of earthquake location parameters. Their relationship could be described as:
 
 .. math:: \sigma_m^2=\sigma^2(G^TG+\lambda^2 I)^{-1}
 
@@ -927,7 +940,7 @@ Try to modify the **damp** parameter and update the results, how it changes? Wha
 
 We have realized that the damping factor controls the converge rate, a larger **damping factor** will lead to slow converge rate but small uncertainty; a smaller **damping factor** will lead to fast converge rate but large uncertainty. Then how to choose proper damping factor? 
 
-A good indicator is the `conditon number <https://en.wikipedia.org/wiki/Condition_number>`__. Conditon number quantifies the relationship between solution error and data error. In earthquake double difference location, the condition number should be in the range 40-80.
+A good indicator is the `conditon number <https://en.wikipedia.org/wiki/Condition_number>`__. Conditon number quantifies the relationship between solution error and data error. In earthquake double difference location, the condition number should be in the range 40-100 (empirical).
 
 .. code::
 
@@ -1140,7 +1153,7 @@ Iterative Double-Difference Method
 LSQR Algorithm
 ***************
 
-Consider a double difference cluster with 1000 events, we do estimation of time consuming for one iteration. Note the :math:`G^TG` dimension is :math:`4000\times 4000`, it costs 16 seconds to calculate the inverse and singular value decomposition. What about 10 k events?
+Considering a double difference cluster with 1000 events, we estimate the time consumed for one iteration. Note the :math:`G^TG` dimension is :math:`4000\times 4000`, it costs 16 seconds to calculate the inverse and singular value decomposition. What about 10 k events?
 
 .. code::
 
@@ -1180,7 +1193,7 @@ To ensure the stability of method, each A column is required to be scaled up to 
    A_1m_1+A_2m_2+\cdots+A_km_k \\&= \frac{A_1}{\|A_1\|}(\|A_1\|m_1)+\frac{A_2}{\|A_2\|}(\|A_2\|m_2)+\cdots+\frac{A_k}{\|A_k\|}(\|A_k\|m_k)\\&=\mathbf{A'm'=b}
    \end{aligned}
 
-After get the solution, a conversion between :math:`\mathbf{m'}` and :math:`\mathbf{m}` is needed by :math:`m_i=\frac{m'_i}{\|G_i\|}`
+After get the solution, a conversion between :math:`\mathbf{m'}` and :math:`\mathbf{m}` is needed by :math:`m_i=\frac{m'_i}{\|A_i\|}`
 
 .. code::
 
@@ -1351,7 +1364,7 @@ After get the solution, a conversion between :math:`\mathbf{m'}` and :math:`\mat
     Iteration   98 residual:     0.00011796
     Iteration   99 residual:     0.00011405
     Iteration  100 residual:     0.00011026
-
+We then find the residual is very small, and the earthquake location almost reached its true location
 .. code::
 
     xmin = min(hyc1_true[0],hyc1_abs[0],hyc1_dd[0])
@@ -1392,25 +1405,25 @@ After get the solution, a conversion between :math:`\mathbf{m'}` and :math:`\mat
 Summary
 --------
 
-In this tutorial, we first demonstrated the influence of velocity misfit and **Station delay**\ ’s influence on earthquake location results.
+In this tutorial, we first demonstrate the influence of velocity misfit and **Station delay**\ ’s influence on earthquake location results.
 
-We then introduce the double-difference method, which theoritical diminish the station delay and limit the influence of veloctity misfit. During processing, we: \* Set up the data kernel **G** and calculate the double difference array **dtdt** \* Add damping to the data kernel to make is stable (*determinant not be zero*) \* Use **conditon number** and use it to guide the selection of damping factor \* Comparison shows **double-difference** location lead to location with **better performance**
+We then introduce the double-difference method, which theoretically diminishes the station delay effect and limits the influence of velocity misfit. During processing, we: \* Set up the data kernel **G** and calculate the double difference array **dtdt** \* Add damping to the data kernel to make it stable (*determinant not be zero*) \* Use **conditon number** to guide the selection of damping factor \* Comparison shows **double-difference** location leads to location with **better performance**
 
 .. note::
 
- | we use one-layer velocity model for its convenience in find the ray partial derivatives.
+ | we use one-layer velocity model for the convenience in finding the ray partial derivatives.
 
 Homework
 *********
 
-1. In the demo example, event origin time is not fully recovered? Could you explain why?(10 points)
-2. Note we added negative symbol to partial derivatives of the event 2 in struct the data kernel, do you know why? (10 points)
-3. In calculate the variance(**var**), it is written ``var = e2/(dtdt_damp.shape[0]-event_number * event_parameters)``, do you know why variance is different from square error here? (10 points)
-4. Add one more event hyc_true3 = (0.2,8.1,1) (x,z,t) and prepare for inversion, set up suitable damping factor so that conditon number in the range 40-100.(80 points)
+1. In the demo example, is event origin time fully recovered? Could you please explain the reason?(10 points)
+2. Note we add negative symbol to partial derivatives of the event 2 in structing the data kernel, do you know why? (10 points)
+3. In calculating the variance(**var**), it is written ``var = e2/(dtdt_damp.shape[0]-event_number * event_parameters)``, do you know why variance is different from square error here? (10 points)
+4. Add one more event hyc_true3 = (0.2,8.1,1) (x,z,t) and prepare for inversion, set up suitable damping factor so that condition number is in the range 40-100.(80 points)
    -  Show the absolute location result of the newly added event and its uncertainty. (20 points)
    -  Show your data kernel G for Double-Difference inversion and its determinant. (20 points)
    -  Show your Double-Difference inversion result and its uncertainty, how many iterations you used? (20 points)
-   -  Did your results closer to true earthquake locations? Make a plot and show (20 points) #### Hint The dimension of :math:`m` should be :math:`9 \times 1`
+   -  Did your results get closer to true earthquake locations? Make a plot and show (20 points) #### Hint The dimension of :math:`m` should be :math:`9 \times 1`
 
       .. math::
 
