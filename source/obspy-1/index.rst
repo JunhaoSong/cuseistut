@@ -378,7 +378,7 @@ It is expected that these 5 stations can record the event well.
 
 2.6.3 Plot the waveform cross-section plot
 ******************************************
-``stream.plot`` allows us to plot the streams at the same figure. For examplr, we can plot all stream with the same X axis:
+``stream.plot`` allows us to plot the streams at the same figure. For example, we can plot all stream with the same X axis:
  
 .. code::
 
