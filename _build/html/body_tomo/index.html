@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Body Wave Tomography &mdash; CUSeisTut</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -48,7 +49,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../unix/index.html">Unix commands</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../GMT6/index.html">Generic Mapping Tools</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../obspy/index.html">Python ObsPy Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obspy-1/index.html">Python ObsPy Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obspy-2/index.html">Python ObsPy Tutorial</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Intermediate level</span></p>
 <ul>
@@ -150,13 +152,13 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="body-wave-tomography">
+  <section id="body-wave-tomography">
 <h1>Body Wave Tomography<a class="headerlink" href="#body-wave-tomography" title="Permalink to this headline"></a></h1>
-<div class="section" id="the-significance-of-velocity-model-in-seismology">
+<section id="the-significance-of-velocity-model-in-seismology">
 <h2>The significance of velocity model in seismology<a class="headerlink" href="#the-significance-of-velocity-model-in-seismology" title="Permalink to this headline"></a></h2>
 <p>Velocity is the essential physical property of underground objects. It can be used to detect the presence (location and size) of different geological objects underground and can be used to search for oil and metal deposits. Furthermore, velocity models can be used to investigate the evolution of the earth, as well as the location and origin of earthquakes. Body waves and surface waves are two types of seismic waves. For velocity inversion, we can use body waves (P- and S-waves), surface waves, or joint body waves and surface waves. There are many velocity inversion methods, such as one-dimensional model inversion, tomographic velocity inversion, and full waveform inversion. These methods have different computational efficiency and accuracy. The research method to use is determined by the accuracy requirements of the research objectives, the quality of seismic data, and the economic cost. Here we introduce a seismic traveltime tomographic inversion method. It uses first arrivals of body waves and plays an important role in detecting the internal structure of the solid earth.</p>
-</div>
-<div class="section" id="brief-introduction-of-the-tomography-inversion-method-tomodd">
+</section>
+<section id="brief-introduction-of-the-tomography-inversion-method-tomodd">
 <h2>Brief introduction of the tomography inversion method-TomoDD<a class="headerlink" href="#brief-introduction-of-the-tomography-inversion-method-tomodd" title="Permalink to this headline"></a></h2>
 <p>TomoDD is a local-scale (&lt;100 km) seismic tomography software based on ray travel time. It is a gird-based 3-D velocity inversion method that uses absolute and relative arrival times to invert both the velocity structure and the event location. The relative arrival time is the differential arrival time of the event pair. Relative arrival times can reduce systematic errors and thus generate more accurate velocity models than standard tomography methods that only use absolute arrival times. TomoDD is an optimization inversion method in which the LSQR algorithm (Paige et al., 1982) is used to minimize the residual between forward data and observed data, so as to obtain the final velocity model. The forward travel time calculation is computed by the pseudo-bending ray tracing algorithm (Koketsu and Sekine, 1998).</p>
 <div class="admonition note">
@@ -165,14 +167,14 @@
 <div class="line">Professor Haijiang Zhang of the University of Science and Technology of China and Professor Clifford H. Thurber of the University of Wisconsin-Madison collaborated on the software. Thanks to Prof. Haijiang Zhang and his team members for their sharing of <code class="docutils literal notranslate"><span class="pre">TomoDD</span></code> codes and tutorials. <code class="docutils literal notranslate"><span class="pre">TomoDD</span></code> is modified from <code class="docutils literal notranslate"><span class="pre">hypoDD</span></code> (Waldhauser 2001), so it is recommended to learn <code class="docutils literal notranslate"><span class="pre">hypoDD</span></code> before you learn <code class="docutils literal notranslate"><span class="pre">TomoDD</span></code>.</div>
 </div>
 </div>
-<div class="section" id="an-introduction-to-the-use-of-tomodd-software">
+<section id="an-introduction-to-the-use-of-tomodd-software">
 <h3>An introduction to the use of TomoDD software<a class="headerlink" href="#an-introduction-to-the-use-of-tomodd-software" title="Permalink to this headline"></a></h3>
 <p>The use of <code class="docutils literal notranslate"><span class="pre">TomoDD</span></code> software mainly consists of three steps: 1) Preparation of input data; 2) Modify parameter files and perform field data inversion; 3) Resolution test of inversion results. Here we give a practical data processing example to illustrate the use of the <code class="docutils literal notranslate"><span class="pre">TomoDD</span></code> software. Download the <code class="docutils literal notranslate"><span class="pre">TomoDD</span></code> example package <a class="reference download internal" download="" href="../_downloads/bddb170e1a6c5e0e4c9dea36044d36cc/USTC-tomoDD-SE-training2020.tar"><code class="xref download docutils literal notranslate"><span class="pre">here</span></code></a>. After unzipping, we can see that the package contains four folders. The <code class="docutils literal notranslate"><span class="pre">Doc</span></code> folder stores the input/output parameters and file format description files of <code class="docutils literal notranslate"><span class="pre">TomoDD</span></code>, as well as two pieces of literatures related to <code class="docutils literal notranslate"><span class="pre">TomoDD</span></code>. The folder <code class="docutils literal notranslate"><span class="pre">Example</span></code> shows an actual velocity inversion case. The <code class="docutils literal notranslate"><span class="pre">Script</span></code> folder shows some MATLAB drawing scripts, and the text file named <code class="docutils literal notranslate"><span class="pre">illustration</span></code> shows how to use them. The folder <code class="docutils literal notranslate"><span class="pre">Src</span></code> contains <code class="docutils literal notranslate"><span class="pre">TomoDD</span></code>’s source code as well as the code for calculating differential arrival times. The platform and software needed to run the program: ubuntu, gfortran, matlab.</p>
-<div class="section" id="preparation-of-input-data">
+<section id="preparation-of-input-data">
 <h4>1 preparation of input data<a class="headerlink" href="#preparation-of-input-data" title="Permalink to this headline"></a></h4>
-<div class="section" id="prepare-the-seismic-phase-file-phase-dat-and-station-file-station-dat">
+<section id="prepare-the-seismic-phase-file-phase-dat-and-station-file-station-dat">
 <h5>1.1 Prepare the seismic phase file (<code class="docutils literal notranslate"><span class="pre">phase.dat</span></code>) and station file (<code class="docutils literal notranslate"><span class="pre">station.dat</span></code>)<a class="headerlink" href="#prepare-the-seismic-phase-file-phase-dat-and-station-file-station-dat" title="Permalink to this headline"></a></h5>
-<div class="section" id="seismic-phase-file-the-format-of-this-file-is-shown-below-as-shown-in-example-ph2dt">
+<section id="seismic-phase-file-the-format-of-this-file-is-shown-below-as-shown-in-example-ph2dt">
 <h6>1.1.1 Seismic phase file: the format of this file is shown below (as shown in <code class="docutils literal notranslate"><span class="pre">Example/ph2dt</span></code>)<a class="headerlink" href="#seismic-phase-file-the-format-of-this-file-is-shown-below-as-shown-in-example-ph2dt" title="Permalink to this headline"></a></h6>
 <a class="reference internal image-reference" href="../_images/Figure1.png"><img alt="../_images/Figure1.png" src="../_images/Figure1.png" style="width: 50%;" /></a>
 <p>Figure 1. The format of the seismic phase file. Lines that begin with <code class="docutils literal notranslate"><span class="pre">#</span></code> represent event information, while lines that do not begin with <code class="docutils literal notranslate"><span class="pre">#</span></code> represent the station that received the event.</p>
@@ -188,8 +190,8 @@ Station name   travel time   data quality   seismic phase
 <div class="line">The data quality value is generally between 0 and 3. If it is greater than 3, the data will be removed.</div>
 </div>
 </div>
-</div>
-<div class="section" id="id1">
+</section>
+<section id="id1">
 <h6>1.1.2 Seismic phase file: the format of this file is shown below (as shown in <code class="docutils literal notranslate"><span class="pre">Example/ph2dt</span></code>)<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h6>
 <a class="reference internal image-reference" href="../_images/Figure2.png"><img alt="../_images/Figure2.png" src="../_images/Figure2.png" style="width: 20%;" /></a>
 <p>Figure 2. The format of the seismic phase file</p>
@@ -198,11 +200,11 @@ Station name   travel time   data quality   seismic phase
 ……
 </pre></div>
 </div>
-</div>
-</div>
-<div class="section" id="calculating-absolute-arrival-times-absolute-dat-differential-arrival-times-of-event-pair-dt-ct-and-event-information-event-dat">
+</section>
+</section>
+<section id="calculating-absolute-arrival-times-absolute-dat-differential-arrival-times-of-event-pair-dt-ct-and-event-information-event-dat">
 <h5>1.2 Calculating absolute arrival times (<code class="docutils literal notranslate"><span class="pre">absolute.dat</span></code>), differential arrival times of event pair (<code class="docutils literal notranslate"><span class="pre">dt.ct</span></code>) and event information (<code class="docutils literal notranslate"><span class="pre">event.dat</span></code>).<a class="headerlink" href="#calculating-absolute-arrival-times-absolute-dat-differential-arrival-times-of-event-pair-dt-ct-and-event-information-event-dat" title="Permalink to this headline"></a></h5>
-<div class="section" id="compile-program-input-ph2dt-inc-output-ph2dtn3">
+<section id="compile-program-input-ph2dt-inc-output-ph2dtn3">
 <h6>1.2.1 Compile program (input: <code class="docutils literal notranslate"><span class="pre">ph2dt.inc</span></code>; output: <code class="docutils literal notranslate"><span class="pre">ph2dtN3</span></code>)<a class="headerlink" href="#compile-program-input-ph2dt-inc-output-ph2dtn3" title="Permalink to this headline"></a></h6>
 <blockquote>
 <div><div class="line-block">
@@ -216,37 +218,37 @@ Station name   travel time   data quality   seismic phase
 <div class="line">A detailed illustration for this subprogram is provided in Waldhauser, F. (2001). HypoDD A program to compute double difference Hypocenter    Locations, pages 4-6 and 15-16.</div>
 </div>
 </div>
-</div>
-<div class="section" id="execute-the-generated-compiler-to-calculate-differential-times-input-ph2dt-inp-output-absolute-dat-dt-ct-event-dat">
+</section>
+<section id="execute-the-generated-compiler-to-calculate-differential-times-input-ph2dt-inp-output-absolute-dat-dt-ct-event-dat">
 <h6>1.2.2 Execute the generated compiler to calculate differential times (input: <code class="docutils literal notranslate"><span class="pre">ph2dt.inp</span></code>; output: <code class="docutils literal notranslate"><span class="pre">absolute.dat</span></code>, <code class="docutils literal notranslate"><span class="pre">dt.ct</span></code>, <code class="docutils literal notranslate"><span class="pre">event.dat</span></code>)<a class="headerlink" href="#execute-the-generated-compiler-to-calculate-differential-times-input-ph2dt-inp-output-absolute-dat-dt-ct-event-dat" title="Permalink to this headline"></a></h6>
 <p>Copy the executable file <code class="docutils literal notranslate"><span class="pre">ph2dtN3</span></code> to the folder <code class="docutils literal notranslate"><span class="pre">Example/ph2dt</span></code>  and edit the parameter file <code class="docutils literal notranslate"><span class="pre">ph2dt.inp</span></code> in that folder. Then, enter <code class="docutils literal notranslate"><span class="pre">./ph2dtN3</span> <span class="pre">ph2dt.inp</span></code> in the command line, and click enter to complete.</p>
-</div>
-<div class="section" id="convert-the-resulting-event-dat-file-to-the-data-format-required-by-tomodd-as-shown-below">
+</section>
+<section id="convert-the-resulting-event-dat-file-to-the-data-format-required-by-tomodd-as-shown-below">
 <h6>1.2.3 Convert the resulting <code class="docutils literal notranslate"><span class="pre">event.dat</span></code> file to the data format required by <code class="docutils literal notranslate"><span class="pre">TomoDD</span></code>, as shown below<a class="headerlink" href="#convert-the-resulting-event-dat-file-to-the-data-format-required-by-tomodd-as-shown-below" title="Permalink to this headline"></a></h6>
 <div class="highlight-:linenos: notranslate"><div class="highlight"><pre><span></span>awk -f addEve0.awk event.dat &gt; event.dat
 </pre></div>
 </div>
 <p>At this point, we have all the data we need for <code class="docutils literal notranslate"><span class="pre">TomoDD</span></code> software, which are <code class="docutils literal notranslate"><span class="pre">absolute.dat</span></code>, <code class="docutils literal notranslate"><span class="pre">dt.ct</span></code>, <code class="docutils literal notranslate"><span class="pre">event.dat</span></code>, <code class="docutils literal notranslate"><span class="pre">station.dat</span></code>.</p>
-</div>
-</div>
-</div>
-<div class="section" id="inversion-example">
+</section>
+</section>
+</section>
+<section id="inversion-example">
 <h4>2 Inversion example<a class="headerlink" href="#inversion-example" title="Permalink to this headline"></a></h4>
-<div class="section" id="preparation-of-the-initial-velocity-model">
+<section id="preparation-of-the-initial-velocity-model">
 <h5>2.1 Preparation of the initial velocity model<a class="headerlink" href="#preparation-of-the-initial-velocity-model" title="Permalink to this headline"></a></h5>
-<div class="section" id="the-initial-velocity-model-may-be-given-a-transversely-homogeneous-gradient-model-increasing-by-depth">
+<section id="the-initial-velocity-model-may-be-given-a-transversely-homogeneous-gradient-model-increasing-by-depth">
 <h6>1 The initial velocity model may be given a transversely homogeneous gradient model increasing by depth.<a class="headerlink" href="#the-initial-velocity-model-may-be-given-a-transversely-homogeneous-gradient-model-increasing-by-depth" title="Permalink to this headline"></a></h6>
-</div>
-<div class="section" id="in-addition-the-initial-velocity-model-can-also-be-obtained-by-using-the-velest-kissling-et-al-1994-program">
+</section>
+<section id="in-addition-the-initial-velocity-model-can-also-be-obtained-by-using-the-velest-kissling-et-al-1994-program">
 <h6>2 In addition, the initial velocity model can also be obtained by using the <code class="docutils literal notranslate"><span class="pre">VELEST</span></code> (Kissling et al., 1994) program.<a class="headerlink" href="#in-addition-the-initial-velocity-model-can-also-be-obtained-by-using-the-velest-kissling-et-al-1994-program" title="Permalink to this headline"></a></h6>
 <p>The format of the initial velocity model is as follows</p>
 <a class="reference internal image-reference" href="../_images/Figure3.png"><img alt="../_images/Figure3.png" src="../_images/Figure3.png" style="width: 40%;" /></a>
 <p>Figure 3. The format of the initial velocity model. <code class="docutils literal notranslate"><span class="pre">bld</span></code> is 1 or 0.1 or 0.01, which depends on the minimum precision of the grid points in the x, y, and z directions. <code class="docutils literal notranslate"><span class="pre">nx</span></code>, <code class="docutils literal notranslate"><span class="pre">ny</span></code>, and <code class="docutils literal notranslate"><span class="pre">nz</span></code> are the number of grid nodes in x, y and z directions. <code class="docutils literal notranslate"><span class="pre">xn(1)</span></code>, <code class="docutils literal notranslate"><span class="pre">xn(nx)</span></code>, <code class="docutils literal notranslate"><span class="pre">yn(1)</span></code>, <code class="docutils literal notranslate"><span class="pre">yn(ny)</span></code>, <code class="docutils literal notranslate"><span class="pre">zn(1)</span></code> and <code class="docutils literal notranslate"><span class="pre">zn(nz)</span></code> are boundary nodes that must be large enough to hold all the events and stations.</p>
-</div>
-</div>
-<div class="section" id="tomodd-source-code-compilation-tomodd-se">
+</section>
+</section>
+<section id="tomodd-source-code-compilation-tomodd-se">
 <h5>2.2 TomoDD source code compilation: <code class="docutils literal notranslate"><span class="pre">tomoDD-SE</span></code><a class="headerlink" href="#tomodd-source-code-compilation-tomodd-se" title="Permalink to this headline"></a></h5>
-<div class="section" id="allocate-the-memory-required-by-the-program-by-modifying-the-following-parameter-file">
+<section id="allocate-the-memory-required-by-the-program-by-modifying-the-following-parameter-file">
 <h6>2.2.1 Allocate the memory required by the program by modifying the following parameter file<a class="headerlink" href="#allocate-the-memory-required-by-the-program-by-modifying-the-following-parameter-file" title="Permalink to this headline"></a></h6>
 <blockquote>
 <div><div class="line-block">
@@ -270,8 +272,8 @@ Station name   travel time   data quality   seismic phase
 <p>MAXND: it is used to control the maximum number of nonzero slowness partial derivatives (MAXND*MAXDATA) (&lt;4*MAXNZ).</p>
 </div></blockquote>
 </div></blockquote>
-</div>
-<div class="section" id="compile-program">
+</section>
+<section id="compile-program">
 <h6>2.2.2 Compile program<a class="headerlink" href="#compile-program" title="Permalink to this headline"></a></h6>
 <p>In the folder <code class="docutils literal notranslate"><span class="pre">Src/tomoDD-SE</span></code>, run <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">clean</span></code> and <code class="docutils literal notranslate"><span class="pre">make</span></code> in sequence to obtain the executable file <code class="docutils literal notranslate"><span class="pre">tomoDD-SE</span></code> for inversion.</p>
 <div class="admonition note">
@@ -289,9 +291,9 @@ Station name   travel time   data quality   seismic phase
 <div class="line">It requires downloading an older version of the gfortran compiler, such as <code class="docutils literal notranslate"><span class="pre">gfortran</span> <span class="pre">4.7</span></code> or lower, updating the compiler name in the Makefile (line 5) to the newly downloaded version, and then recompiling.</div>
 </div>
 </div>
-</div>
-</div>
-<div class="section" id="preparation-of-parameter-file-tomodd-se-inp">
+</section>
+</section>
+<section id="preparation-of-parameter-file-tomodd-se-inp">
 <h5>2.3 Preparation of parameter file: <code class="docutils literal notranslate"><span class="pre">tomoDD-SE.inp</span></code><a class="headerlink" href="#preparation-of-parameter-file-tomodd-se-inp" title="Permalink to this headline"></a></h5>
 <p>This file is shown in <code class="docutils literal notranslate"><span class="pre">Example/RealData-Inversion</span></code>. Change the inversion parameters in the file according to the filed data, and the meaning of the parameters is clearly explained in the parameter file.</p>
 <p>For parameter adjusting, we need to emphasize the following points:</p>
@@ -306,26 +308,26 @@ Station name   travel time   data quality   seismic phase
 <ol class="loweralpha simple" start="4">
 <li><p>The regularization parameters smooth and damp are selected using the L-curve method. For the L-curve method, please refer to Sections 5.1 and 5.2 of Parameter Estimation and Inverse Problems (Richard C. Aster et al. 2005). In <code class="docutils literal notranslate"><span class="pre">Example/RealData-Inversion-Lcurve</span></code>, the procedure for choosing smooth using L-Curve is shown. The selection process for damp is the same as for smooth.</p></li>
 </ol>
-</div>
-<div class="section" id="prepare-the-folder-for-input-data-input-files">
+</section>
+<section id="prepare-the-folder-for-input-data-input-files">
 <h5>2.4 Prepare the folder for input data: <code class="docutils literal notranslate"><span class="pre">Input_Files</span></code><a class="headerlink" href="#prepare-the-folder-for-input-data-input-files" title="Permalink to this headline"></a></h5>
 <p>As shown in <code class="docutils literal notranslate"><span class="pre">Example\RealData-Inversion\Input_Files</span></code>, place the prepared files (<code class="docutils literal notranslate"><span class="pre">absolute.dat</span></code>, <code class="docutils literal notranslate"><span class="pre">dt.ct</span></code>, <code class="docutils literal notranslate"><span class="pre">event.dat</span></code>, <code class="docutils literal notranslate"><span class="pre">station.dat</span></code>) into it.</p>
-</div>
-<div class="section" id="prepare-the-folder-for-output-data-output-files">
+</section>
+<section id="prepare-the-folder-for-output-data-output-files">
 <h5>2.5 Prepare the folder for output data: <code class="docutils literal notranslate"><span class="pre">Output_Files</span></code><a class="headerlink" href="#prepare-the-folder-for-output-data-output-files" title="Permalink to this headline"></a></h5>
 <p>The velocity model and source location information generated by inversion procedure are placed in folder <code class="docutils literal notranslate"><span class="pre">Example\RealData-Inversion\Output_Files</span></code>. In <code class="docutils literal notranslate"><span class="pre">Output_Files</span></code>, matlab programs in this folder can be used to draw the earthquake location and velocity model in three directions of the slice map.</p>
-</div>
-<div class="section" id="perform-inversion">
+</section>
+<section id="perform-inversion">
 <h5>2.6 Perform inversion<a class="headerlink" href="#perform-inversion" title="Permalink to this headline"></a></h5>
 <p>After the above five steps are completed, copy the executable files to the folder <code class="docutils literal notranslate"><span class="pre">Example/RealData-Inversion</span></code> and execute <code class="docutils literal notranslate"><span class="pre">./tomoDD</span> <span class="pre">SE</span> <span class="pre">tomoDD</span> <span class="pre">SE.inp</span></code> in the terminal to carry out velocity inversion. Note that <code class="docutils literal notranslate"><span class="pre">ak135.15.SKS</span></code>, <code class="docutils literal notranslate"><span class="pre">layer-16.dat</span></code> are files that are prepared for the <code class="docutils literal notranslate"><span class="pre">TomoDD</span></code> executable file. We don’t need to change it.</p>
-</div>
-<div class="section" id="display-of-inversion-results">
+</section>
+<section id="display-of-inversion-results">
 <h5>2.7 Display of inversion results<a class="headerlink" href="#display-of-inversion-results" title="Permalink to this headline"></a></h5>
 <p>The figure below shows the velocity model of inversion, which is drawn by the matlab script under the folder <code class="docutils literal notranslate"><span class="pre">Example\RealData-Inversion\Output_Files</span></code>.</p>
 <a class="reference internal image-reference" href="../_images/Figure4.png"><img alt="../_images/Figure4.png" src="../_images/Figure4.png" style="width: 60%;" /></a>
 <p>Figure 4. Inversion results</p>
-</div>
-<div class="section" id="data-residuals">
+</section>
+<section id="data-residuals">
 <h5>2.8 Data residuals<a class="headerlink" href="#data-residuals" title="Permalink to this headline"></a></h5>
 <p>The initial residual file is <code class="docutils literal notranslate"><span class="pre">tomoDD-SE.res.ini</span></code>, as shown below. Its default output is in the directory where the program is run.</p>
 <a class="reference internal image-reference" href="../_images/Figure5.png"><img alt="../_images/Figure5.png" src="../_images/Figure5.png" style="width: 60%;" /></a>
@@ -339,32 +341,32 @@ Station name   travel time   data quality   seismic phase
 <div class="line">All parameters and file formats used in this tutorial are defined in <code class="docutils literal notranslate"><span class="pre">Doc/tomoDD_manual</span></code> and can be queried if necessary</div>
 </div>
 </div>
-</div>
-</div>
-<div class="section" id="resolution-test-of-inversion-results">
+</section>
+</section>
+<section id="resolution-test-of-inversion-results">
 <h4>3 Resolution test of inversion results<a class="headerlink" href="#resolution-test-of-inversion-results" title="Permalink to this headline"></a></h4>
 <p>We need to know the reliability of the obtained velocity model, as well as its horizontal and vertical resolution, in order to conduct further research on seismogenesis interpretation. We can use the ray distribution density diagram and the checkerboard test to study the resolution of the velocity model.</p>
-<div class="section" id="ray-distribution-density">
+<section id="ray-distribution-density">
 <h5>3.1 Ray distribution density<a class="headerlink" href="#ray-distribution-density" title="Permalink to this headline"></a></h5>
 <p>The script <code class="docutils literal notranslate"><span class="pre">extract_dws.awk</span></code> in the folder <code class="docutils literal notranslate"><span class="pre">Example\RealData-Inversion\Output_Files</span></code> can be used to extract the ray density (DWS_P, DWS_S) of each grid point from <code class="docutils literal notranslate"><span class="pre">tomoDD.vel</span></code>. By doing <code class="docutils literal notranslate"><span class="pre">awk</span> <span class="pre">-f</span> <span class="pre">extract_DWS.awk</span> <span class="pre">tomoDD.vel</span></code> at the terminal, we can obtain <code class="docutils literal notranslate"><span class="pre">DWS_P</span></code> and <code class="docutils literal notranslate"><span class="pre">DWS_S</span></code>. The data format of <code class="docutils literal notranslate"><span class="pre">DWS_P</span></code> and <code class="docutils literal notranslate"><span class="pre">DWS_S</span></code> is the same as <code class="docutils literal notranslate"><span class="pre">Vp_model.dat</span></code> and <code class="docutils literal notranslate"><span class="pre">Vs_model.dat</span></code></p>
-</div>
-<div class="section" id="synthetic-resolution-test-checkboard-test">
+</section>
+<section id="synthetic-resolution-test-checkboard-test">
 <h5>3.2 Synthetic resolution test (checkboard test)<a class="headerlink" href="#synthetic-resolution-test-checkboard-test" title="Permalink to this headline"></a></h5>
 <p>The checkerboard test can be explained as follows: first, the checkerboard velocity model with different grid sizes is constructed, and then the theoretical observation record is calculated by using the constructed velocity model and the same recording geometry as in the field. Then, the inversion method is used for the simulated observation record. By comparing the inversion model with the real checkerboard model, the region with the better inversion of checkerboard velocity and size is the region with higher resolution. An example is shown in the folder <code class="docutils literal notranslate"><span class="pre">Example/checkerboard</span></code>. As follows the specific implementation process:</p>
-<div class="section" id="forward-modeling-and-inversion-code-compilation">
+<section id="forward-modeling-and-inversion-code-compilation">
 <h6>3.2.1 Forward modeling and inversion code compilation<a class="headerlink" href="#forward-modeling-and-inversion-code-compilation" title="Permalink to this headline"></a></h6>
 <p>Previously, we compiled the executable <code class="docutils literal notranslate"><span class="pre">tomoDD-SE</span></code> for inversion, so we only need to compile the additional executable <code class="docutils literal notranslate"><span class="pre">tomoDD-SE_syn</span></code> for forward modeling. Changeing the folder to <code class="docutils literal notranslate"><span class="pre">Src/tomoDD-SE</span></code>. By executing <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">clean</span> <span class="pre">-f</span> <span class="pre">Makefile_syn</span></code>, <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">-f</span> <span class="pre">Makefile_syn</span></code> in sequence on the terminal, we can obtain the executable <code class="docutils literal notranslate"><span class="pre">tomoDD-SE_syn</span></code>.</p>
-</div>
-<div class="section" id="generate-synthetic-data">
+</section>
+<section id="generate-synthetic-data">
 <h6>3.2.2 Generate synthetic data<a class="headerlink" href="#generate-synthetic-data" title="Permalink to this headline"></a></h6>
 <p>Copy the generated forward and inverse executable files to folder <code class="docutils literal notranslate"><span class="pre">Example/checkerboard</span></code>.  Use the checkerboard velocity model and the actual recording geometry to simulate the travel time of the first-arrival (the generated data is put in the folder <code class="docutils literal notranslate"><span class="pre">Syn</span></code>).</p>
-</div>
-<div class="section" id="inversion-velocity-model">
+</section>
+<section id="inversion-velocity-model">
 <h6>3.2.3 Inversion velocity model<a class="headerlink" href="#inversion-velocity-model" title="Permalink to this headline"></a></h6>
 <p>Velocity inversion is carried out by using the calculated travel time and the initial model (the inversion results are placed in the folder <code class="docutils literal notranslate"><span class="pre">Vel</span></code>).
 In this example, <code class="docutils literal notranslate"><span class="pre">checkerboard.pl</span></code> integrates accurate checkerboard velocity model construction, travel time forward calculation, and velocity inversion. So simply execute the <code class="docutils literal notranslate"><span class="pre">checkerboard.pl</span></code> in the folder <code class="docutils literal notranslate"><span class="pre">Example/checkerboard</span></code> to implement checkerboard testing.</p>
-</div>
-<div class="section" id="id2">
+</section>
+<section id="id2">
 <h6>3.2.4 Display of inversion results<a class="headerlink" href="#id2" title="Permalink to this headline"></a></h6>
 <p>The real checkerboard model and the inverted checkerboard model are shown below.</p>
 <a class="reference internal image-reference" href="../_images/Figure7.png"><img alt="../_images/Figure7.png" src="../_images/Figure7.png" style="width: 70%;" /></a>
@@ -372,12 +374,12 @@ In this example, <code class="docutils literal notranslate"><span class="pre">ch
 <a class="reference internal image-reference" href="../_images/Figure8.png"><img alt="../_images/Figure8.png" src="../_images/Figure8.png" style="width: 70%;" /></a>
 <p>Figure 8. The inverted checkerboard model</p>
 <p>By comparison with Figures. 7 and 8, the inversion accuracy of field data is also higher in the region where velocity value and checkerboard size are better recovered.</p>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="section" id="reference">
+</section>
+</section>
+</section>
+</section>
+</section>
+<section id="reference">
 <h2>Reference:<a class="headerlink" href="#reference" title="Permalink to this headline"></a></h2>
 <p>Paige, C. C. and Saunders, M. A., 1982, LSQR: Sparse Linear Equations and Least Squares Problems. ACM Transactions on Mathematical Software, 8 (2), 195–209.</p>
 <p>Kissling, E., Ellsworth, W. L., Eberhart-Phillips, D. and Kradolfer, U., 1994, Initial reference models in local earthquake tomography. Journal of Geophysical Research: Solid Earth, 99, 19635–19646.</p>
@@ -386,8 +388,8 @@ In this example, <code class="docutils literal notranslate"><span class="pre">ch
 <p>Zhang, H. J. and Thurber, C. H., 2003, Double-Difference Tomography: The Method and Its Application to the Hayward Fault, California: Bulletin of the Seismological Society of America, 93 (5), 1875–1889.</p>
 <p>Richard C. Aster, Brian Borchers, Clifford H. Thurber, 2005, Parameter Estimation and Inverse Problems.</p>
 <p>Zhang, H. J. and Thurber, C. H., 2006, Development and Applications of Double-difference Seismic Tomography: Pure and Applied Geophysics, 163, 373–403.</p>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
@@ -401,7 +403,7 @@ In this example, <code class="docutils literal notranslate"><span class="pre">ch
 
   <div role="contentinfo">
     <p>&#169; Copyright 2021-2022, CUSeisTut team.
-      <span class="lastupdated">Last updated on 2022-04-01.
+      <span class="lastupdated">Last updated on 2022-04-02.
       </span></p>
   </div>
 

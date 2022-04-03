@@ -33,7 +33,8 @@ This document is developed and maintained by `CUHK Seismology LAB <http://www.cu
 
    unix/index
    GMT6/index
-   obspy/index
+   obspy-1/index
+   obspy-2/index
 
 .. toctree::
    :caption: Intermediate level
