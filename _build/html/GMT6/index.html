@@ -18,9 +18,7 @@
         <script src="../_static/doctools.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Python ObsPy Tutorial" href="../obspy-1/index.html" />
-    <link rel="prev" title="Unix commands" href="../unix/index.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -46,41 +44,12 @@
 <li class="toctree-l1"><a class="reference internal" href="../intro/index.html">Introduction</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Entry level</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../unix/index.html">Unix commands</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Generic Mapping Tools</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#brief-introduction">Brief introduction</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#what-is-gmt">What is GMT?</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#what-can-gmt-do">What can GMT do?</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#how-to-install-gmt">How to install GMT?</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#start-with-three-simple-examples">Start with three simple examples</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#basic-structure-of-gmt-script">Basic structure of GMT script</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#plotting-topographic-map">Plotting topographic map</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#preview">Preview</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#step-by-step-explanation">Step-by-Step explanation</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#plotting-earthquake-catalog">Plotting earthquake catalog</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id1">Preview</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id3">Step-by-Step explanation</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#plotting-cross-sections">Plotting cross sections</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id5">Preview</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#excercises">Excercises</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#reproduce-figure-1-in-the-paper">Reproduce figure 1 in the paper</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#plot-a-cross-section-plot-based-on-the-catalog-generated-in-the-unix-command-tutorial">Plot a cross-section plot based on the catalog generated in the Unix command tutorial</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#plot-the-magnitude-variation-figure-refer-to-figure-4b-in-the-paper">Plot the magnitude variation figure. Refer to Figure 4b in the paper</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../obspy-1/index.html">Python ObsPy Tutorial</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../obspy-2/index.html">Python ObsPy Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../GMT6-1/index.html">Generic Mapping Tools - Topographic Map</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../GMT6-2/index.html">Generic Mapping Tools - Seismic Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obspy-1/index.html">Seismic data request via ObsPy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obspy-2/index.html">Seismic data process via ObsPy</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Intermediate level</span></p>
 <ul>
@@ -263,7 +232,7 @@ $ sh GlobalMap3.sh
 <h3>Preview<a class="headerlink" href="#preview" title="Permalink to this headline"></a></h3>
 <p><strong>After learning this part, you will be able to create the figure below or similar ones.</strong></p>
 <p>The figure below is modified from Figure 1 in <a class="reference external" href="https://doi.org/10.1785/0320210041">this paper</a>.</p>
-<a class="reference internal image-reference" href="../_images/Banda_Arc_Region.png"><img alt="../_images/Banda_Arc_Region.png" src="../_images/Banda_Arc_Region.png" style="width: 80%;" /></a>
+<a class="reference internal image-reference" href="../_images/Banda_Arc_Region1.png"><img alt="../_images/Banda_Arc_Region1.png" src="../_images/Banda_Arc_Region1.png" style="width: 80%;" /></a>
 <p>It is generated using the following commands:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>#!/bin/sh
 
@@ -309,7 +278,7 @@ rm elevation.cpt
 <p><code class="docutils literal notranslate"><span class="pre">-BWeSn</span></code> specifies that the left and bottom ticklabels are visible, which the right and top ticklabels are invisible.</p>
 <p><code class="docutils literal notranslate"><span class="pre">-Bxa5f1</span></code> specifies that x axes have ticklabels with interval of 5 and ticks with interval of 1.</p>
 <p><code class="docutils literal notranslate"><span class="pre">-Bya2f1</span></code> specifies that y axes have ticklabels with interval of 2 and ticks with interval of 1.</p>
-<a class="reference internal image-reference" href="../_images/Banda_Arc_Region01.png"><img alt="../_images/Banda_Arc_Region01.png" src="../_images/Banda_Arc_Region01.png" style="width: 80%;" /></a>
+<a class="reference internal image-reference" href="../_images/Banda_Arc_Region011.png"><img alt="../_images/Banda_Arc_Region011.png" src="../_images/Banda_Arc_Region011.png" style="width: 80%;" /></a>
 <div class="line-block">
 <div class="line"><strong>2. gmt makecpt -Crelief -T-6000/6000/200 -D -Z -H &gt; elevation.cpt</strong> to make color palette tables</div>
 </div>
@@ -325,13 +294,13 @@ rm elevation.cpt
 <p><code class="docutils literal notranslate"><span class="pre">&#64;earth_relief_01m</span></code> will download global relief grids (the resolution is 1 minute, it depends on the map range) from the GMT server. Click to view a full list of provided <a class="reference external" href="https://docs.generic-mapping-tools.org/latest/grdimage-classic.html?highlight=grdimage#global-relief-datasets">Global Relief Datasets</a></p>
 <p><code class="docutils literal notranslate"><span class="pre">-Celevation.cpt</span></code> specifies which CPT to use.</p>
 <p><code class="docutils literal notranslate"><span class="pre">-I+</span></code> selects the default arguments to apply intensity.</p>
-<a class="reference internal image-reference" href="../_images/Banda_Arc_Region02.png"><img alt="../_images/Banda_Arc_Region02.png" src="../_images/Banda_Arc_Region02.png" style="width: 80%;" /></a>
+<a class="reference internal image-reference" href="../_images/Banda_Arc_Region021.png"><img alt="../_images/Banda_Arc_Region021.png" src="../_images/Banda_Arc_Region021.png" style="width: 80%;" /></a>
 <div class="line-block">
 <div class="line"><strong>4. gmt coast -W0.5p,black -Da</strong> to add shorelines</div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">-W0.5p,black</span></code> specifies the line width to be 0.5p (0.5 point) and line color to be black.</p>
 <p><code class="docutils literal notranslate"><span class="pre">-Da</span></code> means that selecting the resolution of shorelines automaticly.</p>
-<a class="reference internal image-reference" href="../_images/Banda_Arc_Region03.png"><img alt="../_images/Banda_Arc_Region03.png" src="../_images/Banda_Arc_Region03.png" style="width: 80%;" /></a>
+<a class="reference internal image-reference" href="../_images/Banda_Arc_Region031.png"><img alt="../_images/Banda_Arc_Region031.png" src="../_images/Banda_Arc_Region031.png" style="width: 80%;" /></a>
 <div class="line-block">
 <div class="line"><strong>5. gmt inset begin -Dn1/0+jBR+w2.5c</strong> to initiate an inset plotting</div>
 </div>
@@ -349,7 +318,7 @@ rm elevation.cpt
 <div class="line-block">
 <div class="line"><strong>7. gmt inset end</strong> to terminate the inset plotting</div>
 </div>
-<a class="reference internal image-reference" href="../_images/Banda_Arc_Region04.png"><img alt="../_images/Banda_Arc_Region04.png" src="../_images/Banda_Arc_Region04.png" style="width: 80%;" /></a>
+<a class="reference internal image-reference" href="../_images/Banda_Arc_Region041.png"><img alt="../_images/Banda_Arc_Region041.png" src="../_images/Banda_Arc_Region041.png" style="width: 80%;" /></a>
 <div class="line-block">
 <div class="line"><strong>8. gmt plot java_trench.txt -W1p,white</strong> to plot trench locations</div>
 </div>
@@ -361,7 +330,7 @@ rm elevation.cpt
 <p><code class="docutils literal notranslate"><span class="pre">116</span> <span class="pre">-12</span></code> specifies the location.</p>
 <p><code class="docutils literal notranslate"><span class="pre">Java</span> <span class="pre">trench</span></code> is the text being added.</p>
 <p><code class="docutils literal notranslate"><span class="pre">-F+f8p,white</span></code> specfies the fontsize and color of text.</p>
-<a class="reference internal image-reference" href="../_images/Banda_Arc_Region05.png"><img alt="../_images/Banda_Arc_Region05.png" src="../_images/Banda_Arc_Region05.png" style="width: 80%;" /></a>
+<a class="reference internal image-reference" href="../_images/Banda_Arc_Region051.png"><img alt="../_images/Banda_Arc_Region051.png" src="../_images/Banda_Arc_Region051.png" style="width: 80%;" /></a>
 <div class="line-block">
 <div class="line"><strong>10. awk ‘NR&gt;1 {print $5,$6}’ GE_3_stations.txt | gmt plot -Si6p -W0.1p,black -Gcyan</strong> to plot seismic stations</div>
 </div>
@@ -371,13 +340,13 @@ rm elevation.cpt
 <div class="line-block">
 <div class="line"><strong>11. awk -F”|” ‘NR&gt;3 {print $6,$5}’ YS_30_stations.txt | gmt plot -Si6p -W0.1p,black -Gwhite</strong> to plot more seismic stations</div>
 </div>
-<a class="reference internal image-reference" href="../_images/Banda_Arc_Region06.png"><img alt="../_images/Banda_Arc_Region06.png" src="../_images/Banda_Arc_Region06.png" style="width: 80%;" /></a>
+<a class="reference internal image-reference" href="../_images/Banda_Arc_Region061.png"><img alt="../_images/Banda_Arc_Region061.png" src="../_images/Banda_Arc_Region061.png" style="width: 80%;" /></a>
 <div class="line-block">
 <div class="line"><strong>12. gmt colorbar -Dn1/0+o0.5c/0c+jBL+w5.5c -Bxa3000 -By+l”Topo (m)” -Celevation.cpt</strong> to add a color bar</div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">+o0.5c/0c</span></code> means the anchor point in the main figure is further moved for 0.5c along the x direction.</p>
 <p><code class="docutils literal notranslate"><span class="pre">-By+l&quot;Topo</span> <span class="pre">(m)&quot;</span></code> adds a label along the y axis.</p>
-<a class="reference internal image-reference" href="../_images/Banda_Arc_Region.png"><img alt="../_images/Banda_Arc_Region.png" src="../_images/Banda_Arc_Region.png" style="width: 80%;" /></a>
+<a class="reference internal image-reference" href="../_images/Banda_Arc_Region1.png"><img alt="../_images/Banda_Arc_Region1.png" src="../_images/Banda_Arc_Region1.png" style="width: 80%;" /></a>
 </section>
 </section>
 <section id="plotting-earthquake-catalog">
@@ -385,7 +354,7 @@ rm elevation.cpt
 <section id="id1">
 <h3>Preview<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h3>
 <p>The figure below is modified from Figure 2 in <a class="reference external" href="https://doi.org/10.1785/0320210041">this paper</a>.</p>
-<a class="reference internal image-reference" href="../_images/catalog.png"><img alt="../_images/catalog.png" src="../_images/catalog.png" style="width: 80%;" /></a>
+<a class="reference internal image-reference" href="../_images/catalog1.png"><img alt="../_images/catalog1.png" src="../_images/catalog1.png" style="width: 80%;" /></a>
 <p>It is generated using the following commands:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
 <span class="n">gmt</span> <span class="n">begin</span> <span class="n">catalog</span> <span class="n">png</span>
@@ -425,7 +394,7 @@ rm elevation.cpt
 <p><code class="docutils literal notranslate"><span class="pre">-Bya5f1</span></code> specifies that y axes have ticklabels with interval of 5 and ticks with interval of 1.</p>
 <p><code class="docutils literal notranslate"><span class="pre">-BWeSn+t&quot;Final</span> <span class="pre">catalog&quot;</span></code> specifies that the left and bottom ticklabels are visible, which the right and top ticklabels are invisible, where the <code class="file docutils literal notranslate"><span class="pre">+t&quot;Final</span> <span class="pre">catalog&quot;</span></code> indicates plotting the title “Final catalog”</p>
 <p><code class="docutils literal notranslate"><span class="pre">--MAP_FRAME_TYPE=plain</span> <span class="pre">--FONT_TITLE=10p</span> <span class="pre">--MAP_TITLE_OFFSET=-8p</span></code> are the gmt settings. <code class="file docutils literal notranslate"><span class="pre">--MAP_FRAME_TYPE=plain</span></code> specifies the frame type as plain(i.e., simple line); <code class="file docutils literal notranslate"><span class="pre">--FONT_TITLE=10p</span></code> specifies the font of title to be 10p; <code class="file docutils literal notranslate"><span class="pre">--MAP_TITLE_OFFSET=-8p</span></code> specifies the distance between the title with the frame to be -8p.</p>
-<a class="reference internal image-reference" href="../_images/catalog01.png"><img alt="../_images/catalog01.png" src="../_images/catalog01.png" style="width: 80%;" /></a>
+<a class="reference internal image-reference" href="../_images/catalog011.png"><img alt="../_images/catalog011.png" src="../_images/catalog011.png" style="width: 80%;" /></a>
 <div class="line-block">
 <div class="line"><strong>2. gmt coast -Gwhite -Slightblue -W0.1p,black -Da</strong> to plot coastline and specify land and sea colours</div>
 </div>
@@ -433,7 +402,7 @@ rm elevation.cpt
 <p><code class="docutils literal notranslate"><span class="pre">-Slightblue</span></code> specifies fill the wet/sea/lake area with lightblue.</p>
 <p><code class="docutils literal notranslate"><span class="pre">--W0.1p,black</span></code> specifies the line with a witdh of 0.1p and line color of black.</p>
 <p><code class="docutils literal notranslate"><span class="pre">-Da</span></code> specifies automatically selects the appropriate data precision based on the size of the current drawing area</p>
-<a class="reference internal image-reference" href="../_images/catalog02.png"><img alt="../_images/catalog02.png" src="../_images/catalog02.png" style="width: 80%;" /></a>
+<a class="reference internal image-reference" href="../_images/catalog021.png"><img alt="../_images/catalog021.png" src="../_images/catalog021.png" style="width: 80%;" /></a>
 <div class="line-block">
 <div class="line"><strong>3. gmt makecpt -Chot -T0/400/10 -D -Z -Ic -H &gt; depth.cpt</strong> to make color palette tables</div>
 </div>
@@ -446,7 +415,7 @@ rm elevation.cpt
 <div class="line"><strong>5. gmt plot catalog.xyz -Sc0.1c -Cdepth.cpt</strong> to plot earthquake data</div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">catalog.xyz</span></code> contains three columns of data. longitude, latitude, and depth. The value of depth column will be used for coloring points based on CPT file.</p>
-<a class="reference internal image-reference" href="../_images/catalog03.png"><img alt="../_images/catalog03.png" src="../_images/catalog03.png" style="width: 80%;" /></a>
+<a class="reference internal image-reference" href="../_images/catalog031.png"><img alt="../_images/catalog031.png" src="../_images/catalog031.png" style="width: 80%;" /></a>
 <div class="line-block">
 <div class="line"><strong>6. gmt plot java_trench.txt -W1p,black</strong> to plot the trench line.</div>
 </div>
@@ -456,13 +425,13 @@ rm elevation.cpt
 <div class="line-block">
 <div class="line"><strong>8. awk -F”|” ‘NR&gt;3 {print $6,$5}’ YS_30_stations.txt |gmt psxy  -Si7p -W0.01p,black -Gblack</strong> to extract station data and plot them</div>
 </div>
-<a class="reference internal image-reference" href="../_images/catalog04.png"><img alt="../_images/catalog04.png" src="../_images/catalog04.png" style="width: 80%;" /></a>
+<a class="reference internal image-reference" href="../_images/catalog041.png"><img alt="../_images/catalog041.png" src="../_images/catalog041.png" style="width: 80%;" /></a>
 <div class="line-block">
 <div class="line"><strong>9. gmt colorbar  -DjBL+h+o0.3c/0.6c+jBL+w5c/0.3c+e -By+l”Depth (km)” -Bxa100 -Cdepth.cpt</strong> to plot a colorbar</div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">-DjBL+h+o0.3c/0.6c+jBL+w5c/0.3c+e</span></code> specifices the paramter of colorbar. <code class="file docutils literal notranslate"><span class="pre">-DjBL</span></code> means plot color at the Bottom Left; <code class="file docutils literal notranslate"><span class="pre">+h</span></code> means
 draw horizontal color scale; <code class="file docutils literal notranslate"><span class="pre">+o0.3c/0.6c</span></code> means plot move the colorbar 0.3 cm in X direction and 0.6 cm in Y Direction; <code class="file docutils literal notranslate"><span class="pre">+w5c/0.3c</span></code> means plot a colorbar with a length of 5 cm and a width of 0.3 cm; <code class="file docutils literal notranslate"><span class="pre">+e</span></code> means add a triangle to the foreground and background colors in the colorbar.</p>
-<a class="reference internal image-reference" href="../_images/catalog05.png"><img alt="../_images/catalog05.png" src="../_images/catalog05.png" style="width: 80%;" /></a>
+<a class="reference internal image-reference" href="../_images/catalog051.png"><img alt="../_images/catalog051.png" src="../_images/catalog051.png" style="width: 80%;" /></a>
 <div class="line-block">
 <div class="line"><strong>10. echo “128 -12.5 N = 19074” | gmt text  -F+f8p,black</strong> to plot text</div>
 </div>
@@ -470,7 +439,7 @@ draw horizontal color scale; <code class="file docutils literal notranslate"><sp
 <div class="line"><strong>11. echo “116 -11.5 Java trench” | gmt text  -F+f8p,black</strong> to plot text</div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">-F+f8p,black</span></code> specifices the font size of 8p and color of black</p>
-<a class="reference internal image-reference" href="../_images/catalog.png"><img alt="../_images/catalog.png" src="../_images/catalog.png" style="width: 80%;" /></a>
+<a class="reference internal image-reference" href="../_images/catalog1.png"><img alt="../_images/catalog1.png" src="../_images/catalog1.png" style="width: 80%;" /></a>
 </section>
 </section>
 <section id="plotting-cross-sections">
@@ -478,7 +447,7 @@ draw horizontal color scale; <code class="file docutils literal notranslate"><sp
 <section id="id5">
 <h3>Preview<a class="headerlink" href="#id5" title="Permalink to this headline"></a></h3>
 <p>The figure below is modified from Figure 3 in <a class="reference external" href="https://doi.org/10.1785/0320210041">this paper</a>.</p>
-<a class="reference internal image-reference" href="../_images/section.png"><img alt="../_images/section.png" src="../_images/section.png" style="width: 80%;" /></a>
+<a class="reference internal image-reference" href="../_images/section1.png"><img alt="../_images/section1.png" src="../_images/section1.png" style="width: 80%;" /></a>
 <p>It is generated using the following commands:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
 <span class="c1"># extract data ignoring header, in order : lon, lat, depth, residual</span>
@@ -578,16 +547,13 @@ draw horizontal color scale; <code class="file docutils literal notranslate"><sp
 
            </div>
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../unix/index.html" class="btn btn-neutral float-left" title="Unix commands" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../obspy-1/index.html" class="btn btn-neutral float-right" title="Python ObsPy Tutorial" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
+          <footer>
 
   <hr/>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2021-2022, CUSeisTut team.
-      <span class="lastupdated">Last updated on 2022-04-02.
+      <span class="lastupdated">Last updated on 2022-04-18.
       </span></p>
   </div>
 

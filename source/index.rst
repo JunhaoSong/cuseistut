@@ -32,7 +32,8 @@ This document is developed and maintained by `CUHK Seismology LAB <http://www.cu
    :hidden:
 
    unix/index
-   GMT6/index
+   GMT6-1/index
+   GMT6-2/index
    obspy-1/index
    obspy-2/index
 
