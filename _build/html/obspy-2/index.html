@@ -1,38 +1,75 @@
-<!DOCTYPE html>
-<html class="writer-html5" lang="en" >
-<head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Seismic data process via ObsPy &mdash; CUSeisTut</title>
-      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
+  <title>Seismic data process via ObsPy &mdash; CUSeisTut</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-    <script src="../_static/js/theme.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Earthquake Detection STA/LTA" href="../sta_lta/index.html" />
     <link rel="prev" title="Seismic data request via ObsPy" href="../obspy-1/index.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+
+   
   <div class="wy-grid-for-nav">
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
+          
+
+          
             <a href="../index.html" class="icon icon-home"> CUSeisTut
+          
+
+          
           </a>
+
+          
+            
+            
               <div class="version">
                 0.0.1
               </div>
+            
+          
+
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -40,7 +77,17 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
               <p class="caption" role="heading"><span class="caption-text">CUSeisTut</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../intro/index.html">Introduction</a></li>
@@ -102,36 +149,74 @@
 <li class="toctree-l1"><a class="reference external" href="https://docs.google.com/forms/d/e/1FAIpQLScSQIcOtANjTonJDhK4KYmoA6H2lUHou9Mqz1oFCHSTd5wxhQ/viewform?usp=sf_link">Give us feedback here</a></li>
 </ul>
 
+            
+          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">CUSeisTut</a>
+        
       </nav>
 
+
       <div class="wy-nav-content">
+        
         <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
       <li>Seismic data process via ObsPy</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
+        
+            
             <a href="../_sources/obspy-2/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-             
+            
   <section id="seismic-data-process-via-obspy">
-<h1>Seismic data process via ObsPy<a class="headerlink" href="#seismic-data-process-via-obspy" title="Permalink to this headline"></a></h1>
+<h1>Seismic data process via ObsPy<a class="headerlink" href="#seismic-data-process-via-obspy" title="Permalink to this headline">¶</a></h1>
 <section id="basic-seismic-data-processing">
-<h2>1 Basic Seismic Data Processing<a class="headerlink" href="#basic-seismic-data-processing" title="Permalink to this headline"></a></h2>
+<h2>1 Basic Seismic Data Processing<a class="headerlink" href="#basic-seismic-data-processing" title="Permalink to this headline">¶</a></h2>
 <section id="detrend-filter-data">
-<h3>1.1 Detrend / Filter Data<a class="headerlink" href="#detrend-filter-data" title="Permalink to this headline"></a></h3>
+<h3>1.1 Detrend / Filter Data<a class="headerlink" href="#detrend-filter-data" title="Permalink to this headline">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">detrend()</span></code> is provided to remove a trend from the trace. There are many methods listed for detrend function (simple, linear, constant …), please refer to <code class="docutils literal notranslate"><span class="pre">obspy.core.trace.Trace.detrend</span></code></p>
 <p>To better visualize and demonstrate the effect of detrending, we will provide some examples with significant trends, and show the effect of detrend function.</p>
 <p><strong>1.1.1 Remove Mean</strong></p>
@@ -178,7 +263,7 @@ The procedures are the same with remove mean, but use <code class="docutils lite
 <a class="reference internal image-reference" href="../_images/linear_shift.png"><img alt="../_images/linear_shift.png" src="../_images/linear_shift.png" style="width: 80%;" /></a>
 </section>
 <section id="filter-data">
-<h3>1.2 Filter Data<a class="headerlink" href="#filter-data" title="Permalink to this headline"></a></h3>
+<h3>1.2 Filter Data<a class="headerlink" href="#filter-data" title="Permalink to this headline">¶</a></h3>
 <p>Filtering data removes the noise so that we can identify the phases easier in the filtered waveforms. You can apply different filters to extract the signal of interest from the raw data. <code class="docutils literal notranslate"><span class="pre">filter</span></code> function provides different filters. For example, <code class="docutils literal notranslate"><span class="pre">bandpass</span></code>, <code class="docutils literal notranslate"><span class="pre">highpass</span></code> and <code class="docutils literal notranslate"><span class="pre">lowpass</span></code>.</p>
 <p>To further understand the effects of different filter, you can download the waveform file here <a class="reference download internal" download="" href="../_downloads/63ac5a6f39643f66943a94bfd7f8ff90/PA03.bhz"><code class="xref download docutils literal notranslate"><span class="pre">PA03.bhz</span></code></a> for practice.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">obspy</span> <span class="kn">import</span> <span class="n">read</span>
@@ -213,7 +298,7 @@ The procedures are the same with remove mean, but use <code class="docutils lite
 <a class="reference internal image-reference" href="../_images/spec_high.png"><img alt="../_images/spec_high.png" src="../_images/spec_high.png" style="width: 40%;" /></a>
 </section>
 <section id="waveform-rotation">
-<h3>1.3 Waveform rotation<a class="headerlink" href="#waveform-rotation" title="Permalink to this headline"></a></h3>
+<h3>1.3 Waveform rotation<a class="headerlink" href="#waveform-rotation" title="Permalink to this headline">¶</a></h3>
 <p>For better reconigizing particlar seismic waves, such as Love waves and Rayleigh waves, we will rotate a seismogram from the North - East coordinate to Radial- Transverse coordinate.</p>
 <p>Here we provide a example. You can download the waveform file here. <a class="reference download internal" download="" href="../_downloads/4eef60ba95688874b52bc7d1aeed4384/BINY.N"><code class="xref download docutils literal notranslate"><span class="pre">BINY.N</span></code></a> and <a class="reference download internal" download="" href="../_downloads/ceb4af043cd238e02718307a22dac370/BINY.E"><code class="xref download docutils literal notranslate"><span class="pre">BINY.E</span></code></a></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">## import modules that needed in processing</span>
@@ -251,7 +336,7 @@ The procedures are the same with remove mean, but use <code class="docutils lite
 <a class="reference internal image-reference" href="../_images/rotate_transverse.png"><img alt="../_images/rotate_transverse.png" src="../_images/rotate_transverse.png" style="width: 55%;" /></a>
 </section>
 <section id="seismic-phases-in-seismogram">
-<h3>1.4 Seismic Phases in seismogram<a class="headerlink" href="#seismic-phases-in-seismogram" title="Permalink to this headline"></a></h3>
+<h3>1.4 Seismic Phases in seismogram<a class="headerlink" href="#seismic-phases-in-seismogram" title="Permalink to this headline">¶</a></h3>
 <p>Many seismic phases can be presented in the seismogram. For beginners, we can focus on P - and S - waves. Here is the demonstration of picking P - and S - waves in a teleseismic earthquake.</p>
 <a class="reference internal image-reference" href="../_images/Teleseismic_phase.png"><img alt="../_images/Teleseismic_phase.png" src="../_images/Teleseismic_phase.png" style="width: 65%;" /></a>
 <p>We will introduce the picking method in next section!</p>
@@ -259,7 +344,7 @@ The procedures are the same with remove mean, but use <code class="docutils lite
 </section>
 <hr class="docutils" />
 <section id="taup">
-<h2>2 TauP<a class="headerlink" href="#taup" title="Permalink to this headline"></a></h2>
+<h2>2 TauP<a class="headerlink" href="#taup" title="Permalink to this headline">¶</a></h2>
 <p>TauP is a toolkit to calculate the seismic travel time calculator. It handles many types of velocity models and calculate times for virtually any seismic phase with a phase parser.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -267,7 +352,7 @@ The procedures are the same with remove mean, but use <code class="docutils lite
 </div>
 <p>TauP can provide us a reference for identifying different phases. We can also compare it with the real arrivals, the difference between actual and theoretical arrival may interpret as a site effect.</p>
 <section id="source-configuration">
-<h3>2.1 Source Configuration<a class="headerlink" href="#source-configuration" title="Permalink to this headline"></a></h3>
+<h3>2.1 Source Configuration<a class="headerlink" href="#source-configuration" title="Permalink to this headline">¶</a></h3>
 <p>Input the information of the source (earthquake)</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">eq_lat</span> <span class="o">=</span> <span class="o">-</span><span class="mf">8.624</span>
 <span class="n">eq_lon</span> <span class="o">=</span> <span class="mf">123.202</span>
@@ -276,7 +361,7 @@ The procedures are the same with remove mean, but use <code class="docutils lite
 </div>
 </section>
 <section id="receiver-configuration">
-<h3>2.2 Receiver Configuration<a class="headerlink" href="#receiver-configuration" title="Permalink to this headline"></a></h3>
+<h3>2.2 Receiver Configuration<a class="headerlink" href="#receiver-configuration" title="Permalink to this headline">¶</a></h3>
 <p>Input the information of the receiver (station)</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sta_lat</span> <span class="o">=</span> <span class="o">-</span><span class="mf">8.4882</span>
 <span class="n">sta_lon</span> <span class="o">=</span> <span class="mf">123.2696</span>
@@ -284,11 +369,11 @@ The procedures are the same with remove mean, but use <code class="docutils lite
 </div>
 </section>
 <section id="travel-time-calculation">
-<h3>2.3 Travel Time Calculation<a class="headerlink" href="#travel-time-calculation" title="Permalink to this headline"></a></h3>
+<h3>2.3 Travel Time Calculation<a class="headerlink" href="#travel-time-calculation" title="Permalink to this headline">¶</a></h3>
 <p>There are 2 methods to calculate the travel time.</p>
 </section>
 <section id="method-1">
-<h3>Method 1<a class="headerlink" href="#method-1" title="Permalink to this headline"></a></h3>
+<h3>Method 1<a class="headerlink" href="#method-1" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">obspy.taup</span> <span class="kn">import</span> <span class="n">TauPyModel</span>
 <span class="c1"># Import the velocity model</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">TauPyModel</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;iasp91&quot;</span><span class="p">)</span>
@@ -309,7 +394,7 @@ The procedures are the same with remove mean, but use <code class="docutils lite
 <p><code class="docutils literal notranslate"><span class="pre">model.get_travel_times</span></code> get the travel times of the phases</p>
 </section>
 <section id="method-2">
-<h3>Method 2<a class="headerlink" href="#method-2" title="Permalink to this headline"></a></h3>
+<h3>Method 2<a class="headerlink" href="#method-2" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">p_arrival</span><span class="p">,</span><span class="n">s_arrival</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_travel_times_geo</span><span class="p">(</span><span class="n">source_depth_in_km</span><span class="o">=</span><span class="n">eq_dep</span><span class="p">,</span>
                                         <span class="n">source_latitude_in_deg</span><span class="o">=</span><span class="n">eq_lat</span><span class="p">,</span>
                                         <span class="n">source_longitude_in_deg</span><span class="o">=</span><span class="n">eq_lon</span><span class="p">,</span>
@@ -328,7 +413,7 @@ The procedures are the same with remove mean, but use <code class="docutils lite
 </div>
 </section>
 <section id="visualise-the-result">
-<h3>2.4 Visualise the result<a class="headerlink" href="#visualise-the-result" title="Permalink to this headline"></a></h3>
+<h3>2.4 Visualise the result<a class="headerlink" href="#visualise-the-result" title="Permalink to this headline">¶</a></h3>
 <p>Plot the theoretical travel time onto the waveform.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import matplotlib module</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -352,9 +437,9 @@ The procedures are the same with remove mean, but use <code class="docutils lite
 </section>
 <hr class="docutils" />
 <section id="section-plot">
-<h2>3 Section Plot<a class="headerlink" href="#section-plot" title="Permalink to this headline"></a></h2>
+<h2>3 Section Plot<a class="headerlink" href="#section-plot" title="Permalink to this headline">¶</a></h2>
 <section id="waveform-cross-section-plot">
-<h3>3.1 Waveform cross-section plot<a class="headerlink" href="#waveform-cross-section-plot" title="Permalink to this headline"></a></h3>
+<h3>3.1 Waveform cross-section plot<a class="headerlink" href="#waveform-cross-section-plot" title="Permalink to this headline">¶</a></h3>
 <p>We have introduce how to make a waveform cross-section plot in 2.6. For this section, we would like to add the calculated TauP arrivals onto to waveform cross-section plot.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bulk</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;YS&#39;</span><span class="p">,</span> <span class="s1">&#39;BAOP&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;BHZ&#39;</span><span class="p">,</span> <span class="n">origin_time</span><span class="p">,</span> <span class="n">origin_time</span><span class="o">+</span><span class="mi">120</span><span class="p">),</span>
         <span class="p">(</span><span class="s1">&#39;YS&#39;</span><span class="p">,</span> <span class="s1">&#39;HADA&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;BHZ&#39;</span><span class="p">,</span> <span class="n">origin_time</span><span class="p">,</span> <span class="n">origin_time</span><span class="o">+</span><span class="mi">120</span><span class="p">),</span>
@@ -400,7 +485,7 @@ The procedures are the same with remove mean, but use <code class="docutils lite
 </div>
 </section>
 <section id="taup-travel-time">
-<h3>3.2 TauP travel time<a class="headerlink" href="#taup-travel-time" title="Permalink to this headline"></a></h3>
+<h3>3.2 TauP travel time<a class="headerlink" href="#taup-travel-time" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">obspy</span> <span class="kn">import</span> <span class="n">taup</span>
 
 <span class="c1"># velocity model configuration</span>
@@ -429,7 +514,7 @@ The procedures are the same with remove mean, but use <code class="docutils lite
 <p>The goal for us is to get the P - and S wave arrival of each station and save them into lists so that we can handle the result later.</p>
 </section>
 <section id="output-the-taup-result-as-text-file-for-further-processing">
-<h3>3.3 Output the TauP result as text file for further processing<a class="headerlink" href="#output-the-taup-result-as-text-file-for-further-processing" title="Permalink to this headline"></a></h3>
+<h3>3.3 Output the TauP result as text file for further processing<a class="headerlink" href="#output-the-taup-result-as-text-file-for-further-processing" title="Permalink to this headline">¶</a></h3>
 <p>As we are handling the data with more than 1 station, it is better for us to save the TauP result in a txt file.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make a table using pandas and save it to the text file</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -457,7 +542,7 @@ The procedures are the same with remove mean, but use <code class="docutils lite
 <p><code class="docutils literal notranslate"><span class="pre">pd.to_csv</span></code> write object to a comma-separated values (csv) file</p>
 </section>
 <section id="trim-and-filter-data">
-<h3>3.4 Trim and filter data<a class="headerlink" href="#trim-and-filter-data" title="Permalink to this headline"></a></h3>
+<h3>3.4 Trim and filter data<a class="headerlink" href="#trim-and-filter-data" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Trim the waveform data - shorter time range</span>
 <span class="n">st</span><span class="o">.</span><span class="n">trim</span><span class="p">(</span><span class="n">origin_time</span><span class="p">,</span> <span class="n">origin_time</span> <span class="o">+</span> <span class="n">p_time</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mi">150</span><span class="p">)</span>
 <span class="c1"># Filter the waveform</span>
@@ -468,7 +553,7 @@ The procedures are the same with remove mean, but use <code class="docutils lite
 <p><code class="docutils literal notranslate"><span class="pre">trim()</span></code> cut all traces with given start time and end time</p>
 </section>
 <section id="add-more-components-on-your-plot">
-<h3>3.5 Add more components on your plot<a class="headerlink" href="#add-more-components-on-your-plot" title="Permalink to this headline"></a></h3>
+<h3>3.5 Add more components on your plot<a class="headerlink" href="#add-more-components-on-your-plot" title="Permalink to this headline">¶</a></h3>
 <p>Then you can add more components in the plot. For example, station name, calculated P - and S wave arrival time.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Add more components onto the section plot</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -519,7 +604,7 @@ The procedures are the same with remove mean, but use <code class="docutils lite
 </section>
 <hr class="docutils" />
 <section id="exercises">
-<h2>4 Exercises<a class="headerlink" href="#exercises" title="Permalink to this headline"></a></h2>
+<h2>4 Exercises<a class="headerlink" href="#exercises" title="Permalink to this headline">¶</a></h2>
 <p>Here is the event information of a magnitude 7.7 earthquake occurred in 2018.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -542,35 +627,54 @@ The procedures are the same with remove mean, but use <code class="docutils lite
 
 
            </div>
+           
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../obspy-1/index.html" class="btn btn-neutral float-left" title="Seismic data request via ObsPy" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../sta_lta/index.html" class="btn btn-neutral float-right" title="Earthquake Detection STA/LTA" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../sta_lta/index.html" class="btn btn-neutral float-right" title="Earthquake Detection STA/LTA" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../obspy-1/index.html" class="btn btn-neutral float-left" title="Seismic data request via ObsPy" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
     </div>
+  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2021-2022, CUSeisTut team.
-      <span class="lastupdated">Last updated on 2022-04-18.
-      </span></p>
-  </div>
+    <p>
+        &copy; Copyright 2021-2022, CUSeisTut team
+      <span class="lastupdated">
+        Last updated on 2022-04-24.
+      </span>
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
+
         </div>
       </div>
+
     </section>
+
   </div>
-  <script>
+  
+
+
+  <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(false);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>
