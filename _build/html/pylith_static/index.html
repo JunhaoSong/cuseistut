@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Static Stress Change - PyLith &mdash; CUSeisTut</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Dynamic Rupture Simulation" href="../pylith_dynamic/index.html" />
+    <link rel="prev" title="Spectral Analysis" href="../source_spectra/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> CUSeisTut
+          </a>
+              <div class="version">
+                0.0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">CUSeisTut</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro/index.html">Introduction</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Entry level</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../unix/index.html">Unix commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../GMT6-1/index.html">Generic Mapping Tools - Topographic Map</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../GMT6-2/index.html">Generic Mapping Tools - Seismic Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obspy-1/index.html">Seismic data request via ObsPy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obspy-2/index.html">Seismic data process via ObsPy</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Intermediate level</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sta_lta/index.html">Earthquake Detection STA/LTA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../abs_loc/index.html">Earthquake Absolute Location</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced level</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../eqt/index.html">Earthquake Transformer Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dd_loc/index.html">Double-Difference Earthquake Relocation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source_spectra/index.html">Spectral Analysis</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Static Stress Change - PyLith</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#brief-introduction">Brief introduction</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#what-is-pylith">What is PyLith?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aim-of-this-module">Aim of this module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-install-pylith">How to install PyLith?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#simple-3d-case-study-nepal">Simple 3D case study - Nepal</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#basic-structure-of-a-configuration-cfg-file">Basic structure of a configuration (.cfg) file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#basic-structure-of-a-spatial-database-spatialdb-file">Basic structure of a spatial database (.spatialdb) file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#running-the-static-simulation">Running the static simulation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#visualizing-results">Visualizing results</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-install-h5py">How to install h5py</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../pylith_dynamic/index.html">Dynamic Rupture Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../body_tomo/index.html">Body Wave Tomography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../surface_tomo/index.html">Surface Wave Tomography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ambient_tomo/index.html">Ambient noise cross correlation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendix</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index.html">Acknowledgement</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://docs.google.com/forms/d/e/1FAIpQLScSQIcOtANjTonJDhK4KYmoA6H2lUHou9Mqz1oFCHSTd5wxhQ/viewform?usp=sf_link">Give us feedback here</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CUSeisTut</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Static Stress Change - PyLith</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/pylith_static/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="static-stress-change-pylith">
+<h1>Static Stress Change - PyLith<a class="headerlink" href="#static-stress-change-pylith" title="Permalink to this headline"></a></h1>
+<section id="brief-introduction">
+<h2>Brief introduction<a class="headerlink" href="#brief-introduction" title="Permalink to this headline"></a></h2>
+<p>Earthquake modeling provides a broad range of possible earthquake scenarios using physics-based models, which is critical for seismic hazard assessment. By incorporating observations and laboratory tests into models, we have better understanding of earthquake behaviors by recreating past earthquakes, and explore the range of potential future earthquakes, thus bridging our knowns and unknowns.</p>
+<section id="what-is-pylith">
+<h3>What is PyLith?<a class="headerlink" href="#what-is-pylith" title="Permalink to this headline"></a></h3>
+<p>PyLith is a finite-element code for quasi-static and dynamic simulations of crustal deformation, primarily earthquakes and volcanoes. Quasi-static problems, also known as implicit problems, solve for the governing equations while neglecting the inertial terms. There are different quasi-static problems related to earthquakes in PyLith, including coseismic stress changes and fault slip, strain accumulation associated with interseismic deformation, and postseismic relaxation of the crust.</p>
+</section>
+<section id="aim-of-this-module">
+<h3>Aim of this module<a class="headerlink" href="#aim-of-this-module" title="Permalink to this headline"></a></h3>
+<p>In this teaching module, we will focus on solving for the stress change corresponding to a fault slip distribution.</p>
+<p><strong>Do you know why an earthquake would happen?</strong>
+When the stresses on a fault plane overcomes the friction, a sudden slip would occur on the fault, releasing energy in waves that travel through the earth’s crust. This is known as an earthquake. Therefore, it is evident that there are stress changes on the fault after an earthquake.</p>
+<p>In other words, given a slip distribution caused by an earthquake, there should be a corresponding stress change. This tutorial considers this as a quasi-static problem and aims to solve this problem through numerical simulation. In PyLith, the problem will be solved when the residual of the governing equation approaches zero.</p>
+<p>In this tutorial, we will demonstrate a simple 3D case study. We will prescribe the heterogeneous slip distribution on the fault and the fault geometry using the mesh shown in the figure below.</p>
+<a class="reference internal image-reference" href="../_images/mesh1.png"><img alt="../_images/mesh1.png" src="../_images/mesh1.png" style="width: 80%;" /></a>
+<p>figure 1. 3D mesh given in this tutorial with dimensions in kilometers</p>
+<p>Then we will run the static simulation to obtain the stress change, so you will learn:</p>
+<div class="line-block">
+<div class="line">1. the input parameters,</div>
+<div class="line">2. initiating a quasi-static simulation,</div>
+<div class="line">3. visualizing the output.</div>
+</div>
+</section>
+<section id="how-to-install-pylith">
+<h3>How to install PyLith?<a class="headerlink" href="#how-to-install-pylith" title="Permalink to this headline"></a></h3>
+<div class="line-block">
+<div class="line">1. Download the PyLith package here <a class="reference external" href="https://drive.google.com/file/d/1jSl5wHFriR4tGKiRK3TYZjsWigyh6TAE/view?usp=sharing">pylith-2.2.2-linux-x86_64.tar.gz</a> , and then move it into your working directory</div>
+</div>
+<div class="line-block">
+<div class="line">2. Open a terminal and run these commands sequentially</div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Exclude $ and start without whitespace!</p>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ tar xvf pylith-2.2.2-linux-x86_64.tar.gz
+$ cd pylith-2.2.2-linux-x86_64/
+$ source setup.sh
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">3. Check if it has been successfully installed</div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pylith
+ &gt;&gt; {default}::
+ -- pyre.inventory(error)
+ -- meshimporter.meshioascii.filename &lt;- &#39;&#39;
+ -- Filename for ASCII input mesh not specified.  To test PyLith, run an example as discussed in the manual.
+ &gt;&gt; {default}::
+ -- pyre.inventory(error)
+ -- timedependent.homogeneous.elasticisotropic3d.label &lt;- &#39;&#39;
+ -- Descriptive label for material not specified.
+ &gt;&gt; {default}::
+ -- pyre.inventory(error)
+ -- timedependent.homogeneous.elasticisotropic3d.simpledb.label &lt;- &#39;&#39;
+ -- Descriptive label for spatial database not specified.
+ &gt;&gt; {default}::
+ -- pyre.inventory(error)
+ -- timedependent.homogeneous.elasticisotropic3d.simpledb.simpleioascii.filename &lt;- &#39;&#39;
+ -- Filename for spatial database not specified.
+pylithapp: configuration error(s)
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="simple-3d-case-study-nepal">
+<h2>Simple 3D case study - Nepal<a class="headerlink" href="#simple-3d-case-study-nepal" title="Permalink to this headline"></a></h2>
+<div class="line-block">
+<div class="line">1. Download the tutorial package <a class="reference download internal" download="" href="../_downloads/2636a535b742ce464297a80d74df833b/pylith_static.tar.gz"><code class="xref download docutils literal notranslate"><span class="pre">pylith_static.tar.gz</span></code></a> and move it to your working directory</div>
+<div class="line">2. Run this command to decompress the package</div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ tar xvf pylith_static.tar.gz
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">3. <code class="docutils literal notranslate"><span class="pre">ls</span></code> different folders in the directory to familiarize yourself with the different files required for a static simulation</div>
+</div>
+<p>For running the static simulation, you will need configuration files (.cfg) that specifies the problem, mesh (.exo) where the simulation takes place, spatial database files (.spatialdb) that describes the variables in space. Here we have two spatial database files - one for the material property, and one for the fault slip distribution. Since the mesh generating softwares are commercial, we will only illustrate the structure and some important parameters of the configuration and spatial database files in the following.</p>
+<section id="basic-structure-of-a-configuration-cfg-file">
+<h3>Basic structure of a configuration (.cfg) file<a class="headerlink" href="#basic-structure-of-a-configuration-cfg-file" title="Permalink to this headline"></a></h3>
+<p>Now, let’s take a took at the <strong>Nepal_kinematic_model.cfg</strong> under the <strong>pylith_static</strong> directory. For a simulation in PyLith, you would need a <strong>configuration file (.cfg)</strong> which specifies the basic parameters of the simulation.</p>
+<div class="line-block">
+<div class="line"><strong>1. Problem</strong></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">[pylithapp.timedependent.formulation.time_step]</span></code> Settings that control the time of the problem. Note that static, quasi-static, and dynamic simulations are also time dependent problems in PyLith.
+<code class="docutils literal notranslate"><span class="pre">total_time</span></code> specifies the total time. We adjust the total simulation time to 0 second because we are running a static simulation.
+<code class="docutils literal notranslate"><span class="pre">dt</span></code> specifies the time step size.</p>
+<p><code class="docutils literal notranslate"><span class="pre">[pylithapp.mesh_generator.reader]</span></code> Settings that control mesh importing.
+<code class="docutils literal notranslate"><span class="pre">filename</span></code> specifies the filename of the mesh.</p>
+<p><code class="docutils literal notranslate"><span class="pre">[pylithapp.timedependent.materials]</span></code> Settings that control the material type.
+<code class="docutils literal notranslate"><span class="pre">db_properties.iohandler.filename</span></code> specifies the name of the spatial database containing the physical properties for the material.
+<code class="docutils literal notranslate"><span class="pre">db_properties.query_type</span></code> specifies the type of search query to perform. This parameter can be set to ‘linear’ or ‘nearest’.</p>
+<div class="line-block">
+<div class="line"><strong>2. Boundary condition</strong></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">[pylithapp.timedependent]</span></code> Settings that control the problem, including the spatial dimension of the mesh.
+<code class="docutils literal notranslate"><span class="pre">bc</span></code> specifies the boundary conditions for different sides of the mesh.
+<code class="docutils literal notranslate"><span class="pre">bc_dof</span></code> specfies which degrees of freedom are being constrained for the boundary conditions. Note that the Degree of freedoms are: x=0, y=1, and z=2. For instance, <code class="docutils literal notranslate"><span class="pre">bc</span> <span class="pre">=</span> <span class="pre">[2]</span></code> refers to fixed displacement in z direction, and <code class="docutils literal notranslate"><span class="pre">bc</span> <span class="pre">=</span> <span class="pre">[0,</span> <span class="pre">1]</span></code> means fixed displacement in x and y-directions.
+<code class="docutils literal notranslate"><span class="pre">label</span></code> specfies the name of the nodeset in ExodusII file from CUBIT/Trelis that defines the boundary.
+<code class="docutils literal notranslate"><span class="pre">db_initial.label</span></code> specfies the label for the spatial database which is required for informative error messages.</p>
+<div class="line-block">
+<div class="line"><strong>3. Faults</strong></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">interfaces</span></code> specifies an array containing the fault interfaces. Here we have one fault interface so we provide an array containing a single interface.</p>
+<p><code class="docutils literal notranslate"><span class="pre">[pylithapp.timedependent.interfaces]</span></code>
+<code class="docutils literal notranslate"><span class="pre">fault</span></code> specifies the type of fault interface condition. For this example we want to prescribe the fault slip, so the interface type is set to <strong>FaultCohesiveKin</strong>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">[pylithapp.timedependent.interfaces.fault]</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">label</span></code> specifies the name of the nodeset in CUBIT/Trelis that defines the fault interface.</p>
+<p><code class="docutils literal notranslate"><span class="pre">edge</span></code> specifies the name of the nodeset in CUBIT/Trelis marking the buried edges of the fault.</p>
+<p><code class="docutils literal notranslate"><span class="pre">quadrature.cell</span></code> specifies the discretization components for fault cells. FIATSimplex deals with simplex finite-element cells, including point, line, triangle, and tetrahedron. We are having triangular cells on our fault interface mesh so FIATSimplex scheme is chosen here.</p>
+<p><code class="docutils literal notranslate"><span class="pre">quadrature.cell.dimension</span></code> specifies the dimension of fault cells. The fault cells are 2D in our case.</p>
+<p><code class="docutils literal notranslate"><span class="pre">[pylithapp.timedependent.interface.fault.eq_scrs.rupture.slip_function]</span></code> Settings for prescribing the coseismic slip distribution on the fault, including the final slip and slip initiation time.</p>
+<p><code class="docutils literal notranslate"><span class="pre">slip.iohandler.filename</span></code> specifies the name of the spatial database containing the coseismic slip distribution.</p>
+<p><code class="docutils literal notranslate"><span class="pre">slip.query_type</span></code> specifies the type of search query to perform. Here we define the slip to be a spatial database with linear interpolation.</p>
+<p><code class="docutils literal notranslate"><span class="pre">slip_time.data</span></code> specifies the slip time within an earthquake rupture relative to the origin time.</p>
+<div class="line-block">
+<div class="line"><strong>4. Output</strong></div>
+</div>
+<p>Settings related to output of the solution over the domain, subdomain (ground surface), and synthetic stations.</p>
+<p><code class="docutils literal notranslate"><span class="pre">output</span></code> specifies the outputs of simulation. Note that the default output is for the entire domain.</p>
+<p><code class="docutils literal notranslate"><span class="pre">output.station</span></code> specifies the type of output for the stations.</p>
+<p><code class="docutils literal notranslate"><span class="pre">[pylithapp.timedependent.formulation.output.domain]</span></code> Settings for domain output.</p>
+<p><code class="docutils literal notranslate"><span class="pre">writer.filename</span></code> specifies the filename of domain output.</p>
+<p><code class="docutils literal notranslate"><span class="pre">[pylithapp.timedependent.formulation.output.station]</span></code> Settings for the station outputs.</p>
+<p><code class="docutils literal notranslate"><span class="pre">reader.filename</span></code> specifies the file with coordinates of stations.</p>
+<p><code class="docutils literal notranslate"><span class="pre">writer.filename</span></code> specifies the filename of station output.</p>
+<p><code class="docutils literal notranslate"><span class="pre">coordsys</span></code> specifies coordinate system used in station file.</p>
+<p>Similar output parameters for the fault and the materials.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<div class="line-block">
+<div class="line">The above only documents the some parameters that we may change specified to our static simulation. Note that under this directory, there is also another configuration file <strong>pylithapp.cfg</strong>. <strong>pylithapp.cfg</strong> is not a self-contained simulation configuration file but it specifies the general parameters common to the simulations under this directory. This file is necessary for running our simulation.</div>
+<div class="line">For more functions and information, please browse through the <a class="reference download internal" download="" href="../_downloads/c67b9dbdf6a39c5971ec0dae6b6bbbfb/pylith-2.2.2_manual.pdf"><code class="xref download docutils literal notranslate"><span class="pre">PyLith</span> <span class="pre">manual</span></code></a>.</div>
+</div>
+</div>
+</section>
+<section id="basic-structure-of-a-spatial-database-spatialdb-file">
+<h3>Basic structure of a spatial database (.spatialdb) file<a class="headerlink" href="#basic-structure-of-a-spatial-database-spatialdb-file" title="Permalink to this headline"></a></h3>
+<p>After knowing what the configuration files do, let’s learn about the spatial database files under the spatialdb directory.</p>
+<div class="line-block">
+<div class="line"><strong>1. Slip_distribution.spatialdb</strong></div>
+</div>
+<p>This spatial database file specifies the distribution of slip on the fault surface. The slip is dependent on the x and y- directions but independent of the depth.</p>
+<p><code class="docutils literal notranslate"><span class="pre">SPATIAL.ascii</span> <span class="pre">1</span></code> the magic header for spatial database files in ASCII format.</p>
+<p><code class="docutils literal notranslate"><span class="pre">SimpleDB</span></code> specifies spatial database files contain a header describing the set of points and then the data with each line listing the
+coordinates of a point followed by the values of the fields for that point.</p>
+<p><code class="docutils literal notranslate"><span class="pre">num-values</span></code> number of values in the database</p>
+<p><code class="docutils literal notranslate"><span class="pre">value-names</span></code> specifies the names and the order of the values as they appear in the data. Note that the names of the values must correspond to the names PyLith requests in querying the database. Here we are having the slip distributions in three different directions - left-lateral (along-strike), reverse (along-dip), and fault-opening (fault-normal).</p>
+<p><code class="docutils literal notranslate"><span class="pre">value-units</span></code> specifies the units of the values in Python syntax (e.g. m, kg/m**3).</p>
+<p><code class="docutils literal notranslate"><span class="pre">num-locs</span></code> specifies the number of locations where values are given.</p>
+<p><code class="docutils literal notranslate"><span class="pre">data-dim</span></code> specifies the locations of data points form a line.</p>
+<p><code class="docutils literal notranslate"><span class="pre">space-dim</span></code> specifies the spatial dimension in which data resides.</p>
+<p><code class="docutils literal notranslate"><span class="pre">cs-data</span></code> specifies the coordinate system associated with the coordinates of the locations where data is given. We are using a Cartesian coordinate system here.</p>
+<p><code class="docutils literal notranslate"><span class="pre">to-meters</span></code> specifies the coordinates in km.</p>
+<p><code class="docutils literal notranslate"><span class="pre">space-dim</span></code> specifies the spatial dimension of the coordinate system. Note that this value must match the one associated with the database.</p>
+<div class="line-block">
+<div class="line"><strong>2. mat_concrust_1D.spatialdb</strong></div>
+</div>
+<p>This spatial database file specifies the material properties. Here we prescribe depth dependent material properties - density, compressional wave velocity vp, and shear wave velocity vs. The parameter setting is basically the same with the spatial database file about slip distribution as illustrated above except <code class="docutils literal notranslate"><span class="pre">value-names</span></code>, <code class="docutils literal notranslate"><span class="pre">value-units</span></code>, and <code class="docutils literal notranslate"><span class="pre">data-dim</span></code> are changed.</p>
+</section>
+<section id="running-the-static-simulation">
+<h3>Running the static simulation<a class="headerlink" href="#running-the-static-simulation" title="Permalink to this headline"></a></h3>
+<p>Now that we have a general picture of the files required for our simulation, let’s run the simulation.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd your_working_directory/pylith_static/
+$ pylith Nepal_kinematic_model.cfg
+</pre></div>
+</div>
+<p>Congrats on running your first simulation!</p>
+</section>
+</section>
+<section id="visualizing-results">
+<h2>Visualizing results<a class="headerlink" href="#visualizing-results" title="Permalink to this headline"></a></h2>
+<p>After finishing the simulation, you should be able to see different output files under the <strong>output</strong> directory. In this tutorial, you will learn how to process the fault output in .h5 format using Python. Hierarchical Data Format (HDF) is a set of file formats (HDF4, HDF5) designed to store and organize large amounts of scientific data. We assume that you already have some experience of using Python.</p>
+<section id="how-to-install-h5py">
+<h3>How to install h5py<a class="headerlink" href="#how-to-install-h5py" title="Permalink to this headline"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ conda create --name pylith
+$ conda activate pylith
+$ conda install h5py
+</pre></div>
+</div>
+<p>Please also make sure your have installed matplotlib in your environment. Now, let’s run the following commands.</p>
+<div class="line-block">
+<div class="line"><strong>1. Import the necessary packages</strong></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">h5py</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><strong>2. Read the .h5 files</strong></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;your_directory/output/Nepal_kinematic_model-fault.h5&#39;</span>
+<span class="n">f</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+<span class="n">fields</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If you check <code class="docutils literal notranslate"><span class="pre">fields</span></code>, you would realize that there are four fields in this file - geometry, time, topology, and vertex_fields. In this tutorial, we will plot results using data from the vertices under <code class="docutils literal notranslate"><span class="pre">geometry</span></code>, and the slip and traction change under <code class="docutils literal notranslate"><span class="pre">vertex_fields</span></code>. For your reference, the figure below illustrates the general layout of a PyLith HDF5 file (extracted from the <a class="reference download internal" download="" href="../_downloads/c67b9dbdf6a39c5971ec0dae6b6bbbfb/pylith-2.2.2_manual.pdf"><code class="xref download docutils literal notranslate"><span class="pre">PyLith</span> <span class="pre">manual</span></code></a>).</p>
+<a class="reference internal image-reference" href="../_images/hdf5_structure1.png"><img alt="../_images/hdf5_structure1.png" src="../_images/hdf5_structure1.png" style="width: 80%;" /></a>
+<p>figure 2. General layout of a PyLith HDF5 file. The orange rectangles with rounded corners identify the groups and the blue
+rectangles with sharp corners identify the datasets. The dimensions of the data sets are shown in parentheses. Most HDF5 files
+will contain either vertex_fields or cell_fields but not both. (Adopted from PyLith Manual)</p>
+<div class="line-block">
+<div class="line"><strong>3. Extract the data</strong></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">slip</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/vertex_fields/slip&#39;</span><span class="p">)</span>
+<span class="n">traction_change</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/vertex_fields/traction_change&#39;</span><span class="p">)</span>
+<span class="n">geometry</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/geometry&#39;</span><span class="p">)</span>
+<span class="n">geometry_vertices</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/geometry/vertices&#39;</span><span class="p">)</span>
+
+<span class="n">x_vertex</span> <span class="o">=</span> <span class="n">geometry_vertices</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mi">1000</span>   <span class="c1"># along dip distance in km</span>
+<span class="n">y_vertex</span> <span class="o">=</span> <span class="n">geometry_vertices</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="mi">1000</span>   <span class="c1"># along strike distance in km</span>
+<span class="n">dip_slip</span> <span class="o">=</span> <span class="n">slip</span><span class="p">[:,:,</span><span class="mi">1</span><span class="p">]</span>            <span class="c1"># updip slip in m</span>
+<span class="n">lateral_slip</span> <span class="o">=</span> <span class="n">slip</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">]</span>            <span class="c1"># left lateral slip in m</span>
+<span class="n">dip_traction</span> <span class="o">=</span> <span class="n">traction_change</span><span class="p">[:,:,</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="mi">10</span><span class="o">**</span><span class="mi">6</span>    <span class="c1"># updip traction in MPa</span>
+<span class="n">lateral_traction</span> <span class="o">=</span> <span class="n">traction_change</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mi">10</span><span class="o">**</span><span class="mi">6</span>    <span class="c1"># left lateral traction in MPa</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><strong>4. Plot the slip distribution and traction change</strong></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">14</span><span class="p">))</span>
+<span class="n">size</span> <span class="o">=</span> <span class="mi">13</span>
+
+<span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">221</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+<span class="n">scat</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_vertex</span><span class="p">,</span><span class="n">y_vertex</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">size</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="n">dip_slip</span><span class="p">,</span><span class="n">cmap</span> <span class="o">=</span> <span class="s1">&#39;jet&#39;</span><span class="p">,</span> <span class="n">vmin</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">=</span> <span class="mf">5.5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Updip slip&#39;</span><span class="p">,</span><span class="n">size</span> <span class="o">=</span> <span class="mi">14</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;along-dip (km)&#39;</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">12</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;along-strike (km)&#39;</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">12</span><span class="p">)</span>
+<span class="n">cbar</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">scat</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">)</span>
+<span class="n">cbar</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelsize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s1">&#39;right&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s1">&#39;top&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">222</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+<span class="n">scat</span> <span class="o">=</span> <span class="n">ax2</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_vertex</span><span class="p">,</span><span class="n">y_vertex</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">size</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="n">dip_traction</span><span class="p">,</span><span class="n">cmap</span> <span class="o">=</span> <span class="s1">&#39;seismic&#39;</span><span class="p">,</span> <span class="n">vmin</span> <span class="o">=</span> <span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Updip traction change&#39;</span><span class="p">,</span><span class="n">size</span> <span class="o">=</span> <span class="mi">14</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;along-dip (km)&#39;</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">12</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;along-strike (km)&#39;</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">12</span><span class="p">)</span>
+<span class="n">cbar</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">scat</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">)</span>
+<span class="n">cbar</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelsize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s1">&#39;right&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s1">&#39;top&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">ax3</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">223</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+<span class="n">reversed_map</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s1">&#39;jet&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">reversed</span><span class="p">()</span>
+<span class="n">scat</span> <span class="o">=</span> <span class="n">ax3</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_vertex</span><span class="p">,</span><span class="n">y_vertex</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">size</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="n">lateral_slip</span><span class="p">,</span><span class="n">cmap</span> <span class="o">=</span> <span class="n">reversed_map</span><span class="p">,</span> <span class="n">vmin</span> <span class="o">=</span> <span class="o">-</span><span class="mf">5.5</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Left lateral slip&#39;</span><span class="p">,</span><span class="n">size</span> <span class="o">=</span> <span class="mi">14</span><span class="p">)</span>
+<span class="n">ax3</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;along-dip (km)&#39;</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">12</span><span class="p">)</span>
+<span class="n">ax3</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;along-strike (km)&#39;</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">12</span><span class="p">)</span>
+<span class="n">cbar</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">scat</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax3</span><span class="p">)</span>
+<span class="n">cbar</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelsize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">ax3</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s1">&#39;right&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">ax3</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s1">&#39;top&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="c1">#plt.ylim([-10, 210])</span>
+
+<span class="n">ax4</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">224</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+<span class="n">scat</span> <span class="o">=</span> <span class="n">ax4</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_vertex</span><span class="p">,</span><span class="n">y_vertex</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">size</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="n">lateral_traction</span><span class="p">,</span><span class="n">cmap</span> <span class="o">=</span> <span class="s1">&#39;seismic&#39;</span><span class="p">,</span> <span class="n">vmin</span> <span class="o">=</span> <span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Left lateral traction change&#39;</span><span class="p">,</span><span class="n">size</span> <span class="o">=</span> <span class="mi">14</span><span class="p">)</span>
+<span class="n">ax4</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;along-dip (km)&#39;</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">12</span><span class="p">)</span>
+<span class="n">ax4</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;along-strike (km)&#39;</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">12</span><span class="p">)</span>
+<span class="n">cbar</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">scat</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax4</span><span class="p">)</span>
+<span class="n">cbar</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelsize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">ax4</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s1">&#39;right&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">ax4</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s1">&#39;top&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>You should be able to generate the following plot.</p>
+<a class="reference internal image-reference" href="../_images/static_results.png"><img alt="../_images/static_results.png" src="../_images/static_results.png" style="width: 80%;" /></a>
+<p>figure 3. A plot of the prescribed slip distributions and their corresponding stress changes</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../source_spectra/index.html" class="btn btn-neutral float-left" title="Spectral Analysis" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../pylith_dynamic/index.html" class="btn btn-neutral float-right" title="Dynamic Rupture Simulation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021-2022, CUSeisTut team.
+      <span class="lastupdated">Last updated on 2022-04-27.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(false);
+      });
+  </script> 
+
+</body>
+</html>
