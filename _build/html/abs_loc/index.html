@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Earthquake Absolute Location &mdash; CUSeisTut</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -77,9 +76,9 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#iterative-method">Iterative Method</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#give-an-initial-source-parameters">1. Give an initial source parameters</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#calculate-the-arrival-times-base-on-input-location">2. Calculate the arrival times base on input location</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#calculate-the-arrival-times-based-on-input-location">2. Calculate the arrival times based on input location</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#measure-the-misfit-between-the-d-obs-and-the-d-cal">3. Measure the misfit between the <span class="math notranslate nohighlight">\(d_{obs}\)</span> and the <span class="math notranslate nohighlight">\(d_{cal}\)</span></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#calculate-paritial-derivatives">4. Calculate Paritial Derivatives</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#calculate-partial-derivatives">4. Calculate Partial Derivatives</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#estimation-of-delta-m-generalized-inversion-problem">5. Estimation of <span class="math notranslate nohighlight">\(\Delta m\)</span>, generalized inversion problem</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#update-hypocenter">6. Update hypocenter</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#start-new-iteration">7. Start new iteration</a></li>
@@ -150,33 +149,34 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="earthquake-absolute-location">
+  <div class="section" id="earthquake-absolute-location">
 <h1>Earthquake Absolute Location<a class="headerlink" href="#earthquake-absolute-location" title="Permalink to this headline"></a></h1>
-<section id="introduction">
+<div class="section" id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline"></a></h2>
-<p>Earthquake detection find the P&amp;S arrival time on different stations. The further step is to find the earthquake location (<strong>x,y,z</strong>) and origin time (<strong>t</strong>). A direct idea is to set up equations and solve for the parameters. However, general solution fits all the equations rarely exist in practice. Another method is the grid search method, the possible space is split into 3D grids, the misfit of each grid as the earthquake source is calculated, the grid where the event occurred should have the minimum misfit. The grid search method needs consider the trade-off below the location resolution and calculation efficiency. To achieve high resolution, the single grid should be divided into smaller size, while the total grids quantity increased dramatically, users have to spend more time in calculation.</p>
-<p>In this session, we introduce the most commonly used iterative earthquake abosolute location method, which could achieve high-resolution earthquake location with limited calculation. We start from simple one-layer model for practice and then run into detailed data processing using the <code class="docutils literal notranslate"><span class="pre">HYPOINVERSE</span></code> program.</p>
-<section id="theory-background">
+<p>The earthquake detection process finds the arrival times of P&amp;S wave on different stations for each event. The next step is to get the earthquake location (<strong>longitude(x),latitude(y),depth(z)</strong>) and origin time (<strong>t</strong>). A direct idea is to set up equations based on the relationship between distance, velocity, and travel time. However, due to complexities in real geophysical setting, a solution that fits all equations rarely exists.</p>
+<p>The most widely used methods are based on least-square algorithm. That is, the place that has the minimum misfit with observations is accepted as the earthquake location. One least-square method is the grid search method. In this method, the possible space is splited into 3D grids, and then the misfit of each grid as the earthquake location is calculated one by one. The earthquake is then considered to be occurred inside the grid with minimum misfit. The grid size controls the earthquake location resolution, a larger grid size will lead to large uncertainty. However, a smaller grid size will lead to heavy calculation load due to dramtically increased grid quantity. Therefore, there is a trade-off between resolution and calculation efficiency in this method.</p>
+<p>Another least-square earthquake location method is the iterative absolute earthquake location method, which can achieve high-resolution location with ideal calculation efficiency and is widely used. In this session, we introduce the details of this method. We start from simple one-layer model for practice and then run into real data processing using the popular <code class="docutils literal notranslate"><span class="pre">HYPOINVERSE</span></code> program, which is developed based on the iterative absolute earthquake location method.</p>
+<div class="section" id="theory-background">
 <h3>Theory Background<a class="headerlink" href="#theory-background" title="Permalink to this headline"></a></h3>
 <img alt="../_images/Ray_textbook.jpg" src="../_images/Ray_textbook.jpg" />
-<p>The arrival time recorded by one station could be presented:</p>
+<p>The arrival time recorded by one station could be presented as:</p>
 <div class="math notranslate nohighlight">
-\[T_i^k = O_k+\int_{s}^{r}uds\]</div>
-<p>where <span class="math notranslate nohighlight">\(T_i^k\)</span> is the arrival time of event k on station i. In the right side of equation, there are two components: 1) The origin time of event k <span class="math notranslate nohighlight">\(O_k\)</span>; 2) The event travel time. It is the integral over the ray path. The s denotes the source location, r represents the receiver (station) location, u is the reciprocal of velocity named slowness.</p>
+\[T_i^k = O_k+\int_{s}^{r}udS\]</div>
+<p>where <span class="math notranslate nohighlight">\(T_i^k\)</span> is the arrival time of event <span class="math notranslate nohighlight">\(k\)</span> on station <span class="math notranslate nohighlight">\(i\)</span>. In the right side of equation, there are two components: 1) The origin time of event <span class="math notranslate nohighlight">\(k\)</span> <span class="math notranslate nohighlight">\(O_k\)</span>; 2) The event travel time. It is the integral over the ray path. The <span class="math notranslate nohighlight">\(s\)</span> denotes the source location, <span class="math notranslate nohighlight">\(r\)</span> represents the receiver (station) location, <span class="math notranslate nohighlight">\(u\)</span> is the reciprocal of velocity named slowness.</p>
 <p>Assume the event with true source parameters <span class="math notranslate nohighlight">\(\mathbf{m_{true}}=(x_{true},y_{true},z_{true},o_{true})^T\)</span> is recorded by <span class="math notranslate nohighlight">\(n\)</span> stations,
-we use <span class="math notranslate nohighlight">\(\mathbf{d_obs}\)</span> to denote the arrival time of each station, then <span class="math notranslate nohighlight">\(\mathbf{m_{true}}\)</span> should satisfy:</p>
+we use <span class="math notranslate nohighlight">\(\mathbf{d_obs}\)</span> to denote the arrival times of stations, then <span class="math notranslate nohighlight">\(\mathbf{m_{true}}\)</span> should satisfy:</p>
 <div class="math notranslate nohighlight">
 \[\mathbf{Fm_{true}=d_obs}\]</div>
-<p>The relationship between <span class="math notranslate nohighlight">\(\mathbf{m}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{d}\)</span> is non-linear because integral is involved as show in previous equation.
-For earthquake parameters that are close to <span class="math notranslate nohighlight">\(\mathbf{m_{true}}\)</span>, we present it as <span class="math notranslate nohighlight">\(\mathbf{m=m_{true}+\Delta{m}}\)</span>, the <span class="math notranslate nohighlight">\(\mathbf{\Delta m}\)</span> will lead to variation in <span class="math notranslate nohighlight">\(\mathbf{d_{obs}+\Delta d}\)</span></p>
+<p>The relationship between <span class="math notranslate nohighlight">\(\mathbf{m}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{d}\)</span> is non-linear because integral is involved as shown in previous equation.
+For earthquake parameters that are close to <span class="math notranslate nohighlight">\(\mathbf{m_{true}}\)</span>, we present them as <span class="math notranslate nohighlight">\(\mathbf{m=m_{true}+\Delta{m}}\)</span>, the <span class="math notranslate nohighlight">\(\mathbf{\Delta m}\)</span> will lead to variation in <span class="math notranslate nohighlight">\(\mathbf{d_{obs}+\Delta d}\)</span></p>
 <p>According to <a class="reference external" href="https://en.wikipedia.org/wiki/Taylor_series">Taylor Expansion theorem</a>, we have:</p>
 <div class="math notranslate nohighlight">
 \[\mathbf{F(m+\Delta m) = Fm + F'\Delta m + ...,}\]</div>
 <p>Neglect the items after the first-order partial derivative, we then have <span class="math notranslate nohighlight">\(\mathbf{\Delta d = F'\Delta m}\)</span>.</p>
-<p>Give the initial location and origin time <span class="math notranslate nohighlight">\(\mathbf{m_0}=(x_0,y_0,z_0,t_0)\)</span>, we can calculate the corresponding arrival time on each station <span class="math notranslate nohighlight">\(\mathbf{d_cal}\)</span> and the <span class="math notranslate nohighlight">\(\mathbf{\Delta d}\)</span>.
-Using the <span class="math notranslate nohighlight">\(\mathbf{\Delta d}\)</span> we can estimate the <span class="math notranslate nohighlight">\(\mathbf{\Delta m}\)</span>. By update the <span class="math notranslate nohighlight">\(\mathbf{\Delta m}\)</span>, an absolute location of hypocenter can be derived.</p>
-</section>
-<section id="contents-of-this-tutorial">
+<p>Given the initial location and origin time <span class="math notranslate nohighlight">\(\mathbf{m_0}=(x_0,y_0,z_0,t_0)\)</span>, we can calculate the corresponding arrival time at each station <span class="math notranslate nohighlight">\(\mathbf{d_cal}\)</span> and the <span class="math notranslate nohighlight">\(\mathbf{\Delta d}\)</span>.
+Using the <span class="math notranslate nohighlight">\(\mathbf{\Delta d}\)</span> we can estimate the <span class="math notranslate nohighlight">\(\mathbf{\Delta m}\)</span>. By updating the <span class="math notranslate nohighlight">\(\mathbf{\Delta m}\)</span>, an absolute location of hypocenter can be derived.</p>
+</div>
+<div class="section" id="contents-of-this-tutorial">
 <h3>Contents of this tutorial<a class="headerlink" href="#contents-of-this-tutorial" title="Permalink to this headline"></a></h3>
 <p>We will introduce how to derive and analyze absolute locations of hypocenters in pyhon which has been devided into listed parts:</p>
 <ol class="arabic simple">
@@ -184,11 +184,11 @@ Using the <span class="math notranslate nohighlight">\(\mathbf{\Delta d}\)</span
 <li><p>Iteration method</p></li>
 <li><p>Error analyze</p></li>
 </ol>
-<p><strong>Authors</strong>: ZI Jinping &amp; SONG Zilin, Earth Science Sytem Program, CUHK.</p>
-<p><strong>Testers</strong>: XIA Zhuoxuan, SUN Zhangyu, Earth Science Sytem Program, CUHK.</p>
-</section>
-</section>
-<section id="python-environment-and-model-setup">
+<p><strong>Authors</strong>: ZI Jinping &amp; SONG Zilin, Earth Science System Program, CUHK.</p>
+<p><strong>Testers</strong>: XIA Zhuoxuan &amp; SUN Zhangyu, Earth Science System Program, CUHK.</p>
+</div>
+</div>
+<div class="section" id="python-environment-and-model-setup">
 <h2>Python Environment and model Setup<a class="headerlink" href="#python-environment-and-model-setup" title="Permalink to this headline"></a></h2>
 <p>We’ll first generate synthetic arrival times on stations from one earthquake location, which is called <strong>Forward Modelling</strong>. We’ll then try to re-generate hypocentral location using these known station arrival times, which is called <strong>Inversion</strong>. In this tutorial, we use one-layer model to avoid complicated ray-tracing (<code class="docutils literal notranslate"><span class="pre">Snell's</span> <span class="pre">law</span></code>)</p>
 <div class="admonition note">
@@ -197,7 +197,7 @@ Using the <span class="math notranslate nohighlight">\(\mathbf{\Delta d}\)</span
 <div class="line">The purpose is that, by comparing the difference between <strong>inverted location</strong> and <strong>true location</strong>, we can: 1. see whether the location process runs properly; 2. conduct error analysis.</div>
 </div>
 </div>
-<section id="python-environment">
+<div class="section" id="python-environment">
 <h3>Python environment<a class="headerlink" href="#python-environment" title="Permalink to this headline"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -209,7 +209,7 @@ Using the <span class="math notranslate nohighlight">\(\mathbf{\Delta d}\)</span
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <div class="line-block">
-<div class="line">Functions below is important to be defined at first.</div>
+<div class="line">Define functions that will be used later.</div>
 </div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">iter_loc</span><span class="p">(</span><span class="n">hyc_loop</span><span class="p">,</span><span class="n">stas</span><span class="p">,</span><span class="n">dobs</span><span class="p">,</span><span class="n">V</span><span class="p">,</span><span class="n">niter</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
@@ -406,8 +406,8 @@ Using the <span class="math notranslate nohighlight">\(\mathbf{\Delta d}\)</span
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-</section>
-<section id="model-setup">
+</div>
+<div class="section" id="model-setup">
 <h3>Model setup<a class="headerlink" href="#model-setup" title="Permalink to this headline"></a></h3>
 <p>Define basic parameters:</p>
 <ol class="arabic simple">
@@ -452,19 +452,19 @@ Using the <span class="math notranslate nohighlight">\(\mathbf{\Delta d}\)</span
 <span class="n">nobs</span> <span class="o">=</span> <span class="n">dobs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
 </div>
-</section>
-</section>
-<section id="the-grid-search-method">
+</div>
+</div>
+<div class="section" id="the-grid-search-method">
 <h2>The Grid-Search Method<a class="headerlink" href="#the-grid-search-method" title="Permalink to this headline"></a></h2>
-<p>The grid search method separate the possible earthquake location zone into 3-D grids, try each grid as earthquake center and calculate the residual. The grid where earthquake located should be lowest residual.</p>
-<section id="set-up-grids">
+<p>The grid search method separates the possible earthquake location zone into 3-D grids, trying each grid as earthquake center and calculating the residual. The grid where earthquake is located should has the lowest residual.</p>
+<div class="section" id="set-up-grids">
 <h3>1. Set up grids<a class="headerlink" href="#set-up-grids" title="Permalink to this headline"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dx</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="n">dy</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="n">dz</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="n">xs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">40</span><span class="p">,</span><span class="mi">41</span><span class="p">,</span><span class="n">dx</span><span class="p">)</span>
 <span class="n">ys</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">40</span><span class="p">,</span><span class="mi">41</span><span class="p">,</span><span class="n">dy</span><span class="p">)</span>
-<span class="n">zs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">21</span><span class="p">,</span><span class="n">dz</span><span class="p">)</span>
+<span class="n">zs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="n">dz</span><span class="p">)</span>
 <span class="n">nx</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span>
 <span class="n">ny</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ys</span><span class="p">)</span>
 <span class="n">nz</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">zs</span><span class="p">)</span>
@@ -481,13 +481,13 @@ Using the <span class="math notranslate nohighlight">\(\mathbf{\Delta d}\)</span
 <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;X (km)&quot;</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Y (km)&quot;</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="s2">&quot;Dep (km)&quot;</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_zlim</span><span class="p">([</span><span class="mi">21</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_zlim</span><span class="p">([</span><span class="mi">20</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 <img alt="../_images/output_13_1.png" src="../_images/output_13_1.png" />
-</section>
-<section id="try-each-grid-and-calculate-error">
+</div>
+<div class="section" id="try-each-grid-and-calculate-error">
 <h3>2. Try each grid and calculate error<a class="headerlink" href="#try-each-grid-and-calculate-error" title="Permalink to this headline"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">V</span> <span class="o">=</span> <span class="n">Vp</span>
 <span class="n">sq_errs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nx</span><span class="p">,</span><span class="n">ny</span><span class="p">,</span><span class="n">nz</span><span class="p">))</span>
@@ -509,8 +509,8 @@ Using the <span class="math notranslate nohighlight">\(\mathbf{\Delta d}\)</span
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Time for location process: &quot;</span><span class="p">,</span><span class="nb">format</span><span class="p">(</span><span class="n">tb</span><span class="o">-</span><span class="n">ta</span><span class="p">,</span><span class="s1">&#39;.3f&#39;</span><span class="p">),</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-</section>
-<section id="find-the-minimum-misfit-grid">
+</div>
+<div class="section" id="find-the-minimum-misfit-grid">
 <h3>3. Find the minimum misfit grid<a class="headerlink" href="#find-the-minimum-misfit-grid" title="Permalink to this headline"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sq_err_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">sq_errs</span><span class="p">)</span>              <span class="c1"># Get the min value</span>
 <span class="n">sq_err_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">sq_errs</span><span class="p">)</span>
@@ -530,11 +530,13 @@ Using the <span class="math notranslate nohighlight">\(\mathbf{\Delta d}\)</span
 <span class="k">else</span><span class="p">:</span>
     <span class="n">nrow</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">nz</span><span class="o">/</span><span class="n">ncol</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span>
 <span class="n">xs_mesh</span><span class="p">,</span><span class="n">ys_mesh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span><span class="n">ys</span><span class="p">)</span>
-<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrow</span><span class="p">,</span><span class="n">ncol</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">ncol</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">nrow</span><span class="p">),</span><span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrow</span><span class="p">,</span><span class="n">ncol</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">2.5</span><span class="o">*</span><span class="n">ncol</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">nrow</span><span class="p">),</span><span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">axs</span> <span class="o">=</span> <span class="n">axs</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nz</span><span class="p">):</span>
     <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">xs_mesh</span><span class="p">,</span><span class="n">ys_mesh</span><span class="p">,</span><span class="n">sq_errs</span><span class="p">[:,:,</span><span class="n">i</span><span class="p">],</span>
                   <span class="n">shading</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span><span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">,</span><span class="n">vmin</span><span class="o">=</span><span class="n">sq_err_min</span><span class="p">,</span><span class="n">vmax</span><span class="o">=</span><span class="n">sq_err_max</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>        <span class="c1"># set current active axis</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">pm</span><span class="p">)</span>
     <span class="n">tmp_sq_err_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">sq_errs</span><span class="p">[:,:,</span><span class="n">i</span><span class="p">])</span>
     <span class="n">_tmp_sq_err_min</span> <span class="o">=</span> <span class="nb">format</span><span class="p">(</span><span class="n">tmp_sq_err_min</span><span class="p">,</span><span class="s1">&#39;6.3f&#39;</span><span class="p">)</span>
     <span class="n">tmp_kk</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">sq_errs</span><span class="p">[:,:,</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="n">tmp_sq_err_min</span><span class="p">)</span>
@@ -577,15 +579,15 @@ Using the <span class="math notranslate nohighlight">\(\mathbf{\Delta d}\)</span
 </pre></div>
 </div>
 <img alt="../_images/output_18_1.png" src="../_images/output_18_1.png" />
-</section>
-<section id="exercise">
+</div>
+<div class="section" id="exercise">
 <h3>Exercise<a class="headerlink" href="#exercise" title="Permalink to this headline"></a></h3>
 <p>Modify V=4.9 and redo the grid search, what do you find?</p>
-</section>
-</section>
-<section id="iterative-method">
+</div>
+</div>
+<div class="section" id="iterative-method">
 <h2>Iterative Method<a class="headerlink" href="#iterative-method" title="Permalink to this headline"></a></h2>
-<p>The arrival time recorded by one station could be presented:</p>
+<p>The arrival time recorded by one station could be presented as:</p>
 <div class="math notranslate nohighlight">
 \[T_i^k = O_k+\int_{s}^{r}uds\]</div>
 <p>where <span class="math notranslate nohighlight">\(T_i^k\)</span> is the arrival time of event k on station i, <em>s</em> is source, <em>r</em> is receiver, <em>u</em> is slowness. In the right side of equation, there are two components:</p>
@@ -603,8 +605,8 @@ Using the <span class="math notranslate nohighlight">\(\mathbf{\Delta d}\)</span
 \[\mathbf{F(m+\Delta m) = Fm + \frac{\partial F}{\partial m}\Delta m + ...,}\]</div>
 <p>where <span class="math notranslate nohighlight">\(\mathbf{m} = (x,y,z,t)\)</span>. Ingoring high-order component:</p>
 <div class="math notranslate nohighlight">
-\[\mathbf{\Delta d = F'\Delta m}\]</div>
-<p>It means the misfit of data is related to the misfit of earthquake location, the relationship is <span class="math notranslate nohighlight">\(\mathbf{F'}\)</span></p>
+\[\mathbf{\Delta d = \frac{\partial F}{\partial m}\Delta m}\]</div>
+<p>It means the misfit of data is related to the misfit of earthquake location, the relationship is presented as:</p>
 <div class="math notranslate nohighlight">
 \[F_i^k = T_i^k = O_k+\int_{s}^{r}uds\]</div>
 <div class="math notranslate nohighlight">
@@ -616,12 +618,23 @@ Using the <span class="math notranslate nohighlight">\(\mathbf{\Delta d}\)</span
 <p>More in detail:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\begin{cases}
-\frac{\partial T}{\partial x}=dx/ds\times u\\
-\frac{\partial T}{\partial y}=dy/ds\times u\\
-\frac{\partial T}{\partial z}=dz/ds\times u\\
+\frac{\partial T}{\partial x}=dx/ds\cdot u\\
+\frac{\partial T}{\partial y}=dy/ds\cdot u\\
+\frac{\partial T}{\partial z}=dz/ds\cdot u\\
 \frac{\partial T}{\partial t}=1
 \end{cases}\end{split}\]</div>
 <p>where <span class="math notranslate nohighlight">\(ds=\sqrt{(dx)^2+(dy)^2+(dz)^2}\)</span></p>
+<p>For one-layer model, <span class="math notranslate nohighlight">\(T_i^k=o_t +\sqrt{x^2+y^2+z^2}/v\)</span>, where
+<span class="math notranslate nohighlight">\(x,y,z\)</span> denotes distance between the source (earthquake location)
+and receiver(station), <span class="math notranslate nohighlight">\(v\)</span> is velocity. Partial derivatives of one-layer model are:</p>
+<div class="math notranslate nohighlight">
+\[\frac{\partial T_i^k}{\partial x} = \frac{x}{\sqrt{x^2+y^2+z^2}v}\]</div>
+<div class="math notranslate nohighlight">
+\[\frac{\partial T_i^k}{\partial y} = \frac{y}{\sqrt{x^2+y^2+z^2}v}\]</div>
+<div class="math notranslate nohighlight">
+\[\frac{\partial T_i^k}{\partial y} = \frac{z}{\sqrt{x^2+y^2+z^2}v}\]</div>
+<div class="math notranslate nohighlight">
+\[\frac{\partial T_i^k}{\partial o_t} = 1\]</div>
 <div class="math notranslate nohighlight">
 \[\begin{split}\begin{bmatrix}
 \frac{\partial T_1}{\partial x}&amp;\frac{\partial T_1}{\partial y}&amp;\frac{\partial T_1}{\partial z}&amp;1\\
@@ -638,13 +651,13 @@ d_1^{obs} - d_1^{cal}\\d_2^{obs} - d_2^{cal}\\\vdots\\d_i^{obs} - d_i^{cal}\\
 <p>After solve this equation, we can update the earthquake location:</p>
 <div class="math notranslate nohighlight">
 \[\mathbf{m=m+\Delta m}\]</div>
-<p>This process generally will not finished in one iteration, more iterations are needed to update the locations until misfit doesn’t decrease any more.</p>
+<p>This process generally will not finish in one iteration, more iterations are needed to update the locations until no apparent change of misfit.</p>
 <a class="reference internal image-reference" href="../_images/Earthquake_location_workflow.jpg"><img alt="../_images/Earthquake_location_workflow.jpg" src="../_images/Earthquake_location_workflow.jpg" style="width: 50%;" /></a>
-<section id="give-an-initial-source-parameters">
+<div class="section" id="give-an-initial-source-parameters">
 <h3>1. Give an initial source parameters<a class="headerlink" href="#give-an-initial-source-parameters" title="Permalink to this headline"></a></h3>
-<p>The station which records arrival earliest is cloest to the hypocenter, so it is reasonable to start initial location:</p>
+<p>The station which records the earliest arrival is the cloest to the hypocenter, so it is reasonable to be set as initial location:</p>
 <ol class="arabic simple">
-<li><p>The same x and y with the cloest station;</p></li>
+<li><p>The same x and y with the closest station;</p></li>
 <li><p>Initial depth at 5 km;</p></li>
 <li><p>Initial origin time 1 sec before the earliest arrival;</p></li>
 </ol>
@@ -658,9 +671,9 @@ d_1^{obs} - d_1^{cal}\\d_2^{obs} - d_2^{cal}\\\vdots\\d_i^{obs} - d_i^{cal}\\
 <span class="n">hyc_loop</span> <span class="o">=</span> <span class="n">hyc_init</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 </pre></div>
 </div>
-</section>
-<section id="calculate-the-arrival-times-base-on-input-location">
-<h3>2. Calculate the arrival times base on input location<a class="headerlink" href="#calculate-the-arrival-times-base-on-input-location" title="Permalink to this headline"></a></h3>
+</div>
+<div class="section" id="calculate-the-arrival-times-based-on-input-location">
+<h3>2. Calculate the arrival times based on input location<a class="headerlink" href="#calculate-the-arrival-times-based-on-input-location" title="Permalink to this headline"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dcal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nsta</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dobs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
     <span class="n">dx</span> <span class="o">=</span> <span class="n">stas</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">hyc_loop</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -669,8 +682,8 @@ d_1^{obs} - d_1^{cal}\\d_2^{obs} - d_2^{cal}\\\vdots\\d_i^{obs} - d_i^{cal}\\
     <span class="n">dcal</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dx</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">dy</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">dz</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="n">Vp</span><span class="o">+</span><span class="n">hyc_loop</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
 </pre></div>
 </div>
-</section>
-<section id="measure-the-misfit-between-the-d-obs-and-the-d-cal">
+</div>
+<div class="section" id="measure-the-misfit-between-the-d-obs-and-the-d-cal">
 <h3>3. Measure the misfit between the <span class="math notranslate nohighlight">\(d_{obs}\)</span> and the <span class="math notranslate nohighlight">\(d_{cal}\)</span><a class="headerlink" href="#measure-the-misfit-between-the-d-obs-and-the-d-cal" title="Permalink to this headline"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">delta_d</span> <span class="o">=</span> <span class="n">dobs</span> <span class="o">-</span> <span class="n">dcal</span>
 <span class="n">e2</span> <span class="o">=</span> <span class="mi">0</span>
@@ -682,25 +695,9 @@ d_1^{obs} - d_1^{cal}\\d_2^{obs} - d_2^{cal}\\\vdots\\d_i^{obs} - d_i^{cal}\\
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">The</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>  <span class="mf">49.466691</span>
 </pre></div>
 </div>
-</section>
-<section id="calculate-paritial-derivatives">
-<h3>4. Calculate Paritial Derivatives<a class="headerlink" href="#calculate-paritial-derivatives" title="Permalink to this headline"></a></h3>
-<div class="math notranslate nohighlight">
-\[T_i^k=o_t +\int_{src}^{rcv}uds\]</div>
-<p>where <span class="math notranslate nohighlight">\(T_i^k\)</span> is the arrrival time, <span class="math notranslate nohighlight">\(o_t\)</span> is the origin
-time. The integral part accounts for time of ray propagation, <span class="math notranslate nohighlight">\(u\)</span>
-is the slowness.</p>
-<p>For one-layer model, <span class="math notranslate nohighlight">\(T_i^k=o_t +\sqrt{x^2+y^2+z^2}/v\)</span>, where
-<span class="math notranslate nohighlight">\(x,y,z\)</span> denotes distance between the source (earthquake location)
-and receiver(station), <span class="math notranslate nohighlight">\(v\)</span> is velocity. Partial derivatives of one-layer model are:</p>
-<div class="math notranslate nohighlight">
-\[\frac{\partial T_i^k}{\partial x} = \frac{x}{\sqrt{x^2+y^2+z^2}v}\]</div>
-<div class="math notranslate nohighlight">
-\[\frac{\partial T_i^k}{\partial y} = \frac{y}{\sqrt{x^2+y^2+z^2}v}\]</div>
-<div class="math notranslate nohighlight">
-\[\frac{\partial T_i^k}{\partial y} = \frac{z}{\sqrt{x^2+y^2+z^2}v}\]</div>
-<div class="math notranslate nohighlight">
-\[\frac{\partial T_i^k}{\partial o_t} = 1\]</div>
+</div>
+<div class="section" id="calculate-partial-derivatives">
+<h3>4. Calculate Partial Derivatives<a class="headerlink" href="#calculate-partial-derivatives" title="Permalink to this headline"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">G</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nsta</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nsta</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
@@ -709,14 +706,14 @@ and receiver(station), <span class="math notranslate nohighlight">\(v\)</span> i
 <span class="n">G</span><span class="p">[:,</span><span class="mi">3</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span>
 </pre></div>
 </div>
-</section>
-<section id="estimation-of-delta-m-generalized-inversion-problem">
+</div>
+<div class="section" id="estimation-of-delta-m-generalized-inversion-problem">
 <h3>5. Estimation of <span class="math notranslate nohighlight">\(\Delta m\)</span>, generalized inversion problem<a class="headerlink" href="#estimation-of-delta-m-generalized-inversion-problem" title="Permalink to this headline"></a></h3>
 <p>Define <span class="math notranslate nohighlight">\(\Delta m = (\Delta x, \Delta y, \Delta z,\Delta t)\)</span>, the
 relationship between <span class="math notranslate nohighlight">\(\Delta m\)</span> and <span class="math notranslate nohighlight">\(\Delta d\)</span> is:</p>
 <div class="math notranslate nohighlight">
 \[G\Delta m =\Delta d\]</div>
-<p><span class="math notranslate nohighlight">\(G\)</span> is not a square matrix, <span class="math notranslate nohighlight">\(G^TG\)</span> is a squared matrix, we
+<p><span class="math notranslate nohighlight">\(G\)</span> is not a square matrix, <span class="math notranslate nohighlight">\(G^TG\)</span> is a square matrix, we
 then have:</p>
 <div class="math notranslate nohighlight">
 \[G^TG\Delta m=G^T\Delta d\]</div>
@@ -738,8 +735,8 @@ have 10 observations to solve for 4 parameters), then:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">delta</span> <span class="n">m</span><span class="p">:</span>  <span class="p">[</span> <span class="mf">1.27106047</span> <span class="mf">10.82922813</span>  <span class="mf">9.25013738</span> <span class="o">-</span><span class="mf">1.91360853</span><span class="p">]</span>
 </pre></div>
 </div>
-</section>
-<section id="update-hypocenter">
+</div>
+<div class="section" id="update-hypocenter">
 <h3>6. Update hypocenter<a class="headerlink" href="#update-hypocenter" title="Permalink to this headline"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hyc_loop</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">hyc_loop</span><span class="p">,</span><span class="n">delta_m</span><span class="o">.</span><span class="n">ravel</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;After this run, results (x,y,z,t) are:&quot;</span><span class="p">,</span><span class="n">hyc_loop</span><span class="p">)</span>
@@ -750,12 +747,12 @@ have 10 observations to solve for 4 parameters), then:</p>
 <span class="kc">True</span> <span class="n">location</span> <span class="n">parameters</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">,</span><span class="n">t</span><span class="p">)</span> <span class="n">are</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.5</span>  <span class="mf">0.5</span>  <span class="mf">9.45</span> <span class="mf">0.</span>  <span class="p">]</span>
 </pre></div>
 </div>
-</section>
-<section id="start-new-iteration">
+</div>
+<div class="section" id="start-new-iteration">
 <h3>7. Start new iteration<a class="headerlink" href="#start-new-iteration" title="Permalink to this headline"></a></h3>
 <p>Move back to step two</p>
-</section>
-<section id="integrated-solution">
+</div>
+<div class="section" id="integrated-solution">
 <h3>8. Integrated Solution<a class="headerlink" href="#integrated-solution" title="Permalink to this headline"></a></h3>
 <p>Summarize previous steps into a loop function</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">k</span> <span class="o">=</span> <span class="mi">0</span>
@@ -798,9 +795,9 @@ have 10 observations to solve for 4 parameters), then:</p>
     <span class="n">e2</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">delta_d</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
         <span class="n">e2</span> <span class="o">+=</span> <span class="n">delta_d</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Iteration </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2"> square error: &quot;</span><span class="p">,</span><span class="nb">format</span><span class="p">(</span><span class="n">e2</span><span class="p">,</span><span class="s1">&#39;5.2f&#39;</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Iteration </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2"> square error: &quot;</span><span class="p">,</span><span class="nb">format</span><span class="p">(</span><span class="n">e2</span><span class="p">,</span><span class="s1">&#39;10.8f&#39;</span><span class="p">))</span>
 
-    <span class="c1"># &gt;&gt;&gt;&gt;&gt; End the loop if error is small &gt;&gt;&gt;&gt;&gt;</span>
+    <span class="c1"># &gt;&gt;&gt;&gt;&gt; add codes to end the loop if error is small &gt;&gt;&gt;&gt;&gt;</span>
 
 <span class="n">hyc_estimate</span> <span class="o">=</span> <span class="n">hyc_loop</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">hyc_estimate</span><span class="p">)</span>
@@ -813,8 +810,8 @@ have 10 observations to solve for 4 parameters), then:</p>
 <span class="p">[</span><span class="mf">5.00000001e-01</span> <span class="mf">5.00000005e-01</span> <span class="mf">9.45000023e+00</span> <span class="mf">7.74200567e-09</span><span class="p">]</span>
 </pre></div>
 </div>
-</section>
-<section id="exercise-10-min">
+</div>
+<div class="section" id="exercise-10-min">
 <h3>Exercise (10 min)<a class="headerlink" href="#exercise-10-min" title="Permalink to this headline"></a></h3>
 <ol class="arabic simple">
 <li><p>Calculate the time used for the iterative location. Compare it with the grid search method.</p></li>
@@ -823,17 +820,17 @@ have 10 observations to solve for 4 parameters), then:</p>
 threshold achieved, then istop = 1.</p></li>
 <li><p>Try to change parameters, e.g. Vp, hyc_true, what’s the maximum iterations needed to converge?</p></li>
 </ol>
-</section>
-</section>
-<section id="more-practical-case">
+</div>
+</div>
+<div class="section" id="more-practical-case">
 <h2>More Practical Case<a class="headerlink" href="#more-practical-case" title="Permalink to this headline"></a></h2>
-<p>In the iterative earthquake case, we first generate the arrivals times and then invert the earthquake location, we find that it is very efficient, fast, and accurate to do so. The error decreased to 0 in around 3 iterations. However, in real cases, it is rare to have error decreased to 0 due to series of factors:</p>
+<p>In the iterative earthquake case, we first generate the arrival times and then invert for the earthquake location, we find that it is very efficient, fast, and accurate to do so. The error decreases to nearly 0 in around 3 iterations. However, in real cases, it is rare to have error decreased to nearly 0 due to series of factors:</p>
 <ol class="arabic simple">
 <li><p>Phase picking error;</p></li>
 <li><p>Time - error of stations;</p></li>
 <li><p>Others.</p></li>
 </ol>
-<section id="phase-picking-error">
+<div class="section" id="phase-picking-error">
 <h3>Phase-Picking Error<a class="headerlink" href="#phase-picking-error" title="Permalink to this headline"></a></h3>
 <p>Could you find the P arrival in below waveforms?</p>
 <a class="reference internal image-reference" href="../_images/pick_error1.png"><img alt="../_images/pick_error1.png" src="../_images/pick_error1.png" style="width: 50%;" /></a>
@@ -841,7 +838,7 @@ threshold achieved, then istop = 1.</p></li>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <div class="line-block">
-<div class="line">The most advanced machine learning phase-pick method, its standard error is ~0.08s in picking P phases.</div>
+<div class="line">The most advanced machine learning phase-pick method has a standard error of ~0.08s in picking P phases.</div>
 </div>
 </div>
 <p>It is reasonable to assume the picking errors follow the <cite>Gaussian Distribution</cite>, the probability we pick the phase arrival close to the true arrival is high and the probability that picked phase is far offset the true arrival is weak.</p>
@@ -979,10 +976,10 @@ threshold achieved, then istop = 1.</p></li>
 <li><p>What do you find from the inversion? compare the results with previous run.</p></li>
 <li><p>Change the sigma value and check the variation of the inversion results.</p></li>
 </ol>
-</section>
-<section id="error-analysis">
+</div>
+<div class="section" id="error-analysis">
 <h3>Error analysis<a class="headerlink" href="#error-analysis" title="Permalink to this headline"></a></h3>
-<p>The error in observed data will of couse lead to uncertainties in the earthquake location parameters estimation. Their relationship could be described as:</p>
+<p>The error in observed data will definitely lead to uncertainties in the estimation of earthquake location parameters. Their relationship could be described as:</p>
 <div class="math notranslate nohighlight">
 \[\sigma_m^2=\sigma_d^2(G^TG)^{-1}\]</div>
 <p>For two parameters, the definition of covariance is:</p>
@@ -1054,7 +1051,7 @@ t =   -0.03 ± 0.06  s
 </div>
 <img alt="../_images/output_56_0.png" src="../_images/output_56_0.png" />
 <p><strong>Principle axes</strong></p>
-<p>Note that off-diagonal elements of <span class="math notranslate nohighlight">\(\sigma_m^2\)</span> is not zero. Using <strong>xy plane</strong> as example, it is shape could be presented by below generated figure. The principle axes are not along the same direction with <strong>xy</strong> axis.</p>
+<p>Note that off-diagonal elements of <span class="math notranslate nohighlight">\(\sigma_m^2\)</span> is not zero. Using <strong>xy plane</strong> as an example, it is shape could be presented by the figure below generated. The principle axes are not along the same direction with <strong>xy</strong> axis.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">angle</span> <span class="o">=</span> <span class="mi">30</span>
 <span class="n">width</span> <span class="o">=</span> <span class="mf">0.5</span>
 <span class="n">height</span> <span class="o">=</span> <span class="mf">0.8</span>
@@ -1113,31 +1110,26 @@ t =   -0.03 ± 0.06  s
 </pre></div>
 </div>
 <img alt="../_images/output_62_0.png" src="../_images/output_62_0.png" />
-</section>
-</section>
-<section id="summary">
+</div>
+</div>
+<div class="section" id="summary">
 <h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline"></a></h2>
-<section id="one-layer-model">
+<div class="section" id="one-layer-model">
 <h3>One layer model<a class="headerlink" href="#one-layer-model" title="Permalink to this headline"></a></h3>
-<p>In the tutorial, we introduced the grid-search method and iterative location method using the one-layer velocity model. The advantage of one-layer is that the ray from the source to one station is a stright line, it is convenient to calculate the corresponding partial derivatives. In the real earth, the velocity varies due to material, pressure and other fators, the ray path is a curved line, making things more complicated.</p>
+<p>In the tutorial, we introduced the grid-search method and iterative location method using the one-layer velocity model. The advantage of one-layer is that the ray from the source to one station is a stright line, it is thus convenient to calculate the corresponding partial derivatives. In the real earth, however, the velocity varies due to material, pressure and other fators, the ray path is therefore a curved line, making things more complicated.</p>
 <img alt="../_images/Ray.png" src="../_images/Ray.png" />
-<p>However, the key process in finding the earthquake locations remain the same:</p>
-<ol class="arabic simple">
-<li><p>Give an initial trial earthquake location;</p></li>
-<li><p>Ray tracing by algorithm (A straight line in one layer model);</p></li>
-<li><p>Calculate the partial derivatives (<span class="math notranslate nohighlight">\(\frac{\partial T}{\partial x_i} = \frac{dx_i}{ds}\)</span>), where <span class="math notranslate nohighlight">\(s\)</span> is the ray; 4. Calculate <span class="math notranslate nohighlight">\(\Delta m\)</span> by <span class="math notranslate nohighlight">\(\Delta d=d_{obs}-d_{cal}\)</span>;</p></li>
-<li><p>Update the earthquake location, if a new iteration needed, move to step 2.</p></li>
-</ol>
-</section>
-<section id="the-grid-search-method-and-the-iteraive-method">
+<p>However, the key process in finding the earthquake locations remains the same.</p>
+</div>
+<div class="section" id="the-grid-search-method-and-the-iteraive-method">
 <h3>The grid search method and the iteraive method<a class="headerlink" href="#the-grid-search-method-and-the-iteraive-method" title="Permalink to this headline"></a></h3>
-<p>In this tutorial, using the <strong>iterative method</strong>, we can converge the minimum error location in limited iterations with the random initial location we set. However, in practical cases, due to the complexity of station coverage, velocity structure, and other factors, a random initiation might lead to local minimum rather than glocal minimum.</p>
+<p>In this tutorial, using the <strong>iterative method</strong>, we can converge the minimum error location in limited iterations with the random initial location we set. However, in practical cases, due to the complexity of station coverage, velocity structure, and other factors, a random initiation might lead to local minimum rather than global minimum.</p>
 <img alt="../_images/grid_minimum.png" src="../_images/grid_minimum.png" />
 <p>(Courtesy of <a class="reference external" href="https://medium.com/analytics-vidhya/journey-of-gradient-descent-from-local-to-global-c851eba3d367">https://medium.com/analytics-vidhya/journey-of-gradient-descent-from-local-to-global-c851eba3d367</a>)
 The general solution is to <strong>conduct rough grid-search first</strong>, which could <strong>avoid local minimum</strong> effectively. Then run the iterative method from the grid search minimum.</p>
-</section>
-<section id="convenient-functions">
+</div>
+<div class="section" id="convenient-functions">
 <h3>Convenient functions<a class="headerlink" href="#convenient-functions" title="Permalink to this headline"></a></h3>
+<p>Defined in the begining of the tutorial.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hyc_abs</span><span class="p">,</span> <span class="n">sigma_m2</span><span class="p">,</span> <span class="n">e2</span> <span class="o">=</span> <span class="n">iter_loc</span><span class="p">(</span><span class="n">hyc_init</span><span class="p">,</span><span class="n">stas</span><span class="p">,</span><span class="n">dobs</span><span class="p">,</span><span class="n">Vp</span><span class="p">)</span>
 <span class="n">present_loc_results</span><span class="p">(</span><span class="n">hyc_abs</span><span class="p">,</span><span class="n">sigma_m2</span><span class="p">,</span><span class="n">std_fmt</span><span class="o">=</span><span class="s1">&#39;.4f&#39;</span><span class="p">)</span>
 </pre></div>
@@ -1153,8 +1145,8 @@ z =    9.45 ± 0.0000  km
 t =   -0.00 ± 0.0000  s
 </pre></div>
 </div>
-</section>
-<section id="play-around-new-station-dataset">
+</div>
+<div class="section" id="play-around-new-station-dataset">
 <h3>Play around new station dataset<a class="headerlink" href="#play-around-new-station-dataset" title="Permalink to this headline"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">stas_set2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mi">45</span><span class="p">,</span><span class="mi">36</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
                  <span class="p">[</span><span class="o">-</span><span class="mi">44</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
@@ -1169,9 +1161,9 @@ t =   -0.00 ± 0.0000  s
 <span class="n">stas</span> <span class="o">=</span> <span class="n">stas_set2</span>
 </pre></div>
 </div>
-</section>
-</section>
-<section id="homework">
+</div>
+</div>
+<div class="section" id="homework">
 <h2>Homework<a class="headerlink" href="#homework" title="Permalink to this headline"></a></h2>
 <ol class="arabic simple">
 <li><p>Using the second station dataset (stats_set2), run the inversion with noise parameters (seed=100, mu=0,sigma=0.1), plot the error ellipse and stations, could you conclude relationship between the error ellipse and the stations coverage? Show your codes and results(30 Points)</p></li>
@@ -1179,26 +1171,26 @@ t =   -0.00 ± 0.0000  s
 <li><p>In previous example, we calculate the <span class="math notranslate nohighlight">\(\sigma_d^2=\frac{1}{nobs}\sum_{i=1}^{nobs}({d_i}-\bar{d})^2\)</span>, note it is the sum of square error divided by <span class="math notranslate nohighlight">\(nobs\)</span> (number of observations). There are scientists proposed that the calculation should be <span class="math notranslate nohighlight">\(\sigma_d^2=\frac{1}{nobs-k}\sum_{i=1}^{nobs}({d_i}-\bar{d})^2\)</span>, where <span class="math notranslate nohighlight">\(nobs-k\)</span> is called <strong>the number of degrees of freedom</strong>, <span class="math notranslate nohighlight">\(k\)</span> is the number of parameters determined by the data, in earthquake location process, <span class="math notranslate nohighlight">\(k=4\)</span> for four paramters (x,y,z,t) are inverted. Try to run the inversion 100 times with random noise <span class="math notranslate nohighlight">\(\sigma_{true}=0.1s\)</span>, calculate the data standard error using two methods, conclude which one is more consistent with the input noise level. Show your codes and results (30 points)</p></li>
 <li><p>What’s your comments and suggestions to this tutorial (10 points)</p></li>
 </ol>
-</section>
-<section id="tutorial-source-code">
+</div>
+<div class="section" id="tutorial-source-code">
 <h2>Tutorial source code<a class="headerlink" href="#tutorial-source-code" title="Permalink to this headline"></a></h2>
 <p>Download <a class="reference download internal" download="" href="../_downloads/f75b2a54887338db23020e4ef6f05f5e/Absolute_Location.zip"><code class="xref download docutils literal notranslate"><span class="pre">here</span></code></a></p>
-</section>
-<section id="hypoinverse-tutorial">
+</div>
+<div class="section" id="hypoinverse-tutorial">
 <h2>HYPOINVERSE Tutorial<a class="headerlink" href="#hypoinverse-tutorial" title="Permalink to this headline"></a></h2>
 <p>Previous python tutorial gives intuitive familarities of the earthquake relocation process, here we further prepared a tutorial of widely used earthquake absolute location tool, the HYPOINVERSE.</p>
-<section id="introduction-of-hypoinverse">
+<div class="section" id="introduction-of-hypoinverse">
 <h3>Introduction of HYPOINVERSE<a class="headerlink" href="#introduction-of-hypoinverse" title="Permalink to this headline"></a></h3>
 <p>Hypoinverse is a computer program that processes files of seismic station data for an earthquake (like p wave arrival times and seismogram amplitudes and durations) into earthquake locations and magnitudes (Klein, 2002). It is a single event location method.</p>
 <p>The Hypoinverse program requires the input of station locations, seismic velocity model, and the phase data. By assuming a trial origin time and hypocentral location for the earthquake, it improves them by iteratively minimizing the least square error of the travel time computed from the input information.</p>
-</section>
-<section id="environment-and-example">
+</div>
+<div class="section" id="environment-and-example">
 <h3>Environment and example<a class="headerlink" href="#environment-and-example" title="Permalink to this headline"></a></h3>
 <p>For MacOS user,  Xcode is needed to be installed, run <code class="docutils literal notranslate"><span class="pre">xcode-select</span> <span class="pre">--install</span></code> and wait for finishment.</p>
 <p><a class="reference download internal" download="" href="../_downloads/c24bdf391f337c07899dcfa836e47a28/Hypoinverse.zip"><code class="xref download docutils literal notranslate"><span class="pre">HYPOINVERSE</span> <span class="pre">example</span></code></a></p>
-</section>
-</section>
-</section>
+</div>
+</div>
+</div>
 
 
            </div>
@@ -1212,7 +1204,7 @@ t =   -0.00 ± 0.0000  s
 
   <div role="contentinfo">
     <p>&#169; Copyright 2021-2022, CUSeisTut team.
-      <span class="lastupdated">Last updated on 2022-04-27.
+      <span class="lastupdated">Last updated on 2022-05-31.
       </span></p>
   </div>
 
