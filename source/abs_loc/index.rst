@@ -3,7 +3,13 @@ Earthquake Absolute Location
 
 Introduction
 --------------
-Earthquake detection find the P&S arrival time on different stations. The further step is to find the earthquake location (**x,y,z**) and origin time (**t**). A direct idea is to set up equations and solve for the parameters. However, general solution fits all the equations rarely exist in practice. Another method is the grid search method, the possible space is split into 3D grids, the misfit of each grid as the earthquake source is calculated, the grid where the event occurred should have the minimum misfit. The grid search method needs consider the trade-off below the location resolution and calculation efficiency. To achieve high resolution, the single grid should be divided into smaller size, while the total grids quantity increased dramatically, users have to spend more time in calculation.
+The earthquake detection process finds P&S arrival times on different stations for each event. The next step is to get the earthquake location (**longitude(x),latitude(y),depth(z)**) and origin time (**t**). A direct idea is to set up equations based on the relationship between distance, velocity, and travel time. However, due to complexities in real geophysical setting, a solution that fits all equations rarely exists. 
+
+The most widely used methods are based on least-square algorithm. That is, the place that has the minimum misfit with observations is accepted as the earthquake location. One least-square method is the grid search method, the possible space is splited into 3D grids, the misfit of each grid as the earthquake location is calculated one by one. The earthquake is then considered to be occurred inside the grid with minimum misfit. The grid size controls the earthquake location resolution, a large grid size will lead to large uncertainty is earthquake location, because we have
+
+ There is a trade-off in the usage of the grid-search method, the grid size is in one side, and the calculation 
+
+The grid search method needs consider the trade-off below the location resolution and calculation efficiency. To achieve high resolution, the single grid should be divided into smaller size, while the total grids quantity increased dramatically, users have to spend more time in calculation.
 
 In this session, we introduce the most commonly used iterative earthquake abosolute location method, which could achieve high-resolution earthquake location with limited calculation. We start from simple one-layer model for practice and then run into detailed data processing using the ``HYPOINVERSE`` program.
 
