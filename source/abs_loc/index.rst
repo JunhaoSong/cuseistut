@@ -5,7 +5,7 @@ Introduction
 --------------
 The earthquake detection process finds the arrival times of P&S wave on different stations for each event. The next step is to get the earthquake location (**longitude(x),latitude(y),depth(z)**) and origin time (**t**). A direct idea is to set up equations based on the relationship between distance, velocity, and travel time. However, due to complexities in real geophysical setting, a solution that fits all equations rarely exists. 
 
-The most widely used methods are based on least-square algorithm. That is, the place that has the minimum misfit with observations is accepted as the earthquake location. One least-square method is the grid search method. In this method, the possible space is splited into 3D grids, and then the misfit of each grid as the earthquake location is calculated one by one. The earthquake is then considered to be occurred inside the grid with minimum misfit. The grid size controls the earthquake location resolution, a larger grid size will lead to large uncertainty. However, a smaller grid size will lead to heavy calculation load due to dramtically increased grid quantity. Therefore, there is a trade-off between resolution and calculation efficiency in this method.
+The most widely used methods are based on least-square algorithm. That is, the place that has the minimum misfit with observations is accepted as the earthquake location. One least-square method is the grid search method. In this method, the possible space is splited into 3D grids, and then the misfit of each grid as the earthquake location is calculated one by one. The earthquake is then considered to be occurred inside the grid with minimum misfit. The grid size controls the earthquake location resolution, a larger grid size will lead to a larger uncertainty (the range where the true earthquake location might be). However, a smaller grid size will lead to heavy calculation load due to dramtically increased grid quantity. Therefore, there is a trade-off between resolution and calculation efficiency in this method.
 
 Another least-square earthquake location method is the iterative absolute earthquake location method, which can achieve high-resolution location with ideal calculation efficiency and is widely used. In this session, we introduce the details of this method. We start from simple one-layer model for practice and then run into real data processing using the popular ``HYPOINVERSE`` program, which is developed based on the iterative absolute earthquake location method.
 
@@ -76,113 +76,6 @@ Python environment
  | Define functions that will be used later.
                   
 .. code:: 
-
-    def iter_loc(hyc_loop,stas,dobs,V,niter=10,show=True):
-        """
-        Do iterative earthquake location
-        Parameters:
-        | hyc_loop: hypoceter for iteration
-        |     stas: array contains stations location
-        |     dobs: observed travel time
-        Return:
-        | hyc_loop: earthquake location after iteration
-        | sigma_m2: square sigma matrix
-        |  sigma_d: root mean square residual
-        """
-        nobs = dobs.shape[0]
-        k = 0
-        while k < niter:
-            dcal = np.zeros((nobs,1))
-            for i in range(dobs.shape[0]):
-                dx = stas[i,0]-hyc_loop[0]
-                dy = stas[i,1]-hyc_loop[1]
-                dz = stas[i,2]-hyc_loop[2]
-                dcal[i,0] = np.sqrt(dx**2+dy**2+dz**2)/V+hyc_loop[3]
-            delta_d = dobs - dcal
-            e2 = 0 
-            for i in range(nobs):
-                e2 += delta_d[i,0]**2
-            if show:
-                print(f"Iteration {k} square error: ",format(e2,'5.2f'))
-    
-            # >>>>> Build G matrix >>>>>>
-            G = np.zeros((nobs,4))
-            G[:,3]=1
-            for i in range(dobs.shape[0]):
-                for j in range(3):
-                    denomiter = np.sqrt((hyc_loop[0]-stas[i,0])**2+(hyc_loop[1]-stas[i,1])**2+(hyc_loop[2]-stas[i,2])**2)
-                    G[i,j]=(hyc_loop[j]-stas[i,j])/denomiter/V
-    
-            # >>>>> Invert the m value >>>>        
-            GTG = np.matmul(G.T,G)
-            GTG_inv = np.linalg.inv(GTG)
-            GTG_inv_GT = np.matmul(GTG_inv,G.T)
-            delta_m = np.matmul(GTG_inv_GT,delta_d)
-    
-            # >>>>> Update the hypocenter loop >>>>>
-            hyc_loop = np.add(hyc_loop,delta_m.ravel())
-            k = k+1
-    
-            # >>>>> End the loop if error is small >>>>>
-            if e2<0.0000001:
-                break
-        sigma_d = np.std(delta_d)
-        sigma_d2 = sigma_d**2
-        sigma_m2 = sigma_d2 * GTG_inv
-        return hyc_loop, sigma_m2, sigma_d
-    
-    def get_init_loc(dobs,stas,depth=5,gap_time=1):
-        """
-        Get initial earthquake location
-        Parameters:
-        |    dobs: observed travel time
-        |    stas: array contain station location
-        |   depth: initial depth of earthquake location
-        |gap_time: set event initial gap time before the earliest arrival
-        """
-        dmin = np.min(dobs)         # The minimum arrival time
-        idx = np.argmin(dobs)       # The index of observation
-    
-        hyc_init = np.zeros(4);      # Init array
-        hyc_init[0] = stas[idx,0];   # Set the same x,y with station
-        hyc_init[1] = stas[idx,1];   # Set the same x,y with station
-        hyc_init[2] = depth;             # Set initial depth 5 km
-        hyc_init[3] = dmin-gap_time;        # Set initial event time 1s earlier than arrival
-        print("Initial trial parameters ","x: ",hyc_init[0],"km; ",
-                                          "y: ",hyc_init[1],"km; ",
-                                          "z: ",hyc_init[2],"km; ",
-                                          "t: ", format(hyc_init[3],'.4f')+" s")
-        return hyc_init
-    
-    def present_loc_results(hyc,sig_square=None,std_fmt='.2f'):
-        """
-        Print earthquake location results
-        |         hyc: hypocenter
-        |sigma_square: squared sigma matrix
-        |     std_fmt: format control of the output uncertainty
-        """
-        _x = format(np.round(hyc[0],4),format("6.2f"))
-        _y = format(np.round(hyc[1],4),format("6.2f"))
-        _z = format(np.round(hyc[2],4),format("6.2f"))
-        _t = format(np.round(hyc[3],4),format("6.2f"))
-        if not isinstance(sig_square,np.ndarray):
-            print("x = ",_x," km")
-            print("x = ",_y," km")
-            print("z = ",_z," km")
-            print("t = ",_t," s")
-        else:
-            stdx = sig_square[0,0]**0.5
-            _stdx = format(np.round(stdx,4),std_fmt)
-            stdy = sig_square[1,1]**0.5
-            _stdy = format(np.round(stdy,4),std_fmt)
-            stdz = sig_square[2,2]**0.5
-            _stdz = format(np.round(stdz,4),std_fmt)
-            stdt = sig_square[3,3]**0.5
-            _stdt = format(np.round(stdt,4),std_fmt)
-            print("x = ",_x,"±",_stdx," km")
-            print("y = ",_y,"±",_stdy," km")
-            print("z = ",_z,"±",_stdz," km")
-            print("t = ",_t,"±",_stdt," s")
             
     def matrix_show(*args,**kwargs):
         """
@@ -907,7 +800,7 @@ Credit: Wikipedia
 
 **Exercise (2 min)**
 
-1. What do you find from the inversion? compare the results with previous run.
+1. What do you find from the inversion? compare the results with the previous run.
 
 2. Change the sigma value and check the variation of the inversion results.
 
@@ -971,7 +864,6 @@ For two parameters, the definition of covariance is:
     y =    0.31 ± 0.22  km
     z =    9.67 ± 0.99  km
     t =   -0.03 ± 0.06  s
-
 
 **Question (2 min)**
 
@@ -1098,12 +990,63 @@ The general solution is to **conduct rough grid-search first**, which could **av
 Convenient functions
 *********************
 
-Defined in the begining of the tutorial.
-
 .. code::
 
+    def iter_loc(hyc_loop,stas,dobs,V,niter=10,show=True):
+        """
+        Do iterative earthquake location
+        Parameters:
+        | hyc_loop: hypoceter for iteration
+        |     stas: array contains stations location
+        |     dobs: observed travel time
+        Return:
+        | hyc_loop: earthquake location after iteration
+        | sigma_m2: square sigma matrix
+        |  sigma_d: root mean square residual
+        """
+        nobs = dobs.shape[0]
+        k = 0
+        while k < niter:
+            dcal = np.zeros((nobs,1))
+            for i in range(dobs.shape[0]):
+                dx = stas[i,0]-hyc_loop[0]
+                dy = stas[i,1]-hyc_loop[1]
+                dz = stas[i,2]-hyc_loop[2]
+                dcal[i,0] = np.sqrt(dx**2+dy**2+dz**2)/V+hyc_loop[3]
+            delta_d = dobs - dcal
+            e2 = 0 
+            for i in range(nobs):
+                e2 += delta_d[i,0]**2
+            if show:
+                print(f"Iteration {k} square error: ",format(e2,'5.2f'))
+    
+            # >>>>> Build G matrix >>>>>>
+            G = np.zeros((nobs,4))
+            G[:,3]=1
+            for i in range(dobs.shape[0]):
+                for j in range(3):
+                    denomiter = np.sqrt((hyc_loop[0]-stas[i,0])**2+(hyc_loop[1]-stas[i,1])**2+(hyc_loop[2]-stas[i,2])**2)
+                    G[i,j]=(hyc_loop[j]-stas[i,j])/denomiter/V
+    
+            # >>>>> Invert the m value >>>>        
+            GTG = np.matmul(G.T,G)
+            GTG_inv = np.linalg.inv(GTG)
+            GTG_inv_GT = np.matmul(GTG_inv,G.T)
+            delta_m = np.matmul(GTG_inv_GT,delta_d)
+    
+            # >>>>> Update the hypocenter loop >>>>>
+            hyc_loop = np.add(hyc_loop,delta_m.ravel())
+            k = k+1
+    
+            # >>>>> End the loop if error is small >>>>>
+            if e2<0.0000001:
+                break
+        sigma_d = np.std(delta_d)
+        sigma_d2 = sigma_d**2
+        sigma_m2 = sigma_d2 * GTG_inv
+        return hyc_loop, sigma_m2, sigma_d
+
     hyc_abs, sigma_m2, e2 = iter_loc(hyc_init,stas,dobs,Vp)
-    present_loc_results(hyc_abs,sigma_m2,std_fmt='.4f')
 
 .. parsed-literal::
 
@@ -1112,6 +1055,44 @@ Defined in the begining of the tutorial.
     Iteration 2 square error:   0.03
     Iteration 3 square error:   0.00
     Iteration 4 square error:   0.00
+
+.. code::
+
+def present_loc_results(hyc,sig_square=None,std_fmt='.2f'):
+    """
+    Print earthquake location results
+    Parameters:
+    |         hyc: hypocenter
+    |sigma_square: squared sigma matrix
+    |     std_fmt: format control of the output uncertainty
+    """
+    _x = format(np.round(hyc[0],4),format("6.2f"))
+    _y = format(np.round(hyc[1],4),format("6.2f"))
+    _z = format(np.round(hyc[2],4),format("6.2f"))
+    _t = format(np.round(hyc[3],4),format("6.2f"))
+    if not isinstance(sig_square,np.ndarray):
+        print("x = ",_x," km")
+        print("x = ",_y," km")
+        print("z = ",_z," km")
+        print("t = ",_t," s")
+    else:
+        stdx = sig_square[0,0]**0.5
+        _stdx = format(np.round(stdx,4),std_fmt)
+        stdy = sig_square[1,1]**0.5
+        _stdy = format(np.round(stdy,4),std_fmt)
+        stdz = sig_square[2,2]**0.5
+        _stdz = format(np.round(stdz,4),std_fmt)
+        stdt = sig_square[3,3]**0.5
+        _stdt = format(np.round(stdt,4),std_fmt)
+        print("x = ",_x,"±",_stdx," km")
+        print("y = ",_y,"±",_stdy," km")
+        print("z = ",_z,"±",_stdz," km")
+        print("t = ",_t,"±",_stdt," s")
+
+    present_loc_results(hyc_abs,sigma_m2,std_fmt='.4f')
+
+.. parsed-literal::
+
     x =    0.50 ± 0.0000  km
     y =    0.50 ± 0.0000  km
     z =    9.45 ± 0.0000  km

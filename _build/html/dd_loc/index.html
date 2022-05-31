@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Double-Difference Earthquake Relocation &mdash; CUSeisTut</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -70,6 +69,10 @@
 <li class="toctree-l2"><a class="reference internal" href="#initiation">Initiation</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#preparation-for-environment">Preparation for Environment</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#basic-parameters">Basic parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#absolute-earthquake-location">Absolute earthquake location</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#initial-location">Initial location</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#velocity-error">Velocity Error</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#station-delay">Station Delay</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#conduct-inversion-with-delayed-data">Conduct inversion with delayed data</a></li>
@@ -139,9 +142,9 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="double-difference-earthquake-relocation">
+  <div class="section" id="double-difference-earthquake-relocation">
 <h1>Double-Difference Earthquake Relocation<a class="headerlink" href="#double-difference-earthquake-relocation" title="Permalink to this headline"></a></h1>
-<section id="introduction">
+<div class="section" id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline"></a></h2>
 <p>Double-difference earthquake relocation algorithm was developed to improve the location accuracy in the presence of measurement uncertainties when we locate earthquakes in the previous tutorial. It is based on the iterative least-square method, using the time difference between observed and predicted phase arrivals for event pairs recorded by a common station, some uncertainties can be canceled to derive high-accuracy hypocenter locations over large distance. Figure below shows a comparison of ~10,000 earthquake locations (left panel) and double-difference locations (right panel) during the 1997 seismic crisis in the Long Valley caldera (Waldhauser, 2001).</p>
 <img alt="../_images/example.png" src="../_images/example.png" />
@@ -158,7 +161,7 @@
 <div class="line">You are strongly encouraged to play around codes in this tutorial and introduce to others, you will find your understanding will be enhanced dramatically during the process.</div>
 </div>
 </div>
-<section id="contents-of-this-tutorial">
+<div class="section" id="contents-of-this-tutorial">
 <h3>Contents of this tutorial<a class="headerlink" href="#contents-of-this-tutorial" title="Permalink to this headline"></a></h3>
 <ol class="arabic simple">
 <li><p>Initiation process</p></li>
@@ -167,11 +170,11 @@
 </ol>
 <p><strong>Authors</strong>: ZI Jinping, SONG Zilin, Earth Science Sytem Program, CUHK.</p>
 <p><strong>Testers</strong>, XIA Zhuoxuan, Sun Zhangyu, Earth Science Sytem Program, CUHK.</p>
-</section>
-</section>
-<section id="initiation">
+</div>
+</div>
+<div class="section" id="initiation">
 <h2>Initiation<a class="headerlink" href="#initiation" title="Permalink to this headline"></a></h2>
-<section id="preparation-for-environment">
+<div class="section" id="preparation-for-environment">
 <h3>Preparation for Environment<a class="headerlink" href="#preparation-for-environment" title="Permalink to this headline"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">time</span>
@@ -351,8 +354,8 @@
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-</section>
-<section id="basic-parameters">
+</div>
+<div class="section" id="basic-parameters">
 <h3>Basic parameters<a class="headerlink" href="#basic-parameters" title="Permalink to this headline"></a></h3>
 <p>Set up station array, earthquake true location, wave-velocity and generate synthetic arrival time.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">stas</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="o">-</span><span class="mi">14</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="o">-</span><span class="mi">8</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">8</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">14</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">20</span><span class="p">,</span><span class="mi">0</span><span class="p">]])</span> <span class="c1"># Station</span>
@@ -392,6 +395,12 @@
 </pre></div>
 </div>
 <img alt="../_images/output_6_0.png" src="../_images/output_6_0.png" />
+</div>
+</div>
+<div class="section" id="absolute-earthquake-location">
+<h2>Absolute earthquake location<a class="headerlink" href="#absolute-earthquake-location" title="Permalink to this headline"></a></h2>
+<div class="section" id="initial-location">
+<h3>Initial location<a class="headerlink" href="#initial-location" title="Permalink to this headline"></a></h3>
 <p>The station which records the earliest waveform is closest to the hypocenter, so it is reasonable to start iteration:</p>
 <ol class="arabic simple">
 <li><p>The same x and y with the closest station;</p></li>
@@ -403,7 +412,7 @@
 
 <span class="n">hyc1_init</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>      <span class="c1"># Init array</span>
 <span class="n">hyc1_init</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">stas</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span><span class="mi">0</span><span class="p">];</span>   <span class="c1"># Set the same x,y with station</span>
-<span class="n">hyc1_init</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>             <span class="c1"># Set initial depth 5 km</span>
+<span class="n">hyc1_init</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>                 <span class="c1"># Set initial depth 5 km</span>
 <span class="n">hyc1_init</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">dmin</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>        <span class="c1"># Set initial event time 1s earlier than arrival</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initial trial parameters &quot;</span><span class="p">,</span><span class="s2">&quot;x: &quot;</span><span class="p">,</span><span class="n">hyc1_init</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="s2">&quot;km; &quot;</span><span class="p">,</span><span class="s2">&quot;z: &quot;</span><span class="p">,</span><span class="n">hyc1_init</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s2">&quot;km; &quot;</span><span class="p">,</span><span class="s2">&quot;t: &quot;</span><span class="p">,</span> <span class="nb">format</span><span class="p">(</span><span class="n">hyc1_init</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="s1">&#39;.4f&#39;</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; s&quot;</span><span class="p">)</span>
 <span class="n">hyc1_loop</span> <span class="o">=</span> <span class="n">hyc1_init</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -435,6 +444,12 @@
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Initial</span> <span class="n">trial</span> <span class="n">parameters</span>  <span class="n">x</span><span class="p">:</span>  <span class="mf">0.0</span> <span class="n">km</span><span class="p">;</span>  <span class="n">z</span><span class="p">:</span>  <span class="mf">5.0</span> <span class="n">km</span><span class="p">;</span>  <span class="n">t</span><span class="p">:</span>  <span class="mf">0.6125</span> <span class="n">s</span>
 </pre></div>
 </div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<div class="line-block">
+<div class="line">For the knowledge of iterative location, please refer to the tutorial Earthquake Absolute Location.</div>
+</div>
+</div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hyc1_abs</span><span class="p">,</span> <span class="n">sigma_m2</span> <span class="o">=</span> <span class="n">iter_loc</span><span class="p">(</span><span class="n">hyc1_loop</span><span class="p">,</span><span class="n">stas</span><span class="p">,</span><span class="n">dobs1</span><span class="p">,</span><span class="n">Vtrue</span><span class="p">)</span>
 <span class="n">present_loc_results</span><span class="p">(</span><span class="n">hyc1_abs</span><span class="p">,</span><span class="n">sigma_m2</span><span class="p">,</span><span class="n">std_fmt</span><span class="o">=</span><span class="s1">&#39;.4f&#39;</span><span class="p">)</span>
 </pre></div>
@@ -448,14 +463,14 @@ z =    8.00 ± 0.0000  km
 t =    0.00 ± 0.0000  s
 </pre></div>
 </div>
-</section>
-<section id="velocity-error">
+</div>
+<div class="section" id="velocity-error">
 <h3>Velocity Error<a class="headerlink" href="#velocity-error" title="Permalink to this headline"></a></h3>
 <p>In the calculation above, we use the true velocity (<strong>Vtrue</strong>) to conduct the inversion. However, in reality, the velocity we measure is more or less different from the true velocity, thus leading to some bias.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <div class="line-block">
-<div class="line">Try to use other velocity valueis to conduct the inversion and check the results, what features do you find?</div>
+<div class="line">Try to use other velocity values to conduct the inversion and check the results, what features do you find?</div>
 </div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Vp</span> <span class="o">=</span> <span class="mf">4.8</span>
@@ -487,10 +502,10 @@ t =   -0.24 ± 0.0204  s
 True location (hyc1_true)  x:  -1 km;  z:  8 km;  t:  0.0000 s
 </pre></div>
 </div>
-</section>
-<section id="station-delay">
+</div>
+<div class="section" id="station-delay">
 <h3>Station Delay<a class="headerlink" href="#station-delay" title="Permalink to this headline"></a></h3>
-<p>In near surface, the material velocity where stations located might vary and lead to influence on the travel time, we call it <strong>Station delay</strong>. The <strong>River sediments</strong> are generally soft composed by not fully consolidated mateirals, their velocities are therefore low. A lower velocity will lead to a longer travel time, thus the actual arrival time will be later than estimated, here we call it <strong>Positive delay</strong>.</p>
+<p>In near surface, the material velocity where stations are located might vary and lead to influence on the travel time, we call it <strong>Station delay</strong>. The <strong>River sediments</strong> are generally composed by not fully consolidated materials, their velocities are therefore low. A lower velocity will lead to a longer travel time, thus the actual arrival time will be later than estimated, here we call it <strong>Positive delay</strong>.</p>
 <p>The <strong>Granite</strong> is igneous rock, its density is high with fast velocity. A higher velocity will lead to a shorter travel time, thus the actual arrival time will be earlier than estimated, we call it
 <strong>Negative delay</strong>.</p>
 <p>In this tutorial, we set value of 0.05s for positive delay and -0.05s for negative delay.</p>
@@ -530,8 +545,8 @@ True location (hyc1_true)  x:  -1 km;  z:  8 km;  t:  0.0000 s
 <span class="n">stas_delay</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span> <span class="p">[</span><span class="mf">0.05</span><span class="p">,</span><span class="mf">0.05</span><span class="p">,</span><span class="mf">0.05</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mf">0.05</span><span class="p">,</span><span class="o">-</span><span class="mf">0.05</span><span class="p">,</span><span class="o">-</span><span class="mf">0.05</span><span class="p">]</span>
 </pre></div>
 </div>
-</section>
-<section id="conduct-inversion-with-delayed-data">
+</div>
+<div class="section" id="conduct-inversion-with-delayed-data">
 <h3>Conduct inversion with delayed data<a class="headerlink" href="#conduct-inversion-with-delayed-data" title="Permalink to this headline"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dobs1_delay</span> <span class="o">=</span> <span class="n">dobs1</span> <span class="o">+</span> <span class="n">stas_delay</span>
 <span class="n">hyc1_abs_delay</span><span class="p">,</span> <span class="n">sigma_m2</span> <span class="o">=</span> <span class="n">iter_loc</span><span class="p">(</span><span class="n">hyc1_init</span><span class="p">,</span><span class="n">stas</span><span class="p">,</span><span class="n">dobs1_delay</span><span class="p">,</span><span class="n">Vp</span><span class="p">)</span>
@@ -556,8 +571,8 @@ t =   -0.24 ± 0.02  s
 True location (hyc1_true)  x:  -1 km;  z:  8 km;  t:  0.0000 s
 </pre></div>
 </div>
-</section>
-<section id="the-second-event">
+</div>
+<div class="section" id="the-second-event">
 <h3>The second event<a class="headerlink" href="#the-second-event" title="Permalink to this headline"></a></h3>
 <p>Now we consider a second event occurred close to the first event</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hyc2_true</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mf">8.3</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
@@ -634,11 +649,16 @@ t =    1.01 ± 0.01  s
 True location (hyc2_true)  x:  1 km;  z:  8.3 km;  t:  1.0000 s
 </pre></div>
 </div>
-</section>
-<section id="add-picking-noise">
+</div>
+<div class="section" id="add-picking-noise">
 <h3>Add Picking Noise<a class="headerlink" href="#add-picking-noise" title="Permalink to this headline"></a></h3>
-<p>Add random noise to simulate the phase picking uncertainty
-.. code:</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<div class="line-block">
+<div class="line">please refer to Earthquake Absolute Location tutorial for more information of add picking noise</div>
+</div>
+</div>
+<p>Add random noise to simulate the phase picking uncertainty</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mu</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="n">sigma</span> <span class="o">=</span> <span class="mf">0.1</span>
 <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">252</span><span class="p">)</span>
@@ -649,9 +669,9 @@ True location (hyc2_true)  x:  1 km;  z:  8.3 km;  t:  1.0000 s
 <span class="n">dobs2_delay_noise</span> <span class="o">=</span> <span class="n">dobs2_delay</span><span class="o">+</span><span class="n">errors</span>
 </pre></div>
 </div>
-</section>
-</section>
-<section id="double-difference-method">
+</div>
+</div>
+<div class="section" id="double-difference-method">
 <h2>Double Difference Method<a class="headerlink" href="#double-difference-method" title="Permalink to this headline"></a></h2>
 <p>The travel-time residual of event <span class="math notranslate nohighlight">\(i\)</span> at station <span class="math notranslate nohighlight">\(k\)</span>:</p>
 <p><span class="math notranslate nohighlight">\(r_k^i=(T_k^i)^{obs}-(T_k^i)^{cal}\)</span> comes from:</p>
@@ -672,8 +692,8 @@ True location (hyc2_true)  x:  1 km;  z:  8.3 km;  t:  1.0000 s
 <p><strong>Event :math:`j`, station :math:`k`</strong></p>
 <p>The travel-time residual of event <span class="math notranslate nohighlight">\(j\)</span> at station <span class="math notranslate nohighlight">\(k\)</span>:</p>
 <div class="math notranslate nohighlight">
-\[`r_k^j=\(T_k^j)^{obs}-(T_k^j)^{cal}`=\sum_{l=1}^2\frac{\partial T_k^j}{\partial x_l^j}\Delta x_l^j +\Delta\tau^j+\int_{s_j}^{r_k}\Delta uds+S_k\]</div>
-<section id="make-difference">
+\[r_k^j=(T_k^j)^{obs}-(T_k^j)^{cal}=\sum_{l=1}^2\frac{\partial T_k^j}{\partial x_l^j}\Delta x_l^j +\Delta\tau^j+\int_{s_j}^{r_k}\Delta uds+S_k\]</div>
+<div class="section" id="make-difference">
 <h3>Make difference<a class="headerlink" href="#make-difference" title="Permalink to this headline"></a></h3>
 <div class="math notranslate nohighlight">
 \[r_k^i-r_k^j=\sum_{l=1}^2\frac{\partial T_k^i}{\partial x_l^i}\Delta x_l^i +\Delta\tau^i+\int_{s_i}^{r_k}\Delta uds-
@@ -721,15 +741,16 @@ are remove or mitigated by double-difference</p>
 \begin{bmatrix}
 r_1^1 - r_1^2\\r_2^1 - r_2^2\\\vdots\\r_k^1 - r_k^2\\
 \end{bmatrix}\end{split}\]</div>
-<p><strong>Workflow</strong></p>
+<p>Practical usage will be introduced later.
+<strong>Workflow</strong></p>
 <img alt="../_images/DD_Earthquake_location_workflow_new.png" src="../_images/DD_Earthquake_location_workflow_new.png" />
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hyc1_dd</span> <span class="o">=</span> <span class="n">hyc1_abs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 <span class="n">hyc2_dd</span> <span class="o">=</span> <span class="n">hyc2_abs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 </pre></div>
 </div>
-</section>
-</section>
-<section id="observed-travel-time-difference">
+</div>
+</div>
+<div class="section" id="observed-travel-time-difference">
 <h2>1. Observed Travel Time Difference<a class="headerlink" href="#observed-travel-time-difference" title="Permalink to this headline"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">obs_trav_t1</span> <span class="o">=</span> <span class="n">dobs1_delay</span> <span class="o">-</span> <span class="n">hyc1_dd</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="c1"># Travel time = arrival_time - origin_time</span>
 <span class="n">obs_trav_t2</span> <span class="o">=</span> <span class="n">dobs2_delay</span> <span class="o">-</span> <span class="n">hyc2_dd</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
@@ -740,8 +761,8 @@ r_1^1 - r_1^2\\r_2^1 - r_2^2\\\vdots\\r_k^1 - r_k^2\\
 </pre></div>
 </div>
 <img alt="../_images/output_34_0.png" src="../_images/output_34_0.png" />
-</section>
-<section id="calculated-travel-time-difference">
+</div>
+<div class="section" id="calculated-travel-time-difference">
 <h2>2. Calculated Travel Time Difference<a class="headerlink" href="#calculated-travel-time-difference" title="Permalink to this headline"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dcal1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nsta</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dobs1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
@@ -758,16 +779,16 @@ r_1^1 - r_1^2\\r_2^1 - r_2^2\\\vdots\\r_k^1 - r_k^2\\
 <span class="n">cal_dt</span> <span class="o">=</span> <span class="n">cal_trav_t1</span> <span class="o">-</span> <span class="n">cal_trav_t2</span>
 </pre></div>
 </div>
-</section>
-<section id="calculate-double-difference">
+</div>
+<div class="section" id="calculate-double-difference">
 <h2>3. Calculate Double-Difference<a class="headerlink" href="#calculate-double-difference" title="Permalink to this headline"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dtdt</span> <span class="o">=</span> <span class="n">obs_dt</span> <span class="o">-</span> <span class="n">cal_dt</span>
 <span class="n">matrix_show</span><span class="p">(</span><span class="n">dtdt</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="../_images/output_38_0.png" src="../_images/output_38_0.png" />
-</section>
-<section id="build-up-data-kernel-g">
+</div>
+<div class="section" id="build-up-data-kernel-g">
 <h2>4. Build Up Data Kernel - G<a class="headerlink" href="#build-up-data-kernel-g" title="Permalink to this headline"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ncol</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="mi">2</span>           <span class="c1"># Two event, each has 3 parameter (delta x, delta z, delta t)</span>
 <span class="n">G</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nsta</span><span class="p">,</span><span class="n">ncol</span><span class="p">))</span>
@@ -784,8 +805,8 @@ r_1^1 - r_1^2\\r_2^1 - r_2^2\\\vdots\\r_k^1 - r_k^2\\
 </pre></div>
 </div>
 <img alt="../_images/output_41_0.png" src="../_images/output_41_0.png" />
-</section>
-<section id="check-gtg-inverse-exists">
+</div>
+<div class="section" id="check-gtg-inverse-exists">
 <h2>5. Check GTG Inverse Exists<a class="headerlink" href="#check-gtg-inverse-exists" title="Permalink to this headline"></a></h2>
 <div class="math notranslate nohighlight">
 \[G\Delta m =\Delta d\]</div>
@@ -806,8 +827,8 @@ have 10 observations to solve for 4 parameters), then:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Error! The determinant is ZERO!!!
 </pre></div>
 </div>
-</section>
-<section id="add-damp-to-matrix">
+</div>
+<div class="section" id="add-damp-to-matrix">
 <h2>6. Add Damp to Matrix<a class="headerlink" href="#add-damp-to-matrix" title="Permalink to this headline"></a></h2>
 <p>Determinant equals zero means there is no unique solution to the inverse problem, that is, the constraints in data kernel G are not enough to get a result, more constraints is needed. The common method is to add damp to the data kernel.</p>
 <p>### Damping the kernel Before damping:</p>
@@ -816,7 +837,7 @@ have 10 observations to solve for 4 parameters), then:</p>
 <p>After damping:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\begin{bmatrix}G\\\lambda I\end{bmatrix}\begin{bmatrix}m\end{bmatrix}=\begin{bmatrix}d\\O\end{bmatrix}\end{split}\]</div>
-<p><span class="math notranslate nohighlight">\(I\)</span> is identity matrix, in this case, it should have columns with G, so its dimension is <span class="math notranslate nohighlight">\(6\times6\)</span>, here:</p>
+<p><span class="math notranslate nohighlight">\(I\)</span> is an identity matrix, in this case, it should have columns with G, so its dimension is <span class="math notranslate nohighlight">\(6\times6\)</span>, here:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\lambda I=\begin{bmatrix}
 \lambda&amp;0&amp;0&amp;0&amp;0&amp;0\\
@@ -831,8 +852,7 @@ have 10 observations to solve for 4 parameters), then:</p>
 \[\begin{split}\begin{align}
 \lambda\Delta x_1 &amp;= 0\\ \lambda\Delta z_1 &amp;= 0\\ \lambda\Delta t_1 &amp;= 0\\ \lambda\Delta x_2 &amp;= 0\\ \lambda\Delta z_2 &amp;= 0\\ \lambda\Delta t_2 &amp;= 0
 \end{align}\end{split}\]</div>
-<p>What does this mean? It means that the solution <strong>SHOULD</strong> be zero. As a least square problem solution is a trade-off among constraints(equations). The true meaning is that these values <strong>SHOULD</strong>
-be small. <span class="math notranslate nohighlight">\(\lambda\)</span> controls the weight(importance) of damping. A large damp will lead to the solution more close to zero.</p>
+<p>What does this mean? It means that the solution <strong>SHOULD</strong> be zero. As a least square problem solution is a trade-off among equations. The application of damping factor will lead to the solution be small values. <span class="math notranslate nohighlight">\(\lambda\)</span> controls the weight(importance) of damping. A large damp will lead to the solution more close to zero.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">G_dp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nsta</span><span class="o">+</span><span class="n">ncol</span><span class="p">,</span><span class="n">ncol</span><span class="p">))</span>
 <span class="n">G_dp</span><span class="p">[:</span><span class="n">nsta</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">G</span>
 <span class="n">damp</span> <span class="o">=</span> <span class="mf">0.1</span>
@@ -845,8 +865,8 @@ be small. <span class="math notranslate nohighlight">\(\lambda\)</span> controls
 </pre></div>
 </div>
 <img alt="../_images/output_46_0.png" src="../_images/output_46_0.png" />
-</section>
-<section id="solve-damped-problem">
+</div>
+<div class="section" id="solve-damped-problem">
 <h2>7. Solve Damped Problem<a class="headerlink" href="#solve-damped-problem" title="Permalink to this headline"></a></h2>
 <p>Step 1:</p>
 <div class="math notranslate nohighlight">
@@ -878,9 +898,10 @@ be small. <span class="math notranslate nohighlight">\(\lambda\)</span> controls
 </pre></div>
 </div>
 <img alt="../_images/output_49_0.png" src="../_images/output_49_0.png" />
-</section>
-<section id="update-location">
+</div>
+<div class="section" id="update-location">
 <h2>8. Update Location<a class="headerlink" href="#update-location" title="Permalink to this headline"></a></h2>
+<p>The output results are the earthquake location misfit with reference to its absolute location. Therefore, the absolute earthquake location should be updated.</p>
 <div class="math notranslate nohighlight">
 \[x_1 = x_1+\Delta x_1\]</div>
 <div class="math notranslate nohighlight">
@@ -917,8 +938,8 @@ be small. <span class="math notranslate nohighlight">\(\lambda\)</span> controls
 </pre></div>
 </div>
 <img alt="../_images/output_52_0.png" src="../_images/output_52_0.png" />
-</section>
-<section id="error-analysis">
+</div>
+<div class="section" id="error-analysis">
 <h2>9. Error analysis<a class="headerlink" href="#error-analysis" title="Permalink to this headline"></a></h2>
 <p>The error in observed data will of course lead to uncertainties in the estimation of earthquake location parameters. Their relationship could be described as:</p>
 <div class="math notranslate nohighlight">
@@ -951,8 +972,8 @@ t =    0.90 ± 0.56  s
 </div>
 <p><strong>Exercise (5 min)</strong></p>
 <p>Try to modify the <strong>damp</strong> parameter and update the results, how it changes? What is the relationship between <strong>damping factor</strong>, <strong>m</strong>, and <strong>Uncertainty</strong>? Can you explain why?</p>
-</section>
-<section id="condition-number">
+</div>
+<div class="section" id="condition-number">
 <h2>10. Condition Number<a class="headerlink" href="#condition-number" title="Permalink to this headline"></a></h2>
 <p>We have realized that the damping factor controls the converge rate, a larger <strong>damping factor</strong> will lead to slow converge rate but small uncertainty; a smaller <strong>damping factor</strong> will lead to fast converge rate but large uncertainty. Then how to choose proper damping factor?</p>
 <p>A good indicator is the <a class="reference external" href="https://en.wikipedia.org/wiki/Condition_number">conditon number</a>. Conditon number quantifies the relationship between solution error and data error. In earthquake double difference location, the condition number should be in the range 40-100 (empirical).</p>
@@ -965,8 +986,8 @@ t =    0.90 ± 0.56  s
 </div>
 <p><strong>Exercise: Start Another Iteration</strong></p>
 <p>The error is still high, update the earthquake location and rerun the process to check the location variation.</p>
-</section>
-<section id="iterative-double-difference-method">
+</div>
+<div class="section" id="iterative-double-difference-method">
 <h2>Iterative Double-Difference Method<a class="headerlink" href="#iterative-double-difference-method" title="Permalink to this headline"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hyc1_loop</span> <span class="o">=</span> <span class="n">hyc1_abs</span>
 <span class="n">hyc2_loop</span> <span class="o">=</span> <span class="n">hyc2_abs</span>
@@ -1049,85 +1070,7 @@ t =    0.90 ± 0.56  s
 <span class="n">Iteration</span>    <span class="mi">8</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00004113</span>
 <span class="n">Iteration</span>    <span class="mi">9</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00004032</span>
 <span class="n">Iteration</span>   <span class="mi">10</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00003954</span>
-<span class="n">Iteration</span>   <span class="mi">11</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00003877</span>
-<span class="n">Iteration</span>   <span class="mi">12</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00003801</span>
-<span class="n">Iteration</span>   <span class="mi">13</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00003727</span>
-<span class="n">Iteration</span>   <span class="mi">14</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00003654</span>
-<span class="n">Iteration</span>   <span class="mi">15</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00003583</span>
-<span class="n">Iteration</span>   <span class="mi">16</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00003513</span>
-<span class="n">Iteration</span>   <span class="mi">17</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00003445</span>
-<span class="n">Iteration</span>   <span class="mi">18</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00003378</span>
-<span class="n">Iteration</span>   <span class="mi">19</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00003312</span>
-<span class="n">Iteration</span>   <span class="mi">20</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00003247</span>
-<span class="n">Iteration</span>   <span class="mi">21</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00003184</span>
-<span class="n">Iteration</span>   <span class="mi">22</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00003122</span>
-<span class="n">Iteration</span>   <span class="mi">23</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00003061</span>
-<span class="n">Iteration</span>   <span class="mi">24</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00003001</span>
-<span class="n">Iteration</span>   <span class="mi">25</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00002943</span>
-<span class="n">Iteration</span>   <span class="mi">26</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00002885</span>
-<span class="n">Iteration</span>   <span class="mi">27</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00002829</span>
-<span class="n">Iteration</span>   <span class="mi">28</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00002774</span>
-<span class="n">Iteration</span>   <span class="mi">29</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00002720</span>
-<span class="n">Iteration</span>   <span class="mi">30</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00002667</span>
-<span class="n">Iteration</span>   <span class="mi">31</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00002615</span>
-<span class="n">Iteration</span>   <span class="mi">32</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00002564</span>
-<span class="n">Iteration</span>   <span class="mi">33</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00002514</span>
-<span class="n">Iteration</span>   <span class="mi">34</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00002465</span>
-<span class="n">Iteration</span>   <span class="mi">35</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00002417</span>
-<span class="n">Iteration</span>   <span class="mi">36</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00002370</span>
-<span class="n">Iteration</span>   <span class="mi">37</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00002324</span>
-<span class="n">Iteration</span>   <span class="mi">38</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00002279</span>
-<span class="n">Iteration</span>   <span class="mi">39</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00002235</span>
-<span class="n">Iteration</span>   <span class="mi">40</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00002191</span>
-<span class="n">Iteration</span>   <span class="mi">41</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00002149</span>
-<span class="n">Iteration</span>   <span class="mi">42</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00002107</span>
-<span class="n">Iteration</span>   <span class="mi">43</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00002066</span>
-<span class="n">Iteration</span>   <span class="mi">44</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00002026</span>
-<span class="n">Iteration</span>   <span class="mi">45</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00001986</span>
-<span class="n">Iteration</span>   <span class="mi">46</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00001948</span>
-<span class="n">Iteration</span>   <span class="mi">47</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00001910</span>
-<span class="n">Iteration</span>   <span class="mi">48</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00001873</span>
-<span class="n">Iteration</span>   <span class="mi">49</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00001837</span>
-<span class="n">Iteration</span>   <span class="mi">50</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00001801</span>
-<span class="n">Iteration</span>   <span class="mi">51</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00001766</span>
-<span class="n">Iteration</span>   <span class="mi">52</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00001732</span>
-<span class="n">Iteration</span>   <span class="mi">53</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00001699</span>
-<span class="n">Iteration</span>   <span class="mi">54</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00001666</span>
-<span class="n">Iteration</span>   <span class="mi">55</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00001633</span>
-<span class="n">Iteration</span>   <span class="mi">56</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00001602</span>
-<span class="n">Iteration</span>   <span class="mi">57</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00001571</span>
-<span class="n">Iteration</span>   <span class="mi">58</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00001541</span>
-<span class="n">Iteration</span>   <span class="mi">59</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00001511</span>
-<span class="n">Iteration</span>   <span class="mi">60</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00001482</span>
-<span class="n">Iteration</span>   <span class="mi">61</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00001453</span>
-<span class="n">Iteration</span>   <span class="mi">62</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00001425</span>
-<span class="n">Iteration</span>   <span class="mi">63</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00001398</span>
-<span class="n">Iteration</span>   <span class="mi">64</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00001371</span>
-<span class="n">Iteration</span>   <span class="mi">65</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00001344</span>
-<span class="n">Iteration</span>   <span class="mi">66</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00001318</span>
-<span class="n">Iteration</span>   <span class="mi">67</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00001293</span>
-<span class="n">Iteration</span>   <span class="mi">68</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00001268</span>
-<span class="n">Iteration</span>   <span class="mi">69</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00001244</span>
-<span class="n">Iteration</span>   <span class="mi">70</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00001220</span>
-<span class="n">Iteration</span>   <span class="mi">71</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00001197</span>
-<span class="n">Iteration</span>   <span class="mi">72</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00001174</span>
-<span class="n">Iteration</span>   <span class="mi">73</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00001151</span>
-<span class="n">Iteration</span>   <span class="mi">74</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00001129</span>
-<span class="n">Iteration</span>   <span class="mi">75</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00001107</span>
-<span class="n">Iteration</span>   <span class="mi">76</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00001086</span>
-<span class="n">Iteration</span>   <span class="mi">77</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00001065</span>
-<span class="n">Iteration</span>   <span class="mi">78</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00001045</span>
-<span class="n">Iteration</span>   <span class="mi">79</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00001025</span>
-<span class="n">Iteration</span>   <span class="mi">80</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00001006</span>
-<span class="n">Iteration</span>   <span class="mi">81</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00000986</span>
-<span class="n">Iteration</span>   <span class="mi">82</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00000968</span>
-<span class="n">Iteration</span>   <span class="mi">83</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00000949</span>
-<span class="n">Iteration</span>   <span class="mi">84</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00000931</span>
-<span class="n">Iteration</span>   <span class="mi">85</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00000913</span>
-<span class="n">Iteration</span>   <span class="mi">86</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00000896</span>
-<span class="n">Iteration</span>   <span class="mi">87</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00000879</span>
-<span class="n">Iteration</span>   <span class="mi">88</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00000862</span>
-<span class="n">Iteration</span>   <span class="mi">89</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00000846</span>
+<span class="o">......</span>
 <span class="n">Iteration</span>   <span class="mi">90</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00000830</span>
 <span class="n">Iteration</span>   <span class="mi">91</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00000814</span>
 <span class="n">Iteration</span>   <span class="mi">92</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00000799</span>
@@ -1153,7 +1096,7 @@ z =    8.41 ± 0.00800  km
 t =    0.88 ± 0.00700  s
 </pre></div>
 </div>
-<section id="lsqr-algorithm">
+<div class="section" id="lsqr-algorithm">
 <h3>LSQR Algorithm<a class="headerlink" href="#lsqr-algorithm" title="Permalink to this headline"></a></h3>
 <p>Considering a double difference cluster with 1000 events, we estimate the time consumed for one iteration. Note the <span class="math notranslate nohighlight">\(G^TG\)</span> dimension is <span class="math notranslate nohighlight">\(4000\times 4000\)</span>, it costs 16 seconds to calculate the inverse and singular value decomposition. What about 10 k events?</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">G</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">4000</span><span class="p">,</span><span class="mi">4000</span><span class="p">)</span>
@@ -1259,90 +1202,7 @@ A_1m_1+A_2m_2+\cdots+A_km_k \\&amp;= \frac{A_1}{\|A_1\|}(\|A_1\|m_1)+\frac{A_2}{
 <span class="n">Iteration</span>    <span class="mi">8</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00410597</span>
 <span class="n">Iteration</span>    <span class="mi">9</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00384061</span>
 <span class="n">Iteration</span>   <span class="mi">10</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00359645</span>
-<span class="n">Iteration</span>   <span class="mi">11</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00337184</span>
-<span class="n">Iteration</span>   <span class="mi">12</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00316522</span>
-<span class="n">Iteration</span>   <span class="mi">13</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00297513</span>
-<span class="n">Iteration</span>   <span class="mi">14</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00280020</span>
-<span class="n">Iteration</span>   <span class="mi">15</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00263915</span>
-<span class="n">Iteration</span>   <span class="mi">16</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00249079</span>
-<span class="n">Iteration</span>   <span class="mi">17</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00235401</span>
-<span class="n">Iteration</span>   <span class="mi">18</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00222780</span>
-<span class="n">Iteration</span>   <span class="mi">19</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00211121</span>
-<span class="n">Iteration</span>   <span class="mi">20</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00200338</span>
-<span class="n">Iteration</span>   <span class="mi">21</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00190352</span>
-<span class="n">Iteration</span>   <span class="mi">22</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00181090</span>
-<span class="n">Iteration</span>   <span class="mi">23</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00172485</span>
-<span class="n">Iteration</span>   <span class="mi">24</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00164479</span>
-<span class="n">Iteration</span>   <span class="mi">25</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00157015</span>
-<span class="n">Iteration</span>   <span class="mi">26</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00150046</span>
-<span class="n">Iteration</span>   <span class="mi">27</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00143525</span>
-<span class="n">Iteration</span>   <span class="mi">28</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00137413</span>
-<span class="n">Iteration</span>   <span class="mi">29</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00131673</span>
-<span class="n">Iteration</span>   <span class="mi">30</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00126274</span>
-<span class="n">Iteration</span>   <span class="mi">31</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00121184</span>
-<span class="n">Iteration</span>   <span class="mi">32</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00116378</span>
-<span class="n">Iteration</span>   <span class="mi">33</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00111833</span>
-<span class="n">Iteration</span>   <span class="mi">34</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00107527</span>
-<span class="n">Iteration</span>   <span class="mi">35</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00103441</span>
-<span class="n">Iteration</span>   <span class="mi">36</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00099558</span>
-<span class="n">Iteration</span>   <span class="mi">37</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00095863</span>
-<span class="n">Iteration</span>   <span class="mi">38</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00092342</span>
-<span class="n">Iteration</span>   <span class="mi">39</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00088982</span>
-<span class="n">Iteration</span>   <span class="mi">40</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00085773</span>
-<span class="n">Iteration</span>   <span class="mi">41</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00082704</span>
-<span class="n">Iteration</span>   <span class="mi">42</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00079766</span>
-<span class="n">Iteration</span>   <span class="mi">43</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00076951</span>
-<span class="n">Iteration</span>   <span class="mi">44</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00074252</span>
-<span class="n">Iteration</span>   <span class="mi">45</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00071662</span>
-<span class="n">Iteration</span>   <span class="mi">46</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00069174</span>
-<span class="n">Iteration</span>   <span class="mi">47</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00066784</span>
-<span class="n">Iteration</span>   <span class="mi">48</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00064486</span>
-<span class="n">Iteration</span>   <span class="mi">49</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00062274</span>
-<span class="n">Iteration</span>   <span class="mi">50</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00060146</span>
-<span class="n">Iteration</span>   <span class="mi">51</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00058096</span>
-<span class="n">Iteration</span>   <span class="mi">52</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00056122</span>
-<span class="n">Iteration</span>   <span class="mi">53</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00054219</span>
-<span class="n">Iteration</span>   <span class="mi">54</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00052385</span>
-<span class="n">Iteration</span>   <span class="mi">55</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00050616</span>
-<span class="n">Iteration</span>   <span class="mi">56</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00048911</span>
-<span class="n">Iteration</span>   <span class="mi">57</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00047265</span>
-<span class="n">Iteration</span>   <span class="mi">58</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00045676</span>
-<span class="n">Iteration</span>   <span class="mi">59</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00044144</span>
-<span class="n">Iteration</span>   <span class="mi">60</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00042664</span>
-<span class="n">Iteration</span>   <span class="mi">61</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00041235</span>
-<span class="n">Iteration</span>   <span class="mi">62</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00039855</span>
-<span class="n">Iteration</span>   <span class="mi">63</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00038523</span>
-<span class="n">Iteration</span>   <span class="mi">64</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00037236</span>
-<span class="n">Iteration</span>   <span class="mi">65</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00035993</span>
-<span class="n">Iteration</span>   <span class="mi">66</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00034792</span>
-<span class="n">Iteration</span>   <span class="mi">67</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00033632</span>
-<span class="n">Iteration</span>   <span class="mi">68</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00032511</span>
-<span class="n">Iteration</span>   <span class="mi">69</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00031428</span>
-<span class="n">Iteration</span>   <span class="mi">70</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00030382</span>
-<span class="n">Iteration</span>   <span class="mi">71</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00029370</span>
-<span class="n">Iteration</span>   <span class="mi">72</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00028393</span>
-<span class="n">Iteration</span>   <span class="mi">73</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00027448</span>
-<span class="n">Iteration</span>   <span class="mi">74</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00026535</span>
-<span class="n">Iteration</span>   <span class="mi">75</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00025653</span>
-<span class="n">Iteration</span>   <span class="mi">76</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00024800</span>
-<span class="n">Iteration</span>   <span class="mi">77</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00023976</span>
-<span class="n">Iteration</span>   <span class="mi">78</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00023179</span>
-<span class="n">Iteration</span>   <span class="mi">79</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00022408</span>
-<span class="n">Iteration</span>   <span class="mi">80</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00021664</span>
-<span class="n">Iteration</span>   <span class="mi">81</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00020944</span>
-<span class="n">Iteration</span>   <span class="mi">82</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00020248</span>
-<span class="n">Iteration</span>   <span class="mi">83</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00019576</span>
-<span class="n">Iteration</span>   <span class="mi">84</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00018926</span>
-<span class="n">Iteration</span>   <span class="mi">85</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00018297</span>
-<span class="n">Iteration</span>   <span class="mi">86</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00017689</span>
-<span class="n">Iteration</span>   <span class="mi">87</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00017102</span>
-<span class="n">Iteration</span>   <span class="mi">88</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00016534</span>
-<span class="n">Iteration</span>   <span class="mi">89</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00015985</span>
-<span class="n">Iteration</span>   <span class="mi">90</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00015454</span>
-<span class="n">Iteration</span>   <span class="mi">91</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00014941</span>
-<span class="n">Iteration</span>   <span class="mi">92</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00014445</span>
-<span class="n">Iteration</span>   <span class="mi">93</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00013966</span>
-<span class="n">Iteration</span>   <span class="mi">94</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00013502</span>
+<span class="o">......</span>
 <span class="n">Iteration</span>   <span class="mi">95</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00013054</span>
 <span class="n">Iteration</span>   <span class="mi">96</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00012620</span>
 <span class="n">Iteration</span>   <span class="mi">97</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00012201</span>
@@ -1384,9 +1244,9 @@ z =    8.30 ± 0.04760000  km
 t =    0.88 ± 0.00000000  s
 </pre></div>
 </div>
-</section>
-</section>
-<section id="summary">
+</div>
+</div>
+<div class="section" id="summary">
 <h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline"></a></h2>
 <p>In this tutorial, we first demonstrate the influence of velocity misfit and <strong>Station delay</strong>’s influence on earthquake location results.</p>
 <p>We then introduce the double-difference method, which theoretically diminishes the station delay effect and limits the influence of velocity misfit. During processing, we: * Set up the data kernel <strong>G</strong> and calculate the double difference array <strong>dtdt</strong> * Add damping to the data kernel to make it stable (<em>determinant not be zero</em>) * Use <strong>conditon number</strong> to guide the selection of damping factor * Comparison shows <strong>double-difference</strong> location leads to location with <strong>better performance</strong></p>
@@ -1396,11 +1256,11 @@ t =    0.88 ± 0.00000000  s
 <div class="line">we use one-layer velocity model for the convenience in finding the ray partial derivatives.</div>
 </div>
 </div>
-<section id="homework">
+<div class="section" id="homework">
 <h3>Homework<a class="headerlink" href="#homework" title="Permalink to this headline"></a></h3>
 <ol class="arabic">
 <li><p>In the demo example, is event origin time fully recovered? Could you please explain the reason?(10 points)</p></li>
-<li><p>Note we add negative symbol to partial derivatives of the event 2 in structing the data kernel, do you know why? (10 points)</p></li>
+<li><p>Note we add negative symbol to partial derivatives of the event 2 in constructing the data kernel, do you know why? (10 points)</p></li>
 <li><p>In calculating the variance(<strong>var</strong>), it is written <code class="docutils literal notranslate"><span class="pre">var</span> <span class="pre">=</span> <span class="pre">e2/(dtdt_damp.shape[0]-event_number</span> <span class="pre">*</span> <span class="pre">event_parameters)</span></code>, do you know why variance is different from square error here? (10 points)</p></li>
 <li><p>Add one more event hyc_true3 = (0.2,8.1,1) (x,z,t) and prepare for inversion, set up suitable damping factor so that condition number is in the range 40-100.(80 points)
 -  Show the absolute location result of the newly added event and its uncertainty. (20 points)
@@ -1431,13 +1291,13 @@ t =    0.88 ± 0.00000000  s
 </div></blockquote>
 </li>
 </ol>
-</section>
-<section id="source-code">
+</div>
+<div class="section" id="source-code">
 <h3>Source code<a class="headerlink" href="#source-code" title="Permalink to this headline"></a></h3>
 <p>Download tutorial code <a class="reference download internal" download="" href="../_downloads/b5f0555e6d6cb2678327be5cac894b40/Relative_Location.zip"><code class="xref download docutils literal notranslate"><span class="pre">here</span></code></a></p>
-</section>
-</section>
-</section>
+</div>
+</div>
+</div>
 
 
            </div>
@@ -1451,7 +1311,7 @@ t =    0.88 ± 0.00000000  s
 
   <div role="contentinfo">
     <p>&#169; Copyright 2021-2022, CUSeisTut team.
-      <span class="lastupdated">Last updated on 2022-04-27.
+      <span class="lastupdated">Last updated on 2022-05-31.
       </span></p>
   </div>
 
