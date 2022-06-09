@@ -56,7 +56,7 @@ Now you are at the  :file:`/home/user/desktop`. Before downloading the data, you
 .. code-block::
     :linenos:
 	
-    $ mkdir Data_storage
+    $ mkdir data_storage
     
 The command  :file:`ls` list the content under current directory. Now run the list files :file:`ls` command the make sure the  :file:`Data_storage` is created. 
 
