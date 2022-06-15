@@ -3,30 +3,36 @@ Earthquake Absolute Location
 
 Introduction
 --------------
-Earthquake detection find the P&S arrival time on different stations. The further step is to find the earthquake location (**x,y,z**) and origin time (**t**). A direct idea is to set up equations and solve for the parameters. However, general solution fits all the equations rarely exist in practice. Another method is the grid search method, the possible space is split into 3D grids, the misfit of each grid as the earthquake source is calculated, the grid where the event occurred should have the minimum misfit. The grid search method needs consider the trade-off below the location resolution and calculation efficiency. To achieve high resolution, the single grid should be divided into smaller size, while the total grids quantity increased dramatically, users have to spend more time in calculation.
+The earthquake detection process finds the arrival times of P&S wave on different stations for each event. The next step is to get the earthquake location (**longitude(x),latitude(y),depth(z)**) and origin time (**t**). The central idea is to invert the data by the equations governing the relationship between arrival data and hypocenter location. However, due to heterogenities in real earth setting, a solution that fits all data rarely exists. 
 
-In this session, we introduce the most commonly used iterative earthquake abosolute location method, which could achieve high-resolution earthquake location with limited calculation. We start from simple one-layer model for practice and then run into detailed data processing using the ``HYPOINVERSE`` program.
+Since the eathquake location cannot fit well with all data. It is mostly determined by the location with minimum misfit. One widely used method is the least-square inversion. Another method used is the grid search method which earthquake location is searched iteratively by defined possible model ranges. Each grid is assumed to be the earthquake location and their misfit with the data is computed. Hence, the minimum misfit location is determine. One large limitation of grid search is the resolution is controlled by grid size. ...
+
+The most widely used methods are based on least-square algorithm. That is, the earthquake location is determined by the minimum misfit with observations. One least-square method is the grid search method. In this method, the possible space is splited into 3D grids, and then the misfit of each grid as the earthquake location is calculated one by one. The earthquake is then considered to be occurred inside the grid with minimum misfit. The grid size controls the earthquake location resolution, a larger grid size will lead to a larger uncertainty (the range where the true earthquake location might be). However, a smaller grid size will lead to heavy calculation load due to dramtically increased grid quantity. Therefore, there is a trade-off between resolution and calculation efficiency in this method.
+
+Another earthquake location method is by inversion. The equation is linearized and solved iteratively by least-sqaure methods. This method does not require intense computation and converge fastly. It is therefore widely used. ...
+
+Another least-square earthquake location method is the iterative absolute earthquake location method, which can achieve high-resolution location with ideal calculation efficiency and is widely used. In this session, we introduce the details of this method. We start from simple one-layer model for practice and then run into real data processing using the popular ``HYPOINVERSE`` program, which is developed based on the iterative absolute earthquake location method.
 
 Theory Background
 ******************
 .. image:: Ray_textbook.jpg
 
-The arrival time recorded by one station could be presented:
+The arrival time recorded by one station could be presented as:
 
 .. math::
-   T_i^k = O_k+\int_{s}^{r}uds
+   T_i^k = O_k+\int_{s}^{r}udS
 
-where :math:`T_i^k` is the arrival time of event k on station i. In the right side of equation, there are two components: 1) The origin time of event k :math:`O_k`; 2) The event travel time. It is the integral over the ray path. The s denotes the source location, r represents the receiver (station) location, u is the reciprocal of velocity named slowness.
+where :math:`T_i^k` is the arrival time of event :math:`k` on station :math:`i`. In the right side of equation, there are two components: 1) The origin time of event :math:`k` :math:`O_k`; 2) The event travel time. It is the integral over the ray path. The :math:`s` denotes the source location, :math:`r` represents the receiver (station) location, :math:`u` is the reciprocal of velocity named slowness.
 
 Assume the event with true source parameters :math:`\mathbf{m_{true}}=(x_{true},y_{true},z_{true},o_{true})^T` is recorded by :math:`n` stations,
-we use :math:`\mathbf{d_obs}` to denote the arrival time of each station, then :math:`\mathbf{m_{true}}` should satisfy:
+we use :math:`\mathbf{d_obs}` to denote the arrival times of stations, then :math:`\mathbf{m_{true}}` should satisfy:
 
 .. math::
 
    \mathbf{Fm_{true}=d_obs}
 
-The relationship between :math:`\mathbf{m}` and :math:`\mathbf{d}` is non-linear because integral is involved as show in previous equation.
-For earthquake parameters that are close to :math:`\mathbf{m_{true}}`, we present it as :math:`\mathbf{m=m_{true}+\Delta{m}}`, the :math:`\mathbf{\Delta m}` will lead to variation in :math:`\mathbf{d_{obs}+\Delta d}`
+The relationship between :math:`\mathbf{m}` and :math:`\mathbf{d}` is non-linear because integral is involved as shown in previous equation.
+For earthquake parameters that are close to :math:`\mathbf{m_{true}}`, we present them as :math:`\mathbf{m=m_{true}+\Delta{m}}`, the :math:`\mathbf{\Delta m}` will lead to variation in :math:`\mathbf{d_{obs}+\Delta d}`
 
 According to `Taylor Expansion theorem <https://en.wikipedia.org/wiki/Taylor_series>`_, we have:
 
@@ -35,8 +41,8 @@ According to `Taylor Expansion theorem <https://en.wikipedia.org/wiki/Taylor_ser
 
 Neglect the items after the first-order partial derivative, we then have :math:`\mathbf{\Delta d = F'\Delta m}`.
 
-Give the initial location and origin time :math:`\mathbf{m_0}=(x_0,y_0,z_0,t_0)`, we can calculate the corresponding arrival time on each station :math:`\mathbf{d_cal}` and the :math:`\mathbf{\Delta d}`.
-Using the :math:`\mathbf{\Delta d}` we can estimate the :math:`\mathbf{\Delta m}`. By update the :math:`\mathbf{\Delta m}`, an absolute location of hypocenter can be derived.
+Given the initial location and origin time :math:`\mathbf{m_0}=(x_0,y_0,z_0,t_0)`, we can calculate the corresponding arrival time at each station :math:`\mathbf{d_cal}` and the :math:`\mathbf{\Delta d}`.
+Using the :math:`\mathbf{\Delta d}` we can estimate the :math:`\mathbf{\Delta m}`. By updating the :math:`\mathbf{\Delta m}`, an absolute location of hypocenter can be derived.
 
 Contents of this tutorial
 **************************
@@ -47,9 +53,9 @@ We will introduce how to derive and analyze absolute locations of hypocenters in
 #. Iteration method
 #. Error analyze
 
-**Authors**: ZI Jinping & SONG Zilin, Earth Science Sytem Program, CUHK. 
+**Authors**: ZI Jinping & SONG Zilin, Earth Science System Program, CUHK. 
 
-**Testers**: XIA Zhuoxuan, SUN Zhangyu, Earth Science Sytem Program, CUHK. 
+**Testers**: XIA Zhuoxuan & SUN Zhangyu, Earth Science System Program, CUHK. 
 
 Python Environment and model Setup
 -----------------------------------
@@ -71,116 +77,9 @@ Python environment
     from mpl_toolkits.mplot3d import Axes3D
 
 .. note::
- | Functions below is important to be defined at first.
+ | Define functions that will be used later.
                   
 .. code:: 
-
-    def iter_loc(hyc_loop,stas,dobs,V,niter=10,show=True):
-        """
-        Do iterative earthquake location
-        Parameters:
-        | hyc_loop: hypoceter for iteration
-        |     stas: array contains stations location
-        |     dobs: observed travel time
-        Return:
-        | hyc_loop: earthquake location after iteration
-        | sigma_m2: square sigma matrix
-        |  sigma_d: root mean square residual
-        """
-        nobs = dobs.shape[0]
-        k = 0
-        while k < niter:
-            dcal = np.zeros((nobs,1))
-            for i in range(dobs.shape[0]):
-                dx = stas[i,0]-hyc_loop[0]
-                dy = stas[i,1]-hyc_loop[1]
-                dz = stas[i,2]-hyc_loop[2]
-                dcal[i,0] = np.sqrt(dx**2+dy**2+dz**2)/V+hyc_loop[3]
-            delta_d = dobs - dcal
-            e2 = 0 
-            for i in range(nobs):
-                e2 += delta_d[i,0]**2
-            if show:
-                print(f"Iteration {k} square error: ",format(e2,'5.2f'))
-    
-            # >>>>> Build G matrix >>>>>>
-            G = np.zeros((nobs,4))
-            G[:,3]=1
-            for i in range(dobs.shape[0]):
-                for j in range(3):
-                    denomiter = np.sqrt((hyc_loop[0]-stas[i,0])**2+(hyc_loop[1]-stas[i,1])**2+(hyc_loop[2]-stas[i,2])**2)
-                    G[i,j]=(hyc_loop[j]-stas[i,j])/denomiter/V
-    
-            # >>>>> Invert the m value >>>>        
-            GTG = np.matmul(G.T,G)
-            GTG_inv = np.linalg.inv(GTG)
-            GTG_inv_GT = np.matmul(GTG_inv,G.T)
-            delta_m = np.matmul(GTG_inv_GT,delta_d)
-    
-            # >>>>> Update the hypocenter loop >>>>>
-            hyc_loop = np.add(hyc_loop,delta_m.ravel())
-            k = k+1
-    
-            # >>>>> End the loop if error is small >>>>>
-            if e2<0.0000001:
-                break
-        sigma_d = np.std(delta_d)
-        sigma_d2 = sigma_d**2
-        sigma_m2 = sigma_d2 * GTG_inv
-        return hyc_loop, sigma_m2, sigma_d
-    
-    def get_init_loc(dobs,stas,depth=5,gap_time=1):
-        """
-        Get initial earthquake location
-        Parameters:
-        |    dobs: observed travel time
-        |    stas: array contain station location
-        |   depth: initial depth of earthquake location
-        |gap_time: set event initial gap time before the earliest arrival
-        """
-        dmin = np.min(dobs)         # The minimum arrival time
-        idx = np.argmin(dobs)       # The index of observation
-    
-        hyc_init = np.zeros(4);      # Init array
-        hyc_init[0] = stas[idx,0];   # Set the same x,y with station
-        hyc_init[1] = stas[idx,1];   # Set the same x,y with station
-        hyc_init[2] = depth;             # Set initial depth 5 km
-        hyc_init[3] = dmin-gap_time;        # Set initial event time 1s earlier than arrival
-        print("Initial trial parameters ","x: ",hyc_init[0],"km; ",
-                                          "y: ",hyc_init[1],"km; ",
-                                          "z: ",hyc_init[2],"km; ",
-                                          "t: ", format(hyc_init[3],'.4f')+" s")
-        return hyc_init
-    
-    def present_loc_results(hyc,sig_square=None,std_fmt='.2f'):
-        """
-        Print earthquake location results
-        |         hyc: hypocenter
-        |sigma_square: squared sigma matrix
-        |     std_fmt: format control of the output uncertainty
-        """
-        _x = format(np.round(hyc[0],4),format("6.2f"))
-        _y = format(np.round(hyc[1],4),format("6.2f"))
-        _z = format(np.round(hyc[2],4),format("6.2f"))
-        _t = format(np.round(hyc[3],4),format("6.2f"))
-        if not isinstance(sig_square,np.ndarray):
-            print("x = ",_x," km")
-            print("x = ",_y," km")
-            print("z = ",_z," km")
-            print("t = ",_t," s")
-        else:
-            stdx = sig_square[0,0]**0.5
-            _stdx = format(np.round(stdx,4),std_fmt)
-            stdy = sig_square[1,1]**0.5
-            _stdy = format(np.round(stdy,4),std_fmt)
-            stdz = sig_square[2,2]**0.5
-            _stdz = format(np.round(stdz,4),std_fmt)
-            stdt = sig_square[3,3]**0.5
-            _stdt = format(np.round(stdt,4),std_fmt)
-            print("x = ",_x,"±",_stdx," km")
-            print("y = ",_y,"±",_stdy," km")
-            print("z = ",_z,"±",_stdz," km")
-            print("t = ",_t,"±",_stdt," s")
             
     def matrix_show(*args,**kwargs):
         """
@@ -323,7 +222,7 @@ Generate synthetic arrival times
 The Grid-Search Method
 --------------------------
 
-The grid search method separate the possible earthquake location zone into 3-D grids, try each grid as earthquake center and calculate the residual. The grid where earthquake located should be lowest residual.
+The grid search method separates the possible earthquake location zone into 3-D grids, trying each grid as earthquake center and calculating the residual. The grid where earthquake is located should has the lowest residual.
 
 1. Set up grids
 ****************
@@ -335,7 +234,7 @@ The grid search method separate the possible earthquake location zone into 3-D g
     dz = 1
     xs = np.arange(-40,41,dx)
     ys = np.arange(-40,41,dy)
-    zs = np.arange(0,21,dz)
+    zs = np.arange(0,20,dz)
     nx = len(xs)
     ny = len(ys)
     nz = len(zs)
@@ -352,7 +251,7 @@ The grid search method separate the possible earthquake location zone into 3-D g
     ax.set_xlabel("X (km)")
     ax.set_ylabel("Y (km)")
     ax.set_zlabel("Dep (km)")
-    ax.set_zlim([21,0])
+    ax.set_zlim([20,0])
     plt.show()
 
 .. image:: output_13_1.png
@@ -408,11 +307,13 @@ The grid search method separate the possible earthquake location zone into 3-D g
     else:
         nrow = int(nz/ncol)+1
     xs_mesh,ys_mesh = np.meshgrid(xs,ys)
-    fig, axs = plt.subplots(nrow,ncol,figsize=(2*ncol,2*nrow),sharex=True,sharey=True)
+    fig, axs = plt.subplots(nrow,ncol,figsize=(2.5*ncol,2*nrow),sharex=True,sharey=True)
     axs = axs.ravel()
     for i in range(nz):
         axs[i].pcolormesh(xs_mesh,ys_mesh,sq_errs[:,:,i],
                       shading='auto',cmap='jet',vmin=sq_err_min,vmax=sq_err_max)
+        plt.sca(axs[i])        # set current active axis
+        plt.colorbar(pm)
         tmp_sq_err_min = np.min(sq_errs[:,:,i])
         _tmp_sq_err_min = format(tmp_sq_err_min,'6.3f')
         tmp_kk = np.where(sq_errs[:,:,i]==tmp_sq_err_min)
@@ -463,7 +364,7 @@ Modify V=4.9 and redo the grid search, what do you find?
 Iterative Method
 -------------------
 
-The arrival time recorded by one station could be presented:
+The arrival time recorded by one station could be presented as:
 
 .. math::  T_i^k = O_k+\int_{s}^{r}uds 
 
@@ -482,9 +383,9 @@ Note the equation above is non-linear. Using Taylor Expansion, we have:
 
 where :math:`\mathbf{m} = (x,y,z,t)`. Ingoring high-order component:
 
-.. math::  \mathbf{\Delta d = F'\Delta m}
+.. math::  \mathbf{\Delta d = \frac{\partial F}{\partial m}\Delta m}
 
-It means the misfit of data is related to the misfit of earthquake location, the relationship is :math:`\mathbf{F'}`
+It means the misfit of data is related to the misfit of earthquake location, the relationship is presented as:
 
 .. math:: F_i^k = T_i^k = O_k+\int_{s}^{r}uds
 
@@ -501,13 +402,25 @@ More in detail:
 .. math::
 
    \begin{cases}
-   \frac{\partial T}{\partial x}=dx/ds\times u\\
-   \frac{\partial T}{\partial y}=dy/ds\times u\\
-   \frac{\partial T}{\partial z}=dz/ds\times u\\
+   \frac{\partial T}{\partial x}=dx/ds\cdot u\\
+   \frac{\partial T}{\partial y}=dy/ds\cdot u\\
+   \frac{\partial T}{\partial z}=dz/ds\cdot u\\
    \frac{\partial T}{\partial t}=1
    \end{cases}
 
 where :math:`ds=\sqrt{(dx)^2+(dy)^2+(dz)^2}`
+
+For one-layer model, :math:`T_i^k=o_t +\sqrt{x^2+y^2+z^2}/v`, where
+:math:`x,y,z` denotes distance between the source (earthquake location)
+and receiver(station), :math:`v` is velocity. Partial derivatives of one-layer model are:
+
+.. math:: \frac{\partial T_i^k}{\partial x} = \frac{x}{\sqrt{x^2+y^2+z^2}v}
+
+.. math:: \frac{\partial T_i^k}{\partial y} = \frac{y}{\sqrt{x^2+y^2+z^2}v}
+
+.. math:: \frac{\partial T_i^k}{\partial y} = \frac{z}{\sqrt{x^2+y^2+z^2}v}
+
+.. math:: \frac{\partial T_i^k}{\partial o_t} = 1
 
 .. math::
 
@@ -528,7 +441,7 @@ After solve this equation, we can update the earthquake location:
 
 .. math:: \mathbf{m=m+\Delta m}
 
-This process generally will not finished in one iteration, more iterations are needed to update the locations until misfit doesn’t decrease any more.
+This process generally will not finish in one iteration, more iterations are needed to update the locations until no apparent change of misfit.
 
 .. image:: Earthquake_location_workflow.jpg
    :width: 50%
@@ -536,9 +449,9 @@ This process generally will not finished in one iteration, more iterations are n
 1. Give an initial source parameters
 *************************************
 
-The station which records arrival earliest is cloest to the hypocenter, so it is reasonable to start initial location: 
+The station which records the earliest arrival is the cloest to the hypocenter, so it is reasonable to be set as initial location:
 
-1. The same x and y with the cloest station; 
+1. The same x and y with the closest station; 
 2. Initial depth at 5 km; 
 3. Initial origin time 1 sec before the earliest arrival;
 
@@ -553,7 +466,7 @@ The station which records arrival earliest is cloest to the hypocenter, so it is
     hyc_init[3] = dmin-1;        # Set initial event time 1s earlier than arrival
     hyc_loop = hyc_init.copy()
 
-2. Calculate the arrival times base on input location
+2. Calculate the arrival times based on input location
 ******************************************************
 
 .. code::
@@ -580,26 +493,8 @@ The station which records arrival earliest is cloest to the hypocenter, so it is
 
     The square error:  49.466691
 
-4. Calculate Paritial Derivatives
+4. Calculate Partial Derivatives
 **********************************
-
-.. math:: T_i^k=o_t +\int_{src}^{rcv}uds
-
-where :math:`T_i^k` is the arrrival time, :math:`o_t` is the origin
-time. The integral part accounts for time of ray propagation, :math:`u`
-is the slowness.
-
-For one-layer model, :math:`T_i^k=o_t +\sqrt{x^2+y^2+z^2}/v`, where
-:math:`x,y,z` denotes distance between the source (earthquake location)
-and receiver(station), :math:`v` is velocity. Partial derivatives of one-layer model are:
-
-.. math:: \frac{\partial T_i^k}{\partial x} = \frac{x}{\sqrt{x^2+y^2+z^2}v}
-
-.. math:: \frac{\partial T_i^k}{\partial y} = \frac{y}{\sqrt{x^2+y^2+z^2}v}
-
-.. math:: \frac{\partial T_i^k}{\partial y} = \frac{z}{\sqrt{x^2+y^2+z^2}v}
-
-.. math:: \frac{\partial T_i^k}{\partial o_t} = 1
 
 .. code::
 
@@ -618,7 +513,7 @@ relationship between :math:`\Delta m` and :math:`\Delta d` is:
 
 .. math:: G\Delta m =\Delta d
 
-:math:`G` is not a square matrix, :math:`G^TG` is a squared matrix, we
+:math:`G` is not a square matrix, :math:`G^TG` is a square matrix, we
 then have:
 
 .. math:: G^TG\Delta m=G^T\Delta d
@@ -718,9 +613,9 @@ Summarize previous steps into a loop function
         e2 = 0 
         for i in range(delta_d.shape[0]):
             e2 += delta_d[i,0]**2
-        print(f"Iteration {k} square error: ",format(e2,'5.2f'))
+        print(f"Iteration {k} square error: ",format(e2,'10.8f'))
         
-        # >>>>> End the loop if error is small >>>>>
+        # >>>>> add codes to end the loop if error is small >>>>>
 
     hyc_estimate = hyc_loop
     print(hyc_estimate)
@@ -749,7 +644,7 @@ Exercise (10 min)
 More Practical Case
 --------------------
 
-In the iterative earthquake case, we first generate the arrivals times and then invert the earthquake location, we find that it is very efficient, fast, and accurate to do so. The error decreased to 0 in around 3 iterations. However, in real cases, it is rare to have error decreased to 0 due to series of factors: 
+In the iterative earthquake case, we first generate the arrival times and then invert for the earthquake location, we find that it is very efficient, fast, and accurate to do so. The error decreases to nearly 0 in around 3 iterations. However, in real cases, it is rare to have error decreased to nearly 0 due to series of factors: 
 
 1. Phase picking error; 
 2. Time - error of stations; 
@@ -766,7 +661,7 @@ Could you find the P arrival in below waveforms?
    :width: 50%
 
 .. note::   
- | The most advanced machine learning phase-pick method, its standard error is ~0.08s in picking P phases.
+ | The most advanced machine learning phase-pick method has a standard error of ~0.08s in picking P phases.
 
 It is reasonable to assume the picking errors follow the `Gaussian Distribution`, the probability we pick the phase arrival close to the true arrival is high and the probability that picked phase is far offset the true arrival is weak.
 
@@ -909,14 +804,14 @@ Credit: Wikipedia
 
 **Exercise (2 min)**
 
-1. What do you find from the inversion? compare the results with previous run.
+1. What do you find from the inversion? compare the results with the previous run.
 
 2. Change the sigma value and check the variation of the inversion results.
 
 Error analysis
 ***************
 
-The error in observed data will of couse lead to uncertainties in the earthquake location parameters estimation. Their relationship could be described as:
+The error in observed data will definitely lead to uncertainties in the estimation of earthquake location parameters. Their relationship could be described as:
 
 .. math:: \sigma_m^2=\sigma_d^2(G^TG)^{-1}
 
@@ -974,7 +869,6 @@ For two parameters, the definition of covariance is:
     z =    9.67 ± 0.99  km
     t =   -0.03 ± 0.06  s
 
-
 **Question (2 min)**
 
 Test different parameters and see how standard error ($\sigma$) changes, which parameter has the largest standard error? which parameter has the minimum standard error? Why?
@@ -1003,7 +897,7 @@ From the covariance matrix, we can estiamte the uncertainty(:math:`\sigma`) of x
 
 **Principle axes**
 
-Note that off-diagonal elements of :math:`\sigma_m^2` is not zero. Using **xy plane** as example, it is shape could be presented by below generated figure. The principle axes are not along the same direction with **xy** axis.
+Note that off-diagonal elements of :math:`\sigma_m^2` is not zero. Using **xy plane** as an example, it is shape could be presented by the figure below generated. The principle axes are not along the same direction with **xy** axis.
 
 .. code::
 
@@ -1080,21 +974,16 @@ Summary
 One layer model
 *****************
 
-In the tutorial, we introduced the grid-search method and iterative location method using the one-layer velocity model. The advantage of one-layer is that the ray from the source to one station is a stright line, it is convenient to calculate the corresponding partial derivatives. In the real earth, the velocity varies due to material, pressure and other fators, the ray path is a curved line, making things more complicated. 
+In the tutorial, we introduced the grid-search method and iterative location method using the one-layer velocity model. The advantage of one-layer is that the ray from the source to one station is a stright line, it is thus convenient to calculate the corresponding partial derivatives. In the real earth, however, the velocity varies due to material, pressure and other fators, the ray path is therefore a curved line, making things more complicated. 
 
 .. image:: Ray.png
 
-However, the key process in finding the earthquake locations remain the same: 
-
-#. Give an initial trial earthquake location; 
-#. Ray tracing by algorithm (A straight line in one layer model); 
-#. Calculate the partial derivatives (:math:`\frac{\partial T}{\partial x_i} = \frac{dx_i}{ds}`), where :math:`s` is the ray; 4. Calculate :math:`\Delta m` by :math:`\Delta d=d_{obs}-d_{cal}`; 
-#. Update the earthquake location, if a new iteration needed, move to step 2.
+However, the key process in finding the earthquake locations remains the same.
 
 The grid search method and the iteraive method
 **********************************************
 
-In this tutorial, using the **iterative method**, we can converge the minimum error location in limited iterations with the random initial location we set. However, in practical cases, due to the complexity of station coverage, velocity structure, and other factors, a random initiation might lead to local minimum rather than glocal minimum. 
+In this tutorial, using the **iterative method**, we can converge the minimum error location in limited iterations with the random initial location we set. However, in practical cases, due to the complexity of station coverage, velocity structure, and other factors, a random initiation might lead to local minimum rather than global minimum. 
 
 .. image:: grid_minimum.png
 
@@ -1107,8 +996,61 @@ Convenient functions
 
 .. code::
 
+    def iter_loc(hyc_loop,stas,dobs,V,niter=10,show=True):
+        """
+        Do iterative earthquake location
+        Parameters:
+        | hyc_loop: hypoceter for iteration
+        |     stas: array contains stations location
+        |     dobs: observed travel time
+        Return:
+        | hyc_loop: earthquake location after iteration
+        | sigma_m2: square sigma matrix
+        |  sigma_d: root mean square residual
+        """
+        nobs = dobs.shape[0]
+        k = 0
+        while k < niter:
+            dcal = np.zeros((nobs,1))
+            for i in range(dobs.shape[0]):
+                dx = stas[i,0]-hyc_loop[0]
+                dy = stas[i,1]-hyc_loop[1]
+                dz = stas[i,2]-hyc_loop[2]
+                dcal[i,0] = np.sqrt(dx**2+dy**2+dz**2)/V+hyc_loop[3]
+            delta_d = dobs - dcal
+            e2 = 0 
+            for i in range(nobs):
+                e2 += delta_d[i,0]**2
+            if show:
+                print(f"Iteration {k} square error: ",format(e2,'5.2f'))
+    
+            # >>>>> Build G matrix >>>>>>
+            G = np.zeros((nobs,4))
+            G[:,3]=1
+            for i in range(dobs.shape[0]):
+                for j in range(3):
+                    denomiter = np.sqrt((hyc_loop[0]-stas[i,0])**2+(hyc_loop[1]-stas[i,1])**2+(hyc_loop[2]-stas[i,2])**2)
+                    G[i,j]=(hyc_loop[j]-stas[i,j])/denomiter/V
+    
+            # >>>>> Invert the m value >>>>        
+            GTG = np.matmul(G.T,G)
+            GTG_inv = np.linalg.inv(GTG)
+            GTG_inv_GT = np.matmul(GTG_inv,G.T)
+            delta_m = np.matmul(GTG_inv_GT,delta_d)
+    
+            # >>>>> Update the hypocenter loop >>>>>
+            hyc_loop = np.add(hyc_loop,delta_m.ravel())
+            k = k+1
+    
+            # >>>>> End the loop if error is small >>>>>
+            if e2<0.0000001:
+                break
+        sigma_d = np.std(delta_d)
+        sigma_d2 = sigma_d**2
+        sigma_m2 = sigma_d2 * GTG_inv
+        return hyc_loop, sigma_m2, sigma_d
+
     hyc_abs, sigma_m2, e2 = iter_loc(hyc_init,stas,dobs,Vp)
-    present_loc_results(hyc_abs,sigma_m2,std_fmt='.4f')
 
 .. parsed-literal::
 
@@ -1117,6 +1059,44 @@ Convenient functions
     Iteration 2 square error:   0.03
     Iteration 3 square error:   0.00
     Iteration 4 square error:   0.00
+
+.. code::
+
+def present_loc_results(hyc,sig_square=None,std_fmt='.2f'):
+    """
+    Print earthquake location results
+    Parameters:
+    |         hyc: hypocenter
+    |sigma_square: squared sigma matrix
+    |     std_fmt: format control of the output uncertainty
+    """
+    _x = format(np.round(hyc[0],4),format("6.2f"))
+    _y = format(np.round(hyc[1],4),format("6.2f"))
+    _z = format(np.round(hyc[2],4),format("6.2f"))
+    _t = format(np.round(hyc[3],4),format("6.2f"))
+    if not isinstance(sig_square,np.ndarray):
+        print("x = ",_x," km")
+        print("x = ",_y," km")
+        print("z = ",_z," km")
+        print("t = ",_t," s")
+    else:
+        stdx = sig_square[0,0]**0.5
+        _stdx = format(np.round(stdx,4),std_fmt)
+        stdy = sig_square[1,1]**0.5
+        _stdy = format(np.round(stdy,4),std_fmt)
+        stdz = sig_square[2,2]**0.5
+        _stdz = format(np.round(stdz,4),std_fmt)
+        stdt = sig_square[3,3]**0.5
+        _stdt = format(np.round(stdt,4),std_fmt)
+        print("x = ",_x,"±",_stdx," km")
+        print("y = ",_y,"±",_stdy," km")
+        print("z = ",_z,"±",_stdz," km")
+        print("t = ",_t,"±",_stdt," s")
+
+    present_loc_results(hyc_abs,sigma_m2,std_fmt='.4f')
+
+.. parsed-literal::
+
     x =    0.50 ± 0.0000  km
     y =    0.50 ± 0.0000  km
     z =    9.45 ± 0.0000  km

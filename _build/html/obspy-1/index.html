@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Seismic data request via ObsPy &mdash; CUSeisTut</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -126,17 +125,17 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="seismic-data-request-via-obspy">
+  <div class="section" id="seismic-data-request-via-obspy">
 <h1>Seismic data request via ObsPy<a class="headerlink" href="#seismic-data-request-via-obspy" title="Permalink to this headline"></a></h1>
-<section id="brief-introduction">
+<div class="section" id="brief-introduction">
 <h2>Brief introduction<a class="headerlink" href="#brief-introduction" title="Permalink to this headline"></a></h2>
-<section id="what-is-obspy">
+<div class="section" id="what-is-obspy">
 <h3>What is ObsPy?<a class="headerlink" href="#what-is-obspy" title="Permalink to this headline"></a></h3>
 <p><strong>ObsPy</strong> is an open-source project dedicated to provide a <strong>Python</strong> framework for <strong>processing seismological data</strong>. It provides parsers for common file formats, clients to access data centers and seismological signal processing routines which allow the manipulation of seismological time series (copied from ObsPy Github page).</p>
 <a class="reference internal image-reference" href="../_images/obspy_logo.png"><img alt="../_images/obspy_logo.png" src="../_images/obspy_logo.png" style="width: 50%;" /></a>
 <p>We assume that you already have some experience of using Python. If not, you are suggested to read this <a class="reference external" href="https://docs.obspy.org/tutorial/code_snippets/python_introduction.html">small, incomplete introduction to the Python programming language</a>.</p>
-</section>
-<section id="how-to-install-obspy">
+</div>
+<div class="section" id="how-to-install-obspy">
 <h3>How to install ObsPy<a class="headerlink" href="#how-to-install-obspy" title="Permalink to this headline"></a></h3>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -156,8 +155,8 @@ $ conda install obspy=1.2
 <p class="admonition-title">Warning</p>
 <p>Exclude $ sign and start without whitespace!</p>
 </div>
-</section>
-<section id="contents-of-this-tutorial">
+</div>
+<div class="section" id="contents-of-this-tutorial">
 <h3>Contents of this tutorial<a class="headerlink" href="#contents-of-this-tutorial" title="Permalink to this headline"></a></h3>
 <p>We will introduce how to request, read, visualize, and further process seismic data using a few basic <code class="docutils literal notranslate"><span class="pre">functions</span></code> in the ObsPy <code class="docutils literal notranslate"><span class="pre">module</span></code>. it includes:</p>
 <ol class="arabic simple">
@@ -167,14 +166,14 @@ $ conda install obspy=1.2
 <li><p>Cross-section Plot with TauP arrivals</p></li>
 </ol>
 <p>Developed by LAU Tsz Lam Zoe under the instructions of Junhao SONG, Han CHEN, and Suli Yao.</p>
-</section>
-</section>
+</div>
+</div>
 <hr class="docutils" />
-<section id="utc-date-time">
+<div class="section" id="utc-date-time">
 <h2>1 UTC Date Time<a class="headerlink" href="#utc-date-time" title="Permalink to this headline"></a></h2>
 <p>Now let’s introduce the UTC DateTime format.</p>
 <p>The UTC DateTime is a Coordinated Universal Time. Usually we could see that HKT (UTC+8) or BJT (UTC+8), which means that Hong Kong or Beijing time is 8 hours earlier than UTC time. We usually use UTC Datetime to present the origin time of an earthquake. Seismic time-series data like digital seismograms also use UTC Datetime to present the time of each sample.</p>
-<section id="datetime-initialization">
+<div class="section" id="datetime-initialization">
 <h3>1.1 DateTime Initialization<a class="headerlink" href="#datetime-initialization" title="Permalink to this headline"></a></h3>
 <p>First in the terminal, type <code class="docutils literal notranslate"><span class="pre">python</span></code> and then type <code class="docutils literal notranslate"><span class="pre">enter</span></code>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">## Method1</span>
@@ -200,8 +199,8 @@ $ conda install obspy=1.2
 <div class="line">Method 1 &amp; 2 are examples. You can explore others <a class="reference external" href="https://docs.obspy.org/packages/autogen/obspy.core.utcdatetime.UTCDateTime.html#obspy.core.utcdatetime.UTCDateTime">here</a>.</div>
 </div>
 </div>
-</section>
-<section id="datetime-attribute-access">
+</div>
+<div class="section" id="datetime-attribute-access">
 <h3>1.2 DateTime Attribute Access<a class="headerlink" href="#datetime-attribute-access" title="Permalink to this headline"></a></h3>
 <p>Now we can assign the UTCDateTime object to a variable “time”.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;time = UTCDateTime(&quot;2012-09-07T12:15:00&quot;)</span>
@@ -233,8 +232,8 @@ $ conda install obspy=1.2
 <div class="line">The UNIX timestamp format means the number of seconds since the Epoch. The reference time is: “1970-01-01”</div>
 </div>
 </div>
-</section>
-<section id="handling-time-differences">
+</div>
+<div class="section" id="handling-time-differences">
 <h3>1.3 Handling time differences<a class="headerlink" href="#handling-time-differences" title="Permalink to this headline"></a></h3>
 <p>Calculate the time difference or add seconds into original “time”</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;print(time - UTCDateTime(&quot;2012-09-07&quot;))</span>
@@ -245,16 +244,16 @@ $ conda install obspy=1.2
 </pre></div>
 </div>
 <p>Clearly, we can see that “time2” is 1 hour (3600 seconds) later than “time”.</p>
-</section>
-</section>
+</div>
+</div>
 <hr class="docutils" />
-<section id="seismic-data-acquisition-and-visualization">
+<div class="section" id="seismic-data-acquisition-and-visualization">
 <h2>2 Seismic data acquisition and visualization<a class="headerlink" href="#seismic-data-acquisition-and-visualization" title="Permalink to this headline"></a></h2>
-<section id="flow-chart">
+<div class="section" id="flow-chart">
 <h3>Flow chart<a class="headerlink" href="#flow-chart" title="Permalink to this headline"></a></h3>
 <a class="reference internal image-reference" href="../_images/flowchart2.png"><img alt="../_images/flowchart2.png" src="../_images/flowchart2.png" style="width: 100%;" /></a>
-</section>
-<section id="choose-an-event">
+</div>
+<div class="section" id="choose-an-event">
 <h3>2.1 Choose an event<a class="headerlink" href="#choose-an-event" title="Permalink to this headline"></a></h3>
 <p>You can select one event in the event list.</p>
 <div class="admonition note">
@@ -276,8 +275,8 @@ $ conda install obspy=1.2
 <span class="n">eq_mag</span> <span class="o">=</span> <span class="mf">3.9</span>
 </pre></div>
 </div>
-</section>
-<section id="choose-a-station">
+</div>
+<div class="section" id="choose-a-station">
 <h3>2.2 Choose a station<a class="headerlink" href="#choose-a-station" title="Permalink to this headline"></a></h3>
 <p>Choose one station from the station list.
 Make sure the selected station is operating during the event.</p>
@@ -291,8 +290,8 @@ Make sure the selected station is operating during the event.</p>
 <div class="line">YS|BAOP||BHZ|-8.4882|123.2696|67.0|0.0|0.0|-90.0|Nanometrics Trillium 120 Sec Response/Taurus Stand|1.19642E9|0.3|m/s|50.0|2014-10-31T00:00:00|2016-12-31T23:59:59</div>
 </div>
 </div>
-</section>
-<section id="get-waveforms">
+</div>
+<div class="section" id="get-waveforms">
 <h3>2.3 Get waveforms<a class="headerlink" href="#get-waveforms" title="Permalink to this headline"></a></h3>
 <p>Import the web service providers and input station information.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">obspy.clients.fdsn</span> <span class="kn">import</span> <span class="n">Client</span>
@@ -327,8 +326,8 @@ Make sure the selected station is operating during the event.</p>
 <div class="line">IRIS is one of the web service providers which is commonly used.</div>
 </div>
 </div>
-</section>
-<section id="meta-data">
+</div>
+<div class="section" id="meta-data">
 <h3>2.4 Meta data<a class="headerlink" href="#meta-data" title="Permalink to this headline"></a></h3>
 <p>We can print the meta data inside the stream.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">st</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">stats</span><span class="p">)</span>
@@ -407,8 +406,8 @@ Make sure the selected station is operating during the event.</p>
 </pre></div>
 </div>
 </div>
-</section>
-<section id="plot-the-waveforms">
+</div>
+<div class="section" id="plot-the-waveforms">
 <h3>2.5 Plot the waveforms<a class="headerlink" href="#plot-the-waveforms" title="Permalink to this headline"></a></h3>
 <p>Here we plot the waveforms without any preprocessing procedure.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">st</span><span class="o">.</span><span class="n">plot</span><span class="p">();</span>
@@ -423,12 +422,12 @@ Make sure the selected station is operating during the event.</p>
 <p class="admonition-title">Note</p>
 <p>Spectrogram is a frequency content of a seismogram. You can check the energy level of the waves over time.</p>
 </div>
-</section>
-<section id="waveform-cross-section-plot">
+</div>
+<div class="section" id="waveform-cross-section-plot">
 <h3>2.6 Waveform Cross-section Plot<a class="headerlink" href="#waveform-cross-section-plot" title="Permalink to this headline"></a></h3>
 <p>Plot a record section.</p>
-</section>
-<section id="get-the-waveform-data-with-more-than-1-station">
+</div>
+<div class="section" id="get-the-waveform-data-with-more-than-1-station">
 <h3>2.6.1 Get the waveform data with more than 1 station<a class="headerlink" href="#get-the-waveform-data-with-more-than-1-station" title="Permalink to this headline"></a></h3>
 <p>For our example, station ‘BAOP’, ‘HADA’, ‘SINA’ ‘BKOR’ and ‘ALRB’ are located near the epicentre of the earthquake.
 It is expected that these 5 stations can record the event well.</p>
@@ -445,8 +444,8 @@ It is expected that these 5 stations can record the event well.</p>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">get_waveforms_bulk</span></code> send a bulk request for waveforms to the server</p>
-</section>
-<section id="calculate-the-great-circle-distance-from-stations-to-earthquake">
+</div>
+<div class="section" id="calculate-the-great-circle-distance-from-stations-to-earthquake">
 <h3>2.6.2 Calculate the great circle distance from stations to earthquake<a class="headerlink" href="#calculate-the-great-circle-distance-from-stations-to-earthquake" title="Permalink to this headline"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Input the coordinates of stations</span>
 <span class="n">ALRB_loc</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">8.2194</span><span class="p">,</span> <span class="mf">124.4115</span><span class="p">]</span>
@@ -491,8 +490,8 @@ It is expected that these 5 stations can record the event well.</p>
 <div class="line">We also have to save the calculated distance into the metadata, as the value is empty initially.</div>
 </div>
 </div>
-</section>
-<section id="plot-the-waveform-cross-section-plot">
+</div>
+<div class="section" id="plot-the-waveform-cross-section-plot">
 <h3>2.6.3 Plot the waveform cross-section plot<a class="headerlink" href="#plot-the-waveform-cross-section-plot" title="Permalink to this headline"></a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">stream.plot</span></code> allows us to plot the streams at the same figure. For example, we can plot all stream with the same X axis:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">st_bulk</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">1600</span><span class="p">,</span><span class="mi">800</span><span class="p">))</span>  <span class="c1">## size=(1600,800) sets the figure size</span>
@@ -508,9 +507,9 @@ It is expected that these 5 stations can record the event well.</p>
 <p class="admonition-title">Note</p>
 <p>We could add more features to the plot, for example, the phase arrivals, and the station names. It is a good way for us to recognize different seismic phases, We can also get the apparent velocity of P - and S - waves from the plot. We will introduce these in the next section.</p>
 </div>
-</section>
-</section>
-</section>
+</div>
+</div>
+</div>
 
 
            </div>
@@ -524,7 +523,7 @@ It is expected that these 5 stations can record the event well.</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2021-2022, CUSeisTut team.
-      <span class="lastupdated">Last updated on 2022-04-27.
+      <span class="lastupdated">Last updated on 2022-06-16.
       </span></p>
   </div>
 

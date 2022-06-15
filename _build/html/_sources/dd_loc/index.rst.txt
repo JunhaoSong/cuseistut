@@ -258,6 +258,11 @@ Set up station array, earthquake true location, wave-velocity and generate synth
 
 .. image:: output_6_0.png
 
+Absolute earthquake location
+-------------------
+
+Initial location
+*****************
 
 The station which records the earliest waveform is closest to the hypocenter, so it is reasonable to start iteration: 
 
@@ -272,7 +277,7 @@ The station which records the earliest waveform is closest to the hypocenter, so
     
     hyc1_init = np.zeros(3);      # Init array
     hyc1_init[0] = stas[idx,0];   # Set the same x,y with station
-    hyc1_init[1] = 5;             # Set initial depth 5 km
+    hyc1_init[1] = 5;                 # Set initial depth 5 km
     hyc1_init[2] = dmin-1;        # Set initial event time 1s earlier than arrival
     print("Initial trial parameters ","x: ",hyc1_init[0],"km; ","z: ",hyc1_init[1],"km; ","t: ", format(hyc1_init[2],'.4f')+" s")
     hyc1_loop = hyc1_init.copy()
@@ -305,6 +310,9 @@ We can also define a function to get the initial location
 
     Initial trial parameters  x:  0.0 km;  z:  5.0 km;  t:  0.6125 s
 
+.. note::
+  | For the knowledge of iterative location, please refer to the tutorial Earthquake Absolute Location.
+
 .. code::
 
     hyc1_abs, sigma_m2 = iter_loc(hyc1_loop,stas,dobs1,Vtrue)
@@ -327,7 +335,7 @@ Velocity Error
 In the calculation above, we use the true velocity (**Vtrue**) to conduct the inversion. However, in reality, the velocity we measure is more or less different from the true velocity, thus leading to some bias.
 
 .. note::
- | Try to use other velocity valueis to conduct the inversion and check the results, what features do you find?
+ | Try to use other velocity values to conduct the inversion and check the results, what features do you find?
 
 .. code::
 
@@ -359,7 +367,7 @@ In the calculation above, we use the true velocity (**Vtrue**) to conduct the in
 Station Delay
 **************
 
-In near surface, the material velocity where stations located might vary and lead to influence on the travel time, we call it **Station delay**. The **River sediments** are generally soft composed by not fully consolidated mateirals, their velocities are therefore low. A lower velocity will lead to a longer travel time, thus the actual arrival time will be later than estimated, here we call it **Positive delay**.
+In near surface, the material velocity where stations are located might vary and lead to influence on the travel time, we call it **Station delay**. The **River sediments** are generally composed by not fully consolidated materials, their velocities are therefore low. A lower velocity will lead to a longer travel time, thus the actual arrival time will be later than estimated, here we call it **Positive delay**.
 
 The **Granite** is igneous rock, its density is high with fast velocity. A higher velocity will lead to a shorter travel time, thus the actual arrival time will be earlier than estimated, we call it
 **Negative delay**.
@@ -526,7 +534,12 @@ Now we consider a second event occurred close to the first event
 
 Add Picking Noise
 ******************
+
+.. note::
+    | please refer to Earthquake Absolute Location tutorial for more information of add picking noise
+
 Add random noise to simulate the phase picking uncertainty
+
 .. code::
 
     mu = 0
@@ -540,7 +553,6 @@ Add random noise to simulate the phase picking uncertainty
 
 Double Difference Method
 --------------------------
-
 
 The travel-time residual of event :math:`i` at station :math:`k`:
 
@@ -573,7 +585,7 @@ The travel-time residual of event :math:`j` at station :math:`k`:
 
 .. math::
 
-   `r_k^j=\(T_k^j)^{obs}-(T_k^j)^{cal}`=\sum_{l=1}^2\frac{\partial T_k^j}{\partial x_l^j}\Delta x_l^j +\Delta\tau^j+\int_{s_j}^{r_k}\Delta uds+S_k
+   r_k^j=(T_k^j)^{obs}-(T_k^j)^{cal}=\sum_{l=1}^2\frac{\partial T_k^j}{\partial x_l^j}\Delta x_l^j +\Delta\tau^j+\int_{s_j}^{r_k}\Delta uds+S_k
 
 Make difference
 ******************
@@ -638,7 +650,7 @@ Detailed expression is, note the negative signs in the last 3 columns of data ke
    \begin{bmatrix}
    r_1^1 - r_1^2\\r_2^1 - r_2^2\\\vdots\\r_k^1 - r_k^2\\
    \end{bmatrix}
-
+Practical usage will be introduced later.
 **Workflow**
 
 .. image:: DD_Earthquake_location_workflow_new.png
@@ -761,7 +773,7 @@ After damping:
 
 .. math:: \begin{bmatrix}G\\\lambda I\end{bmatrix}\begin{bmatrix}m\end{bmatrix}=\begin{bmatrix}d\\O\end{bmatrix}
 
-:math:`I` is identity matrix, in this case, it should have columns with G, so its dimension is :math:`6\times6`, here:
+:math:`I` is an identity matrix, in this case, it should have columns with G, so its dimension is :math:`6\times6`, here:
 
 .. math::
 
@@ -782,8 +794,7 @@ After damping:
    \lambda\Delta x_1 &= 0\\ \lambda\Delta z_1 &= 0\\ \lambda\Delta t_1 &= 0\\ \lambda\Delta x_2 &= 0\\ \lambda\Delta z_2 &= 0\\ \lambda\Delta t_2 &= 0
    \end{align}
 
-What does this mean? It means that the solution **SHOULD** be zero. As a least square problem solution is a trade-off among constraints(equations). The true meaning is that these values **SHOULD**
-be small. :math:`\lambda` controls the weight(importance) of damping. A large damp will lead to the solution more close to zero.
+What does this mean? It means that the solution **SHOULD** be zero. As a least square problem solution is a trade-off among equations. The application of damping factor will lead to the solution be small values. :math:`\lambda` controls the weight(importance) of damping. A large damp will lead to the solution more close to zero.
 
 .. code::
 
@@ -850,6 +861,8 @@ Step 4:
 
 8. Update Location
 ------------------
+
+The output results are the earthquake location misfit with reference to its absolute location. Therefore, the absolute earthquake location should be updated.
 
 .. math:: x_1 = x_1+\Delta x_1
 
@@ -1043,85 +1056,7 @@ Iterative Double-Difference Method
     Iteration    8 square error:     0.00004113
     Iteration    9 square error:     0.00004032
     Iteration   10 square error:     0.00003954
-    Iteration   11 square error:     0.00003877
-    Iteration   12 square error:     0.00003801
-    Iteration   13 square error:     0.00003727
-    Iteration   14 square error:     0.00003654
-    Iteration   15 square error:     0.00003583
-    Iteration   16 square error:     0.00003513
-    Iteration   17 square error:     0.00003445
-    Iteration   18 square error:     0.00003378
-    Iteration   19 square error:     0.00003312
-    Iteration   20 square error:     0.00003247
-    Iteration   21 square error:     0.00003184
-    Iteration   22 square error:     0.00003122
-    Iteration   23 square error:     0.00003061
-    Iteration   24 square error:     0.00003001
-    Iteration   25 square error:     0.00002943
-    Iteration   26 square error:     0.00002885
-    Iteration   27 square error:     0.00002829
-    Iteration   28 square error:     0.00002774
-    Iteration   29 square error:     0.00002720
-    Iteration   30 square error:     0.00002667
-    Iteration   31 square error:     0.00002615
-    Iteration   32 square error:     0.00002564
-    Iteration   33 square error:     0.00002514
-    Iteration   34 square error:     0.00002465
-    Iteration   35 square error:     0.00002417
-    Iteration   36 square error:     0.00002370
-    Iteration   37 square error:     0.00002324
-    Iteration   38 square error:     0.00002279
-    Iteration   39 square error:     0.00002235
-    Iteration   40 square error:     0.00002191
-    Iteration   41 square error:     0.00002149
-    Iteration   42 square error:     0.00002107
-    Iteration   43 square error:     0.00002066
-    Iteration   44 square error:     0.00002026
-    Iteration   45 square error:     0.00001986
-    Iteration   46 square error:     0.00001948
-    Iteration   47 square error:     0.00001910
-    Iteration   48 square error:     0.00001873
-    Iteration   49 square error:     0.00001837
-    Iteration   50 square error:     0.00001801
-    Iteration   51 square error:     0.00001766
-    Iteration   52 square error:     0.00001732
-    Iteration   53 square error:     0.00001699
-    Iteration   54 square error:     0.00001666
-    Iteration   55 square error:     0.00001633
-    Iteration   56 square error:     0.00001602
-    Iteration   57 square error:     0.00001571
-    Iteration   58 square error:     0.00001541
-    Iteration   59 square error:     0.00001511
-    Iteration   60 square error:     0.00001482
-    Iteration   61 square error:     0.00001453
-    Iteration   62 square error:     0.00001425
-    Iteration   63 square error:     0.00001398
-    Iteration   64 square error:     0.00001371
-    Iteration   65 square error:     0.00001344
-    Iteration   66 square error:     0.00001318
-    Iteration   67 square error:     0.00001293
-    Iteration   68 square error:     0.00001268
-    Iteration   69 square error:     0.00001244
-    Iteration   70 square error:     0.00001220
-    Iteration   71 square error:     0.00001197
-    Iteration   72 square error:     0.00001174
-    Iteration   73 square error:     0.00001151
-    Iteration   74 square error:     0.00001129
-    Iteration   75 square error:     0.00001107
-    Iteration   76 square error:     0.00001086
-    Iteration   77 square error:     0.00001065
-    Iteration   78 square error:     0.00001045
-    Iteration   79 square error:     0.00001025
-    Iteration   80 square error:     0.00001006
-    Iteration   81 square error:     0.00000986
-    Iteration   82 square error:     0.00000968
-    Iteration   83 square error:     0.00000949
-    Iteration   84 square error:     0.00000931
-    Iteration   85 square error:     0.00000913
-    Iteration   86 square error:     0.00000896
-    Iteration   87 square error:     0.00000879
-    Iteration   88 square error:     0.00000862
-    Iteration   89 square error:     0.00000846
+    ......
     Iteration   90 square error:     0.00000830
     Iteration   91 square error:     0.00000814
     Iteration   92 square error:     0.00000799
@@ -1274,90 +1209,7 @@ After get the solution, a conversion between :math:`\mathbf{m'}` and :math:`\mat
     Iteration    8 residual:     0.00410597
     Iteration    9 residual:     0.00384061
     Iteration   10 residual:     0.00359645
-    Iteration   11 residual:     0.00337184
-    Iteration   12 residual:     0.00316522
-    Iteration   13 residual:     0.00297513
-    Iteration   14 residual:     0.00280020
-    Iteration   15 residual:     0.00263915
-    Iteration   16 residual:     0.00249079
-    Iteration   17 residual:     0.00235401
-    Iteration   18 residual:     0.00222780
-    Iteration   19 residual:     0.00211121
-    Iteration   20 residual:     0.00200338
-    Iteration   21 residual:     0.00190352
-    Iteration   22 residual:     0.00181090
-    Iteration   23 residual:     0.00172485
-    Iteration   24 residual:     0.00164479
-    Iteration   25 residual:     0.00157015
-    Iteration   26 residual:     0.00150046
-    Iteration   27 residual:     0.00143525
-    Iteration   28 residual:     0.00137413
-    Iteration   29 residual:     0.00131673
-    Iteration   30 residual:     0.00126274
-    Iteration   31 residual:     0.00121184
-    Iteration   32 residual:     0.00116378
-    Iteration   33 residual:     0.00111833
-    Iteration   34 residual:     0.00107527
-    Iteration   35 residual:     0.00103441
-    Iteration   36 residual:     0.00099558
-    Iteration   37 residual:     0.00095863
-    Iteration   38 residual:     0.00092342
-    Iteration   39 residual:     0.00088982
-    Iteration   40 residual:     0.00085773
-    Iteration   41 residual:     0.00082704
-    Iteration   42 residual:     0.00079766
-    Iteration   43 residual:     0.00076951
-    Iteration   44 residual:     0.00074252
-    Iteration   45 residual:     0.00071662
-    Iteration   46 residual:     0.00069174
-    Iteration   47 residual:     0.00066784
-    Iteration   48 residual:     0.00064486
-    Iteration   49 residual:     0.00062274
-    Iteration   50 residual:     0.00060146
-    Iteration   51 residual:     0.00058096
-    Iteration   52 residual:     0.00056122
-    Iteration   53 residual:     0.00054219
-    Iteration   54 residual:     0.00052385
-    Iteration   55 residual:     0.00050616
-    Iteration   56 residual:     0.00048911
-    Iteration   57 residual:     0.00047265
-    Iteration   58 residual:     0.00045676
-    Iteration   59 residual:     0.00044144
-    Iteration   60 residual:     0.00042664
-    Iteration   61 residual:     0.00041235
-    Iteration   62 residual:     0.00039855
-    Iteration   63 residual:     0.00038523
-    Iteration   64 residual:     0.00037236
-    Iteration   65 residual:     0.00035993
-    Iteration   66 residual:     0.00034792
-    Iteration   67 residual:     0.00033632
-    Iteration   68 residual:     0.00032511
-    Iteration   69 residual:     0.00031428
-    Iteration   70 residual:     0.00030382
-    Iteration   71 residual:     0.00029370
-    Iteration   72 residual:     0.00028393
-    Iteration   73 residual:     0.00027448
-    Iteration   74 residual:     0.00026535
-    Iteration   75 residual:     0.00025653
-    Iteration   76 residual:     0.00024800
-    Iteration   77 residual:     0.00023976
-    Iteration   78 residual:     0.00023179
-    Iteration   79 residual:     0.00022408
-    Iteration   80 residual:     0.00021664
-    Iteration   81 residual:     0.00020944
-    Iteration   82 residual:     0.00020248
-    Iteration   83 residual:     0.00019576
-    Iteration   84 residual:     0.00018926
-    Iteration   85 residual:     0.00018297
-    Iteration   86 residual:     0.00017689
-    Iteration   87 residual:     0.00017102
-    Iteration   88 residual:     0.00016534
-    Iteration   89 residual:     0.00015985
-    Iteration   90 residual:     0.00015454
-    Iteration   91 residual:     0.00014941
-    Iteration   92 residual:     0.00014445
-    Iteration   93 residual:     0.00013966
-    Iteration   94 residual:     0.00013502
+    ......
     Iteration   95 residual:     0.00013054
     Iteration   96 residual:     0.00012620
     Iteration   97 residual:     0.00012201
@@ -1417,7 +1269,7 @@ Homework
 *********
 
 1. In the demo example, is event origin time fully recovered? Could you please explain the reason?(10 points)
-2. Note we add negative symbol to partial derivatives of the event 2 in structing the data kernel, do you know why? (10 points)
+2. Note we add negative symbol to partial derivatives of the event 2 in constructing the data kernel, do you know why? (10 points)
 3. In calculating the variance(**var**), it is written ``var = e2/(dtdt_damp.shape[0]-event_number * event_parameters)``, do you know why variance is different from square error here? (10 points)
 4. Add one more event hyc_true3 = (0.2,8.1,1) (x,z,t) and prepare for inversion, set up suitable damping factor so that condition number is in the range 40-100.(80 points)
    -  Show the absolute location result of the newly added event and its uncertainty. (20 points)

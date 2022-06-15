@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Spectral Analysis &mdash; CUSeisTut</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -118,26 +117,26 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="spectral-analysis">
+  <div class="section" id="spectral-analysis">
 <h1>Spectral Analysis<a class="headerlink" href="#spectral-analysis" title="Permalink to this headline"></a></h1>
-<section id="introduction">
+<div class="section" id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline"></a></h2>
-<section id="what-is-earthquake-stress-drop">
+<div class="section" id="what-is-earthquake-stress-drop">
 <h3>What is earthquake stress drop?<a class="headerlink" href="#what-is-earthquake-stress-drop" title="Permalink to this headline"></a></h3>
 <p>Stress drop is an important earthquake source parameter, which is proportional to the ratio of fault slip to rupture extent (D/L). The higher stress drop means larger slip given the same rupture area. Since stress drop reflects the strength level on faults, the evolution of the stress drop may indicate some activities on faults such as fluid migration.</p>
-</section>
-<section id="stress-drop-in-a-circular-fault">
+</div>
+<div class="section" id="stress-drop-in-a-circular-fault">
 <h3>Stress drop in a circular fault<a class="headerlink" href="#stress-drop-in-a-circular-fault" title="Permalink to this headline"></a></h3>
 <p>For a circular fault in a whole space, Eshelby(1957) obtained the relation between the average stress drop and the seismic moment:</p>
 <a class="reference internal image-reference" href="../_images/circular_fault.png"><img alt="../_images/circular_fault.png" src="../_images/circular_fault.png" style="width: 70%;" /></a>
-</section>
-<section id="what-is-earthquake-spectrum">
+</div>
+<div class="section" id="what-is-earthquake-spectrum">
 <h3>What is earthquake spectrum?<a class="headerlink" href="#what-is-earthquake-spectrum" title="Permalink to this headline"></a></h3>
 <p>We can calculate the spectrum for earthquakes from the seismograms after removing the effects from the path. The amplitude in the low frequency limit is determined by earthquake moment (M0). The spectrum starts to decay around corner frequency (fc), and keep a nearly constant decay rate in log-log domain in the high frequency.</p>
 <a class="reference internal image-reference" href="../_images/spectra_case.png"><img alt="../_images/spectra_case.png" src="../_images/spectra_case.png" style="width: 60%;" /></a>
 <p>Figure 1: (Figure 9.13 in Introduction to Seismology) The relationships between near-field displacement and far-field displacement and velocity for time series (left two panels) and spectra (right panel).</p>
-</section>
-<section id="brune-s-model-for-far-field-spectrum">
+</div>
+<div class="section" id="brune-s-model-for-far-field-spectrum">
 <h3>Brune’s model for far-field spectrum<a class="headerlink" href="#brune-s-model-for-far-field-spectrum" title="Permalink to this headline"></a></h3>
 <p>Linking the spectra with the source parameters requires assumptions on the source. Brune (1970) assume a built up the relationship between the source spectra and the source parameters including the stress drop. He assumed that the stress pulse is tangential and rupture velocity is infinite on a circular rupture surface, then derived the near-filed displacement under the constraint of edge-effect. The slip and slip rate on the fault evolve with time.</p>
 <a class="reference internal image-reference" href="../_images/brunesource1.png"><img alt="../_images/brunesource1.png" src="../_images/brunesource1.png" style="width: 70%;" /></a>
@@ -148,16 +147,16 @@
 <p>Figure 2: the shape of slip and slip rate function in Brune’s model.</p>
 <p>The conservation of energy density at high frequency and long-period limit(static field ) were applied to constrain the displacement in Brune’s model. Brune’s model has been widely used in spectral analysis in the following format to link the spectra with the seismic moment and stress drop:</p>
 <a class="reference internal image-reference" href="../_images/equation_final.png"><img alt="../_images/equation_final.png" src="../_images/equation_final.png" style="width: 80%;" /></a>
-</section>
-<section id="path-and-free-surface-effects">
+</div>
+<div class="section" id="path-and-free-surface-effects">
 <h3>Path and free surface effects<a class="headerlink" href="#path-and-free-surface-effects" title="Permalink to this headline"></a></h3>
 <p>To calculate the source spectra, the effects from the path and depth phases should be removed. In this tutorial, we will try to remove the attenuation term. For earthquakes happened in shallow depth with relative long duration, the depth phases may overlap with P wave and impact the spectral shape (Hanks, 1981). Therefore, we need to calculate and remove the effect from those depth phases.</p>
 <p>All those processing process will be included in the tutorial package <a class="reference download internal" download="" href="../_downloads/91b8138be7101ca0b6c8bff36199e43d/spectral_analysis.zip"><code class="xref download docutils literal notranslate"><span class="pre">spectral_analysis.zip</span></code></a>. Following is an example of spectral analysis of 2017-11-13 M7.3 Iran earthquake.</p>
-</section>
-</section>
-<section id="example-the-2017-11-12-iran-m7-3-earthquake">
+</div>
+</div>
+<div class="section" id="example-the-2017-11-12-iran-m7-3-earthquake">
 <h2>Example: the 2017-11-12 Iran M7.3 earthquake<a class="headerlink" href="#example-the-2017-11-12-iran-m7-3-earthquake" title="Permalink to this headline"></a></h2>
-<section id="download-the-waveforms-and-pre-processing">
+<div class="section" id="download-the-waveforms-and-pre-processing">
 <h3>Download the waveforms and pre=processing<a class="headerlink" href="#download-the-waveforms-and-pre-processing" title="Permalink to this headline"></a></h3>
 <p>We use waveforms with epicentral distances of 30-90 degree. We provide some waveforms in the tutorial packages. You can also download the waveforms from IRIS. Considering the duration of the earthquake, we select a time window of 40s, starting from the P arrival for the spectra calculation. We taper the waveforms in 15s windows at the two ends of the selected time windows.</p>
 <div class="admonition note">
@@ -173,8 +172,8 @@
 <div class="line">We can see the waveform shape varies with azimuth due to the rupture directivity effect. It is suggested to use waveforms covering all the azimuth.</div>
 </div>
 </div>
-</section>
-<section id="calculate-spectra">
+</div>
+<div class="section" id="calculate-spectra">
 <h3>Calculate spectra<a class="headerlink" href="#calculate-spectra" title="Permalink to this headline"></a></h3>
 <p>Then we calculate the spectra for each waveform traces by conducting fast Fourier transform. The function used here is <code class="docutils literal notranslate"><span class="pre">sacfft.m</span></code></p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">function</span> <span class="p">[</span><span class="n">amplitude</span><span class="p">,</span> <span class="n">phase</span><span class="p">,</span> <span class="n">frequency</span><span class="p">]</span><span class="o">=</span><span class="n">sacfft</span><span class="p">(</span><span class="n">displacement_seri</span><span class="p">,</span> <span class="n">time_seri</span><span class="p">);</span>
@@ -184,8 +183,8 @@
 <span class="go">% following processing are all conducted in log domain</span>
 </pre></div>
 </div>
-</section>
-<section id="correction-for-spreading-term-and-radiation-pattern">
+</div>
+<div class="section" id="correction-for-spreading-term-and-radiation-pattern">
 <h3>Correction for spreading term and radiation pattern<a class="headerlink" href="#correction-for-spreading-term-and-radiation-pattern" title="Permalink to this headline"></a></h3>
 <p>It has been illustrated in equation (2) that the amplitude of the spectra decay with ray path length with 1/R and is proportional to the radiation term. Here, we correct for the two terms using the functions <code class="docutils literal notranslate"><span class="pre">direct_P.m</span></code></p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">function</span> <span class="p">[</span><span class="n">radiationp</span><span class="p">,</span><span class="n">Ray_len</span><span class="p">,</span><span class="n">Amp_P</span><span class="p">]</span><span class="o">=</span><span class="n">direct_P</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span><span class="n">depth</span><span class="p">,</span><span class="n">Azi</span><span class="p">,</span><span class="n">M</span><span class="p">,</span><span class="n">path</span><span class="p">)</span>
@@ -205,8 +204,8 @@
 <div class="line">The amplitudes of spectra obviously become more concentrated after the correction, indicating that the scattering is mostly caused by the radiation pattern and the spreading term.</div>
 </div>
 </div>
-</section>
-<section id="correction-for-attenuation">
+</div>
+<div class="section" id="correction-for-attenuation">
 <h3>Correction for attenuation<a class="headerlink" href="#correction-for-attenuation" title="Permalink to this headline"></a></h3>
 <p>Here, we adopt the global attenuation model to correct the spectra (Choy and Boatwright, 1985). The correction is based on the function <code class="docutils literal notranslate"><span class="pre">corre.m</span></code>.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">function</span> <span class="n">tp</span> <span class="o">=</span> <span class="n">corre</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
@@ -216,8 +215,8 @@
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/spectra_correction2.png"><img alt="../_images/spectra_correction2.png" src="../_images/spectra_correction2.png" style="width: 100%;" /></a>
-</section>
-<section id="correction-for-the-depth-phases">
+</div>
+<div class="section" id="correction-for-the-depth-phases">
 <h3>Correction for the depth phases<a class="headerlink" href="#correction-for-the-depth-phases" title="Permalink to this headline"></a></h3>
 <p>The depth of the event is 19 km in the SAC files. Given the depth here, the relative arrival times of sP and pP phases are within 15 seconds and contribute to the spectra. Here, we calculate the synthetic spectra for the depth phases effect using the function <code class="docutils literal notranslate"><span class="pre">depth_phase_spectrum.m</span></code></p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">function</span> <span class="p">[</span><span class="n">depth_time</span><span class="p">,</span><span class="n">response_depth</span><span class="p">,</span><span class="n">anp_dep</span><span class="p">,</span><span class="n">ph_dep</span><span class="p">,</span><span class="n">ffn_dep</span><span class="p">]</span><span class="o">=</span><span class="n">depth_phase_spectrum</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="n">window_length</span><span class="p">,</span><span class="n">datalength</span><span class="p">,</span><span class="n">M</span><span class="p">,</span><span class="n">path</span><span class="p">)</span>
@@ -236,8 +235,8 @@
 <div class="line">The depth phase will largely affect the waveform shape at low frequency. It is obvious that the spectra become more flat after correcting for the depth phases.</div>
 </div>
 </div>
-</section>
-<section id="estimating-the-moment-and-stress-drop">
+</div>
+<div class="section" id="estimating-the-moment-and-stress-drop">
 <h3>Estimating the moment and stress drop<a class="headerlink" href="#estimating-the-moment-and-stress-drop" title="Permalink to this headline"></a></h3>
 <p>The average magnitude of spectra in the low frequency limit is ~ 4*10^19 Nm. The moment magnitude is 1.1*10^20 Nm. The moment magnitude is 7.3. The corner frequency is ~0.1 Hz. Assuming a P wave speed of 3900 km/s and a density of 3000kg/m^3, the stress drop is estimated to be 25 MPa, residing in the normal range for continental earthquakes.</p>
 <div class="admonition note">
@@ -247,9 +246,9 @@
 </div>
 </div>
 <a class="reference internal image-reference" href="../_images/fitting1.png"><img alt="../_images/fitting1.png" src="../_images/fitting1.png" style="width: 60%;" /></a>
-</section>
-</section>
-</section>
+</div>
+</div>
+</div>
 
 
            </div>
@@ -263,7 +262,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright 2021-2022, CUSeisTut team.
-      <span class="lastupdated">Last updated on 2022-04-27.
+      <span class="lastupdated">Last updated on 2022-06-16.
       </span></p>
   </div>
 

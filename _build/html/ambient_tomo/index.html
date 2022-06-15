@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ambient noise cross correlation &mdash; CUSeisTut</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -121,12 +120,12 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="ambient-noise-cross-correlation">
+  <div class="section" id="ambient-noise-cross-correlation">
 <h1>Ambient noise cross correlation<a class="headerlink" href="#ambient-noise-cross-correlation" title="Permalink to this headline"></a></h1>
 <p>In this tutorial, we will introduce why and how to compute cross-correlation functions (CCFs) from seismic ambient noise data.</p>
-<section id="a-brief-introdcution-of-ambient-noise-cross-correlation">
+<div class="section" id="a-brief-introdcution-of-ambient-noise-cross-correlation">
 <h2>A Brief Introdcution of Ambient Noise Cross-correlation<a class="headerlink" href="#a-brief-introdcution-of-ambient-noise-cross-correlation" title="Permalink to this headline"></a></h2>
-<section id="what-is-ambient-noise">
+<div class="section" id="what-is-ambient-noise">
 <h3>1.1 What is Ambient Noise?<a class="headerlink" href="#what-is-ambient-noise" title="Permalink to this headline"></a></h3>
 <p>In seismology, the term <strong>noise</strong> refers to ground motion which is recorded in the absence of an identifiable source of seismic energy, such as an earthquake. In particular, seismic noise is the weak, low-frequency seismic signal originating from randomly distributed sources. The continuous interaction of low frequency (&lt;1Hz) oceanic surface waves (swells) with the Earth’s crust is the main cause of natural ambient noise and is observed globally (Aki and Richards).</p>
 <p>It is often discarded and cannot be used for geophysical applications, but not always. Seismic noise can be utilized for earth imaging in the border sense, i.e., structural analysis of crust, global tomography, and monitoring velocity changes along faults and volcanic regions. For instance, the cross-correlation of seismic noise reflects the medium properties along the prorogation path.</p>
@@ -134,8 +133,8 @@
 <p class="admonition-title">Note</p>
 <p>This process is known as Seismic noise interferometry (SNI).</p>
 </div>
-</section>
-<section id="id1">
+</div>
+<div class="section" id="id1">
 <h3>1.2  Ambient noise cross correlation<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h3>
 <p>Given two seismometers, <span class="math notranslate nohighlight">\(u_1\)</span> and <span class="math notranslate nohighlight">\(u_2\)</span>, placed at some distance apart on the surface, the stations will record ground motion as a function of time: <span class="math notranslate nohighlight">\(u_1(t)\)</span> and <span class="math notranslate nohighlight">\(u_2(t)\)</span>. Over long periods of time, the cross-correlation of ground motions of <span class="math notranslate nohighlight">\(u_1(t)\)</span> and <span class="math notranslate nohighlight">\(u_2(t)\)</span></p>
 <div class="math notranslate nohighlight">
@@ -150,13 +149,13 @@
 <p>GFs which emerge on noise cross-correlation functions (NCFs) will therefore contain energy in both the causal and acausal parts, symmetric about zero time lag: the causal part representing energy arriving at station B in response to an impulsive source at station A, and the acausal part energy arriving at station A in response to a source at station B (Fig.3). Because GFs are usually assumed to be the same in both directions along a path, the two sides of an NCF can be treated as representing exactly the same information, but reversed in time.</p>
 <a class="reference internal image-reference" href="http://volc_seis_commission.leeds.ac.uk/images/stories/antiii.jpg"><img alt="http://volc_seis_commission.leeds.ac.uk/images/stories/antiii.jpg" src="http://volc_seis_commission.leeds.ac.uk/images/stories/antiii.jpg" style="width: 50%;" /></a>
 <p>Figure 3.Causal and anticausal parts of an NCF. (a) Idealised NCF for the cross-correlation order station A to  station B. The arrows indicate the energy path which is  represented by the positive and negative parts of the cross-correlation function. (b) Representation of the noise sources which (theoretically) contribute to the causal and anticausal part of the station A - station B NCF</p>
-</section>
-<section id="workflow">
+</div>
+<div class="section" id="workflow">
 <h3>1.3 Workflow:<a class="headerlink" href="#workflow" title="Permalink to this headline"></a></h3>
 <a class="reference internal image-reference" href="../_images/workflow.png"><img alt="../_images/workflow.png" src="../_images/workflow.png" style="width: 80%;" /></a>
 <p>Figure 04: Schematic representation of the data processing scheme</p>
-</section>
-<section id="data-preparation-and-inital-processing">
+</div>
+<div class="section" id="data-preparation-and-inital-processing">
 <h3>1.4 Data Preparation and inital processing<a class="headerlink" href="#data-preparation-and-inital-processing" title="Permalink to this headline"></a></h3>
 <p>The basic step in the data processing method is to prepare waveform data from each station separately. The goal of this phase is to accentuate broad-band ambient noise by removing earthquake signals and instrumental irregularities that tend to obscure it.</p>
 <ol class="arabic simple">
@@ -165,11 +164,11 @@
 <li><p>In order to further down-weight the contribution of high-energy arrivals which could obscure the lower amplitude ambient noise signal, a “one-bit” normalisation is applied after various authors (e.g. Stehly et. al. (2007))</p></li>
 <li><p>Do cross correlation between station pairs</p></li>
 </ol>
-</section>
-</section>
-<section id="tutorial">
+</div>
+</div>
+<div class="section" id="tutorial">
 <h2>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline"></a></h2>
-<section id="import-useful-packages-from-python-library">
+<div class="section" id="import-useful-packages-from-python-library">
 <h3>2.1 Import useful packages from Python library<a class="headerlink" href="#import-useful-packages-from-python-library" title="Permalink to this headline"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">obspy</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -178,8 +177,8 @@
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 </pre></div>
 </div>
-</section>
-<section id="stations-information">
+</div>
+<div class="section" id="stations-information">
 <h3>2.2 Stations information<a class="headerlink" href="#stations-information" title="Permalink to this headline"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sta1_lon</span> <span class="o">=</span> <span class="mf">104.462283</span><span class="p">;</span> <span class="n">sta1_lat</span> <span class="o">=</span> <span class="mf">29.409383</span>
 <span class="n">sta2_lon</span> <span class="o">=</span> <span class="mf">104.483083</span><span class="p">;</span> <span class="n">sta2_lat</span> <span class="o">=</span> <span class="mf">29.478317</span>
@@ -191,8 +190,8 @@
 <p class="admonition-title">Note</p>
 <p>Station information can also be directly extracted using obspy.</p>
 </div>
-</section>
-<section id="bandpass-filter">
+</div>
+<div class="section" id="bandpass-filter">
 <h3>2.3 Bandpass filter<a class="headerlink" href="#bandpass-filter" title="Permalink to this headline"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">period_min</span> <span class="o">=</span> <span class="mi">2</span>
 <span class="n">period_max</span> <span class="o">=</span> <span class="mi">5</span>
@@ -201,8 +200,8 @@
 <span class="n">st</span><span class="o">.</span><span class="n">plot</span><span class="p">();</span>
 </pre></div>
 </div>
-</section>
-<section id="plot-the-waveoforms">
+</div>
+<div class="section" id="plot-the-waveoforms">
 <h3>2.4 Plot the waveoforms<a class="headerlink" href="#plot-the-waveoforms" title="Permalink to this headline"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">st</span> <span class="o">=</span> <span class="n">Stream</span><span class="p">()</span>
 <span class="n">st1</span> <span class="o">=</span> <span class="n">obspy</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;GS020_BHZ_20200512.mseed&quot;</span><span class="p">)</span> <span class="c1"># Load 1 Day Data from Station GS020</span>
@@ -214,8 +213,8 @@
 <span class="n">st</span><span class="o">.</span><span class="n">plot</span><span class="p">();</span>
 </pre></div>
 </div>
-</section>
-<section id="down-sampling-data">
+</div>
+<div class="section" id="down-sampling-data">
 <h3>2.5 Down-sampling Data<a class="headerlink" href="#down-sampling-data" title="Permalink to this headline"></a></h3>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -239,8 +238,8 @@
 <p class="admonition-title">Note</p>
 <p>data is resampled from 100 to 20 Hz.</p>
 </div>
-</section>
-<section id="one-bit-normalization">
+</div>
+<div class="section" id="one-bit-normalization">
 <h3>2.6 One-bit Normalization<a class="headerlink" href="#one-bit-normalization" title="Permalink to this headline"></a></h3>
 <p>To remove the non-stationary events that inevitably lie in seismic records, the so-called <strong>one-bit normalization</strong> is commonly applied to the noise data. This processing consists of replacing each sample of a record by its sign.</p>
 <div class="admonition note">
@@ -255,8 +254,8 @@
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/one_bit.png"><img alt="../_images/one_bit.png" src="../_images/one_bit.png" style="width: 70%;" /></a>
-</section>
-<section id="conduct-cross-correlation">
+</div>
+<div class="section" id="conduct-cross-correlation">
 <h3>2.7 Conduct Cross-Correlation<a class="headerlink" href="#conduct-cross-correlation" title="Permalink to this headline"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">max_lagtime</span> <span class="o">=</span> <span class="mi">50</span>
 <span class="n">max_shift_num</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">max_lagtime</span><span class="o">*</span><span class="n">st</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">sampling_rate</span><span class="p">))</span>
@@ -277,8 +276,8 @@
 <span class="n">cross_list</span> <span class="o">=</span> <span class="n">cross_list</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">cross_list</span><span class="p">)</span>
 </pre></div>
 </div>
-</section>
-<section id="plot-results">
+</div>
+<div class="section" id="plot-results">
 <h3>2.8 Plot Results<a class="headerlink" href="#plot-results" title="Permalink to this headline"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">max_lagtime</span><span class="p">,</span><span class="n">max_lagtime</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">max_lagtime</span><span class="o">*</span><span class="n">fs_new</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">time</span><span class="p">,</span><span class="n">cross_list</span><span class="p">)</span>
@@ -288,8 +287,8 @@
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/cross_corr.png"><img alt="../_images/cross_corr.png" src="../_images/cross_corr.png" style="width: 70%;" /></a>
-</section>
-<section id="references">
+</div>
+<div class="section" id="references">
 <h3>2.5 References:<a class="headerlink" href="#references" title="Permalink to this headline"></a></h3>
 <ol class="arabic simple">
 <li><p>Bensen, G. D., M. H. Ritzwoller, M. P. Barmin, A. Lin Levshin, Feifan Lin, M. P. Moschetti, N. M. Shapiro, and Yanyan Yang. “Processing seismic ambient noise data to obtain reliable broad-band surface wave dispersion measurements.” Geophysical journal international 169, no. 3 (2007): 1239-1260.</p></li>
@@ -297,9 +296,9 @@
 <li><p>Stehly, L., Campillo, M., and Shapiro, N.M. Traveltime measurements from noise correlation: stability and detection of instrumental time shifts. Geophys. J. Int. (2007) 171 223-230.</p></li>
 <li><p>SeisNoise.jl GPU Computing Tutorial <a class="reference external" href="https://nextjournal.com/thclements/seisnoisejl-gpu-computing-tutorial">https://nextjournal.com/thclements/seisnoisejl-gpu-computing-tutorial</a></p></li>
 </ol>
-</section>
-</section>
-</section>
+</div>
+</div>
+</div>
 
 
            </div>
@@ -313,7 +312,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright 2021-2022, CUSeisTut team.
-      <span class="lastupdated">Last updated on 2022-04-27.
+      <span class="lastupdated">Last updated on 2022-06-16.
       </span></p>
   </div>
 
