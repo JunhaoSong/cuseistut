@@ -39,7 +39,7 @@ How to install PyLith?
 
 | 1. Download the PyLith package here `pylith-2.2.2-linux-x86_64.tar.gz <https://drive.google.com/file/d/1jSl5wHFriR4tGKiRK3TYZjsWigyh6TAE/view?usp=sharing>`_ , and then move it into your working directory
 
-| 2. Open a terminal and run these commands sequentially
+| 2. Open a terminal in Linux or Mac OS X (Darwin) platform, and run these commands sequentially. For Windows 10 Users, we recommend using the Windows Subsystem for Linux (WSL). The installation of WSL could be found `here <https://docs.microsoft.com/en-us/windows/wsl/install>`_ or searched online.
 
 .. warning::
 
