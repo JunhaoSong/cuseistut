@@ -37,9 +37,9 @@ Then we will run the static simulation to obtain the stress change, so you will 
 How to install PyLith?
 **********************
 
-| 1. Download the PyLith package here `pylith-2.2.2-linux-x86_64.tar.gz <https://drive.google.com/file/d/1jSl5wHFriR4tGKiRK3TYZjsWigyh6TAE/view?usp=sharing>`_ , and then move it into your working directory
+| 1. Download the PyLith package suitable for your computer `here <https://github.com/geodynamics/pylith/releases/tag/v2.1.0>`_, and then move it into your working directory
 
-| 2. Open a terminal in Linux or Mac OS X (Darwin) platform, and run these commands sequentially. For Windows 10 Users, we recommend using the Windows Subsystem for Linux (WSL). The installation of WSL could be found `here <https://docs.microsoft.com/en-us/windows/wsl/install>`_ or searched online.
+| 2. Open a terminal in Linux or Mac OS X (Darwin) platform and run these commands sequentially. For Windows 10 Users, we recommend using the Windows Subsystem for Linux (WSL). The installation of WSL could be found `here <https://docs.microsoft.com/en-us/windows/wsl/install>`_ or searched online. Please note that PyLith is using Python2.7. For the new MacOS updates where Python2.7 is removed, you would need to set the environment.
 
 .. warning::
 
