@@ -176,7 +176,7 @@
 <div class="section" id="calculate-spectra">
 <h3>Calculate spectra<a class="headerlink" href="#calculate-spectra" title="Permalink to this headline"></a></h3>
 <p>Then we calculate the spectra for each waveform traces by conducting fast Fourier transform. The function used here is <code class="docutils literal notranslate"><span class="pre">sacfft.m</span></code></p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">function</span> <span class="p">[</span><span class="n">amplitude</span><span class="p">,</span> <span class="n">phase</span><span class="p">,</span> <span class="n">frequency</span><span class="p">]</span><span class="o">=</span><span class="n">sacfft</span><span class="p">(</span><span class="n">displacement_seri</span><span class="p">,</span> <span class="n">time_seri</span><span class="p">);</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">function</span> <span class="p">[</span><span class="n">amplitude</span><span class="p">,</span> <span class="n">phase</span><span class="p">,</span> <span class="n">frequency</span><span class="p">]</span><span class="o">=</span><span class="n">sacfft</span><span class="p">(</span><span class="n">displacement_seri</span><span class="p">,</span> <span class="n">time_seri</span><span class="p">);</span>
 <span class="go">% Inputs: the displacement (m) and time series of the waveforms.</span>
 <span class="go">% Outputs in the left: the amplitude, phase term, and the frequency of the spectra</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">amplitude</span><span class="o">=</span><span class="n">log10</span><span class="p">(</span><span class="n">amplitude</span><span class="p">);</span>
@@ -187,13 +187,13 @@
 <div class="section" id="correction-for-spreading-term-and-radiation-pattern">
 <h3>Correction for spreading term and radiation pattern<a class="headerlink" href="#correction-for-spreading-term-and-radiation-pattern" title="Permalink to this headline"></a></h3>
 <p>It has been illustrated in equation (2) that the amplitude of the spectra decay with ray path length with 1/R and is proportional to the radiation term. Here, we correct for the two terms using the functions <code class="docutils literal notranslate"><span class="pre">direct_P.m</span></code></p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">function</span> <span class="p">[</span><span class="n">radiationp</span><span class="p">,</span><span class="n">Ray_len</span><span class="p">,</span><span class="n">Amp_P</span><span class="p">]</span><span class="o">=</span><span class="n">direct_P</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span><span class="n">depth</span><span class="p">,</span><span class="n">Azi</span><span class="p">,</span><span class="n">M</span><span class="p">,</span><span class="n">path</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">function</span> <span class="p">[</span><span class="n">radiationp</span><span class="p">,</span><span class="n">Ray_len</span><span class="p">,</span><span class="n">Amp_P</span><span class="p">]</span><span class="o">=</span><span class="n">direct_P</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span><span class="n">depth</span><span class="p">,</span><span class="n">Azi</span><span class="p">,</span><span class="n">M</span><span class="p">,</span><span class="n">path</span><span class="p">)</span>
 <span class="go">% inputs in the right: epicentral distance (dist), source_depth(km,depth), azimuth of station (Azi), moment tensor (M),path to the folder TT_M (path)</span>
 <span class="go">% outputs in the left: p wave radiation term (radiationp), ray path length (ray_len), synthetic amplitude of P</span>
 </pre></div>
 </div>
 <p>The normalized moment tensor has been given as <code class="docutils literal notranslate"><span class="pre">M.dat</span></code> in the package. It can be downloaded from the GCMT website. The epicentral distance and azimuth info are extracted from the sac files. The <code class="docutils literal notranslate"><span class="pre">TT_M</span></code> folder contains info of the earth model and table for ray parameters. After calculate the synthetic amplitude given a normalized moment tensor, we correct the spectral by substract it from the raw spectra in the log domain. The the amplitude of the spectral should represent the seismic moment (Nm).</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">amplitude</span><span class="o">=</span><span class="n">amplitude</span><span class="o">-</span><span class="n">log10</span><span class="p">(</span><span class="n">Amp_P</span><span class="p">);</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">amplitude</span><span class="o">=</span><span class="n">amplitude</span><span class="o">-</span><span class="n">log10</span><span class="p">(</span><span class="n">Amp_P</span><span class="p">);</span>
 <span class="go">% correction for the spreading term and the radiation pattern</span>
 </pre></div>
 </div>
@@ -208,7 +208,7 @@
 <div class="section" id="correction-for-attenuation">
 <h3>Correction for attenuation<a class="headerlink" href="#correction-for-attenuation" title="Permalink to this headline"></a></h3>
 <p>Here, we adopt the global attenuation model to correct the spectra (Choy and Boatwright, 1985). The correction is based on the function <code class="docutils literal notranslate"><span class="pre">corre.m</span></code>.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">function</span> <span class="n">tp</span> <span class="o">=</span> <span class="n">corre</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">function</span> <span class="n">tp</span> <span class="o">=</span> <span class="n">corre</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
 <span class="go">% f: frequency; tp: correction factor for attenuation as a function of frequency</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">amplitude</span><span class="o">=</span><span class="n">amplitude</span><span class="o">-</span><span class="n">log10</span><span class="p">(</span><span class="n">corr</span><span class="p">(</span><span class="n">f</span><span class="p">));</span>
 <span class="go">% correct for attenuation</span>
@@ -219,7 +219,7 @@
 <div class="section" id="correction-for-the-depth-phases">
 <h3>Correction for the depth phases<a class="headerlink" href="#correction-for-the-depth-phases" title="Permalink to this headline"></a></h3>
 <p>The depth of the event is 19 km in the SAC files. Given the depth here, the relative arrival times of sP and pP phases are within 15 seconds and contribute to the spectra. Here, we calculate the synthetic spectra for the depth phases effect using the function <code class="docutils literal notranslate"><span class="pre">depth_phase_spectrum.m</span></code></p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">function</span> <span class="p">[</span><span class="n">depth_time</span><span class="p">,</span><span class="n">response_depth</span><span class="p">,</span><span class="n">anp_dep</span><span class="p">,</span><span class="n">ph_dep</span><span class="p">,</span><span class="n">ffn_dep</span><span class="p">]</span><span class="o">=</span><span class="n">depth_phase_spectrum</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="n">window_length</span><span class="p">,</span><span class="n">datalength</span><span class="p">,</span><span class="n">M</span><span class="p">,</span><span class="n">path</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">function</span> <span class="p">[</span><span class="n">depth_time</span><span class="p">,</span><span class="n">response_depth</span><span class="p">,</span><span class="n">anp_dep</span><span class="p">,</span><span class="n">ph_dep</span><span class="p">,</span><span class="n">ffn_dep</span><span class="p">]</span><span class="o">=</span><span class="n">depth_phase_spectrum</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="n">window_length</span><span class="p">,</span><span class="n">datalength</span><span class="p">,</span><span class="n">M</span><span class="p">,</span><span class="n">path</span><span class="p">)</span>
 <span class="go">% Inputs: the name of the sac file (filename); the length of the selected windows in second (window_length);</span>
 <span class="go">% Inputs: the length of the time series used in Fourier transform; moment tensor(M);path to the folder TT_M</span>
 <span class="go">% Outputs: time series(depth_time);synthetic waveforms normalized by P wave amplitude;</span>
@@ -262,7 +262,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright 2021-2022, CUSeisTut team.
-      <span class="lastupdated">Last updated on 2022-06-16.
+      <span class="lastupdated">Last updated on 2022-06-22.
       </span></p>
   </div>
 
