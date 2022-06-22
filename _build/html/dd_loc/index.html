@@ -421,8 +421,7 @@
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Initial</span> <span class="n">trial</span> <span class="n">parameters</span>  <span class="n">x</span><span class="p">:</span>  <span class="mf">0.0</span> <span class="n">km</span><span class="p">;</span>  <span class="n">z</span><span class="p">:</span>  <span class="mf">5.0</span> <span class="n">km</span><span class="p">;</span>  <span class="n">t</span><span class="p">:</span>  <span class="mf">0.6125</span> <span class="n">s</span>
 </pre></div>
 </div>
-<p>We can also define a function to get the initial location
-.. code:</p>
+<p>We can also define a function to get the initial location</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_init_loc</span><span class="p">(</span><span class="n">dobs</span><span class="p">,</span><span class="n">stas</span><span class="p">,</span><span class="n">depth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">gap_time</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get initial earthquake location</span>
@@ -741,8 +740,8 @@ are remove or mitigated by double-difference</p>
 \begin{bmatrix}
 r_1^1 - r_1^2\\r_2^1 - r_2^2\\\vdots\\r_k^1 - r_k^2\\
 \end{bmatrix}\end{split}\]</div>
-<p>Practical usage will be introduced later.
-<strong>Workflow</strong></p>
+<p>Practical usage will be introduced later.</p>
+<p><strong>Workflow</strong></p>
 <img alt="../_images/DD_Earthquake_location_workflow_new.png" src="../_images/DD_Earthquake_location_workflow_new.png" />
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hyc1_dd</span> <span class="o">=</span> <span class="n">hyc1_abs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 <span class="n">hyc2_dd</span> <span class="o">=</span> <span class="n">hyc2_abs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -918,8 +917,7 @@ have 10 observations to solve for 4 parameters), then:</p>
 <span class="n">hyc2_dd</span> <span class="o">=</span> <span class="n">hyc2_dd</span><span class="o">+</span><span class="n">m</span><span class="o">.</span><span class="n">ravel</span><span class="p">()[</span><span class="mi">3</span><span class="p">:]</span>
 </pre></div>
 </div>
-<p>We can see the solutions already depart the initial location and move closer to the true location
-.. code:</p>
+<p>We can see the solutions already depart the initial location and move closer to the true location</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xmin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">hyc1_true</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">hyc1_abs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">hyc1_dd</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 <span class="n">xmax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">hyc1_true</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">hyc1_abs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">hyc1_dd</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 <span class="n">ymin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">hyc1_true</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">hyc1_abs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">hyc1_dd</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
@@ -1211,8 +1209,7 @@ A_1m_1+A_2m_2+\cdots+A_km_k \\&amp;= \frac{A_1}{\|A_1\|}(\|A_1\|m_1)+\frac{A_2}{
 <span class="n">Iteration</span>  <span class="mi">100</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00011026</span>
 </pre></div>
 </div>
-<p>We then find the residual is very small, and the earthquake location almost reached its true location
-.. code:</p>
+<p>We then find the residual is very small, and the earthquake location almost reached its true location</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xmin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">hyc1_true</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">hyc1_abs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">hyc1_dd</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 <span class="n">xmax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">hyc1_true</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">hyc1_abs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">hyc1_dd</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 <span class="n">ymin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">hyc1_true</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">hyc1_abs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">hyc1_dd</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
@@ -1311,7 +1308,7 @@ t =    0.88 ± 0.00000000  s
 
   <div role="contentinfo">
     <p>&#169; Copyright 2021-2022, CUSeisTut team.
-      <span class="lastupdated">Last updated on 2022-06-16.
+      <span class="lastupdated">Last updated on 2022-06-22.
       </span></p>
   </div>
 

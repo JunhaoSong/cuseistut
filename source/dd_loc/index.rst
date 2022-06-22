@@ -1,5 +1,5 @@
 Double-Difference Earthquake Relocation
-=============
+===================================================
 
 Introduction
 -------------
@@ -259,7 +259,7 @@ Set up station array, earthquake true location, wave-velocity and generate synth
 .. image:: output_6_0.png
 
 Absolute earthquake location
--------------------
+-------------------------------------------------------
 
 Initial location
 *****************
@@ -285,7 +285,9 @@ The station which records the earliest waveform is closest to the hypocenter, so
 .. parsed-literal::
 
     Initial trial parameters  x:  0.0 km;  z:  5.0 km;  t:  0.6125 s
+
 We can also define a function to get the initial location
+
 .. code::
 
     def get_init_loc(dobs,stas,depth=5,gap_time=1):
@@ -650,7 +652,9 @@ Detailed expression is, note the negative signs in the last 3 columns of data ke
    \begin{bmatrix}
    r_1^1 - r_1^2\\r_2^1 - r_2^2\\\vdots\\r_k^1 - r_k^2\\
    \end{bmatrix}
+
 Practical usage will be introduced later.
+
 **Workflow**
 
 .. image:: DD_Earthquake_location_workflow_new.png
@@ -880,7 +884,9 @@ The output results are the earthquake location misfit with reference to its abso
 
     hyc1_dd = hyc1_dd+m.ravel()[:3]
     hyc2_dd = hyc2_dd+m.ravel()[3:]
+
 We can see the solutions already depart the initial location and move closer to the true location
+
 .. code::
 
     xmin = min(hyc1_true[0],hyc1_abs[0],hyc1_dd[0])
@@ -1216,7 +1222,9 @@ After get the solution, a conversion between :math:`\mathbf{m'}` and :math:`\mat
     Iteration   98 residual:     0.00011796
     Iteration   99 residual:     0.00011405
     Iteration  100 residual:     0.00011026
+
 We then find the residual is very small, and the earthquake location almost reached its true location
+
 .. code::
 
     xmin = min(hyc1_true[0],hyc1_abs[0],hyc1_dd[0])

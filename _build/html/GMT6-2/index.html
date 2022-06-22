@@ -175,6 +175,8 @@
 <div class="line"><strong>3. gmt makecpt -Chot -T0/400/10 -D -Z -Ic -H &gt; depth.cpt</strong> to make color palette tables</div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">-Chot</span></code> specifies the input cpt used is <a class="reference external" href="http://soliton.vm.bytemark.co.uk/pub/cpt-city/gmt/GMT_hot.png">hot</a></p>
+<p><code class="docutils literal notranslate"><span class="pre">-D</span></code> selects the back- and foreground colors for the colorbar</p>
+<p><code class="docutils literal notranslate"><span class="pre">-Z</span></code> creates a continuous cpt file</p>
 <p><code class="docutils literal notranslate"><span class="pre">-Ic</span></code> reverse the CPT</p>
 <div class="line-block">
 <div class="line"><strong>4. awk ‘{print $9,$8,$10}’ banda_arc_catalog.txt &gt; catalog.xyz</strong></div>
@@ -324,7 +326,7 @@ draw horizontal color scale; <code class="file docutils literal notranslate"><sp
 
   <div role="contentinfo">
     <p>&#169; Copyright 2021-2022, CUSeisTut team.
-      <span class="lastupdated">Last updated on 2022-06-16.
+      <span class="lastupdated">Last updated on 2022-06-22.
       </span></p>
   </div>
 

@@ -82,6 +82,10 @@ Step-by-Step explanation
 
 ``-Chot`` specifies the input cpt used is `hot <http://soliton.vm.bytemark.co.uk/pub/cpt-city/gmt/GMT_hot.png>`_
 
+``-D`` selects the back- and foreground colors for the colorbar
+
+``-Z`` creates a continuous cpt file
+
 ``-Ic`` reverse the CPT
 
 | **4. awk '{print $9,$8,$10}' banda_arc_catalog.txt > catalog.xyz**

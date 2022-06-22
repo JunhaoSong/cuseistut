@@ -1088,43 +1088,40 @@ The general solution is to <strong>conduct rough grid-search first</strong>, whi
 <span class="n">Iteration</span> <span class="mi">4</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>   <span class="mf">0.00</span>
 </pre></div>
 </div>
-<dl>
-<dt>def present_loc_results(hyc,sig_square=None,std_fmt=’.2f’):</dt><dd><p>“””
-Print earthquake location results
-Parameters:
-|         hyc: hypocenter
-<a href="#id1"><span class="problematic" id="id2">|</span></a>sigma_square: squared sigma matrix
-|     std_fmt: format control of the output uncertainty
-“””
-_x = format(np.round(hyc[0],4),format(“6.2f”))
-_y = format(np.round(hyc[1],4),format(“6.2f”))
-_z = format(np.round(hyc[2],4),format(“6.2f”))
-_t = format(np.round(hyc[3],4),format(“6.2f”))
-if not isinstance(sig_square,np.ndarray):</p>
-<blockquote>
-<div><p>print(“x = “,_x,” km”)
-print(“x = “,_y,” km”)
-print(“z = “,_z,” km”)
-print(“t = “,_t,” s”)</p>
-</div></blockquote>
-<dl class="simple">
-<dt>else:</dt><dd><p>stdx = sig_square[0,0]**0.5
-_stdx = format(np.round(stdx,4),std_fmt)
-stdy = sig_square[1,1]**0.5
-_stdy = format(np.round(stdy,4),std_fmt)
-stdz = sig_square[2,2]**0.5
-_stdz = format(np.round(stdz,4),std_fmt)
-stdt = sig_square[3,3]**0.5
-_stdt = format(np.round(stdt,4),std_fmt)
-print(“x = “,_x,”±”,_stdx,” km”)
-print(“y = “,_y,”±”,_stdy,” km”)
-print(“z = “,_z,”±”,_stdz,” km”)
-print(“t = “,_t,”±”,_stdt,” s”)</p>
-</dd>
-</dl>
-<p>present_loc_results(hyc_abs,sigma_m2,std_fmt=’.4f’)</p>
-</dd>
-</dl>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">present_loc_results</span><span class="p">(</span><span class="n">hyc</span><span class="p">,</span><span class="n">sig_square</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">std_fmt</span><span class="o">=</span><span class="s1">&#39;.2f&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Print earthquake location results</span>
+<span class="sd">    Parameters:</span>
+<span class="sd">    |         hyc: hypocenter</span>
+<span class="sd">    |sigma_square: squared sigma matrix</span>
+<span class="sd">    |     std_fmt: format control of the output uncertainty</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_x</span> <span class="o">=</span> <span class="nb">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">hyc</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">4</span><span class="p">),</span><span class="nb">format</span><span class="p">(</span><span class="s2">&quot;6.2f&quot;</span><span class="p">))</span>
+    <span class="n">_y</span> <span class="o">=</span> <span class="nb">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">hyc</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="mi">4</span><span class="p">),</span><span class="nb">format</span><span class="p">(</span><span class="s2">&quot;6.2f&quot;</span><span class="p">))</span>
+    <span class="n">_z</span> <span class="o">=</span> <span class="nb">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">hyc</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="mi">4</span><span class="p">),</span><span class="nb">format</span><span class="p">(</span><span class="s2">&quot;6.2f&quot;</span><span class="p">))</span>
+    <span class="n">_t</span> <span class="o">=</span> <span class="nb">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">hyc</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span><span class="mi">4</span><span class="p">),</span><span class="nb">format</span><span class="p">(</span><span class="s2">&quot;6.2f&quot;</span><span class="p">))</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sig_square</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x = &quot;</span><span class="p">,</span><span class="n">_x</span><span class="p">,</span><span class="s2">&quot; km&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x = &quot;</span><span class="p">,</span><span class="n">_y</span><span class="p">,</span><span class="s2">&quot; km&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;z = &quot;</span><span class="p">,</span><span class="n">_z</span><span class="p">,</span><span class="s2">&quot; km&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;t = &quot;</span><span class="p">,</span><span class="n">_t</span><span class="p">,</span><span class="s2">&quot; s&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">stdx</span> <span class="o">=</span> <span class="n">sig_square</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="mf">0.5</span>
+        <span class="n">_stdx</span> <span class="o">=</span> <span class="nb">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">stdx</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span><span class="n">std_fmt</span><span class="p">)</span>
+        <span class="n">stdy</span> <span class="o">=</span> <span class="n">sig_square</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mf">0.5</span>
+        <span class="n">_stdy</span> <span class="o">=</span> <span class="nb">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">stdy</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span><span class="n">std_fmt</span><span class="p">)</span>
+        <span class="n">stdz</span> <span class="o">=</span> <span class="n">sig_square</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="o">**</span><span class="mf">0.5</span>
+        <span class="n">_stdz</span> <span class="o">=</span> <span class="nb">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">stdz</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span><span class="n">std_fmt</span><span class="p">)</span>
+        <span class="n">stdt</span> <span class="o">=</span> <span class="n">sig_square</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span><span class="o">**</span><span class="mf">0.5</span>
+        <span class="n">_stdt</span> <span class="o">=</span> <span class="nb">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">stdt</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span><span class="n">std_fmt</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x = &quot;</span><span class="p">,</span><span class="n">_x</span><span class="p">,</span><span class="s2">&quot;±&quot;</span><span class="p">,</span><span class="n">_stdx</span><span class="p">,</span><span class="s2">&quot; km&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;y = &quot;</span><span class="p">,</span><span class="n">_y</span><span class="p">,</span><span class="s2">&quot;±&quot;</span><span class="p">,</span><span class="n">_stdy</span><span class="p">,</span><span class="s2">&quot; km&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;z = &quot;</span><span class="p">,</span><span class="n">_z</span><span class="p">,</span><span class="s2">&quot;±&quot;</span><span class="p">,</span><span class="n">_stdz</span><span class="p">,</span><span class="s2">&quot; km&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;t = &quot;</span><span class="p">,</span><span class="n">_t</span><span class="p">,</span><span class="s2">&quot;±&quot;</span><span class="p">,</span><span class="n">_stdt</span><span class="p">,</span><span class="s2">&quot; s&quot;</span><span class="p">)</span>
+
+    <span class="n">present_loc_results</span><span class="p">(</span><span class="n">hyc_abs</span><span class="p">,</span><span class="n">sigma_m2</span><span class="p">,</span><span class="n">std_fmt</span><span class="o">=</span><span class="s1">&#39;.4f&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>x =    0.50 ± 0.0000  km
 y =    0.50 ± 0.0000  km
 z =    9.45 ± 0.0000  km
@@ -1190,7 +1187,7 @@ t =   -0.00 ± 0.0000  s
 
   <div role="contentinfo">
     <p>&#169; Copyright 2021-2022, CUSeisTut team.
-      <span class="lastupdated">Last updated on 2022-06-16.
+      <span class="lastupdated">Last updated on 2022-06-22.
       </span></p>
   </div>
 
