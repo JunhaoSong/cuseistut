@@ -48,6 +48,7 @@ This document is developed and maintained by `CUHK Seismology LAB <http://www.cu
    :caption: Advanced level
    :hidden:
 
+   gcap/index
    eqt/index
    dd_loc/index
    source_spectra/index

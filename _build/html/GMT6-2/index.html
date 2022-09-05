@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Generic Mapping Tools - Seismic Data &mdash; CUSeisTut</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -76,6 +77,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Advanced level</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../gcap/index.html">Focal mechanism</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../eqt/index.html">Earthquake Transformer Tutorial</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../dd_loc/index.html">Double-Difference Earthquake Relocation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../source_spectra/index.html">Spectral Analysis</a></li>
@@ -115,11 +117,11 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="generic-mapping-tools-seismic-data">
+  <section id="generic-mapping-tools-seismic-data">
 <h1>Generic Mapping Tools - Seismic Data<a class="headerlink" href="#generic-mapping-tools-seismic-data" title="Permalink to this headline"></a></h1>
-<div class="section" id="plotting-earthquake-catalog">
+<section id="plotting-earthquake-catalog">
 <h2>Plotting earthquake catalog<a class="headerlink" href="#plotting-earthquake-catalog" title="Permalink to this headline"></a></h2>
-<div class="section" id="preview">
+<section id="preview">
 <h3>Preview<a class="headerlink" href="#preview" title="Permalink to this headline"></a></h3>
 <p>The figure below is modified from Figure 2 in <a class="reference external" href="https://doi.org/10.1785/0320210041">this paper</a>.</p>
 <a class="reference internal image-reference" href="../_images/catalog.png"><img alt="../_images/catalog.png" src="../_images/catalog.png" style="width: 80%;" /></a>
@@ -150,8 +152,8 @@
 </pre></div>
 </div>
 <p>To reproduce it by yourself, you may first download or save <a class="reference download internal" download="" href="../_downloads/1ba9796a95c9efaca342deeca20b66ac/banda_arc_catalog.txt"><code class="xref download docutils literal notranslate"><span class="pre">banda_arc_catalog.txt</span></code></a>, <a class="reference download internal" download="" href="../_downloads/7b45cc6eb3242b2f85c9e4f724ab10b8/java_trench.txt"><code class="xref download docutils literal notranslate"><span class="pre">java_trench.txt</span></code></a>, <a class="reference download internal" download="" href="../_downloads/ffe799108d8f6c0457fc7ca20f8fc1f1/GE_3_stations.txt"><code class="xref download docutils literal notranslate"><span class="pre">GE_3_stations.txt</span></code></a>, <a class="reference download internal" download="" href="../_downloads/5fbd80661c0f465641ce83235efb6299/YS_30_stations.txt"><code class="xref download docutils literal notranslate"><span class="pre">YS_30_stations.txt</span></code></a>, and then move these files into your working directory. Try to copy the above commands and run them on your own computer to see if you can generate the same figure without warning or error.</p>
-</div>
-<div class="section" id="step-by-step-explanation">
+</section>
+<section id="step-by-step-explanation">
 <h3>Step-by-Step explanation<a class="headerlink" href="#step-by-step-explanation" title="Permalink to this headline"></a></h3>
 <div class="line-block">
 <div class="line"><strong>1. gmt basemap -JM15c -R115/131/-13/-5 -Bxa5f1 -Bya5f1 -BWeSn+t”Final catalog” –MAP_FRAME_TYPE=plain –FONT_TITLE=10p –MAP_TITLE_OFFSET=-8p</strong> to plot base maps and frames</div>
@@ -210,11 +212,11 @@ draw horizontal color scale; <code class="file docutils literal notranslate"><sp
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">-F+f8p,black</span></code> specifices the font size of 8p and color of black</p>
 <a class="reference internal image-reference" href="../_images/catalog.png"><img alt="../_images/catalog.png" src="../_images/catalog.png" style="width: 80%;" /></a>
-</div>
-</div>
-<div class="section" id="plotting-cross-sections">
+</section>
+</section>
+<section id="plotting-cross-sections">
 <h2>Plotting cross sections<a class="headerlink" href="#plotting-cross-sections" title="Permalink to this headline"></a></h2>
-<div class="section" id="id1">
+<section id="id1">
 <h3>Preview<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h3>
 <p>The figure below is modified from Figure 3 in <a class="reference external" href="https://doi.org/10.1785/0320210041">this paper</a>.</p>
 <a class="reference internal image-reference" href="../_images/section.png"><img alt="../_images/section.png" src="../_images/section.png" style="width: 80%;" /></a>
@@ -277,11 +279,11 @@ draw horizontal color scale; <code class="file docutils literal notranslate"><sp
 </div>
 <p>To reproduce it by yourself, you may first download or save <a class="reference download internal" download="" href="../_downloads/1ba9796a95c9efaca342deeca20b66ac/banda_arc_catalog.txt"><code class="xref download docutils literal notranslate"><span class="pre">banda_arc_catalog.txt</span></code></a> and then move this files into your working directory. Try to copy the above commands and run them on your own computer to see if you can generate the same figure without warning or error.</p>
 <p><strong>You may go to the</strong> <a class="reference external" href="https://docs.generic-mapping-tools.org/6.3/index.html">official tutorial website of GMT v6.3</a> <strong>for more exploring</strong></p>
-</div>
-</div>
-<div class="section" id="excercises">
+</section>
+</section>
+<section id="excercises">
 <h2>Excercises<a class="headerlink" href="#excercises" title="Permalink to this headline"></a></h2>
-<div class="section" id="reproduce-figure-1-in-the-paper">
+<section id="reproduce-figure-1-in-the-paper">
 <h3>Reproduce figure 1 in the paper<a class="headerlink" href="#reproduce-figure-1-in-the-paper" title="Permalink to this headline"></a></h3>
 <blockquote>
 <div><ol class="arabic simple">
@@ -291,8 +293,8 @@ draw horizontal color scale; <code class="file docutils literal notranslate"><sp
 <li><p>plot the map view cross-section, mark two ends of it with “A” and “A’”. The cross-section should cross through the “MMRI” station, and with a length of 300 km, strike 30 degrees west of north</p></li>
 </ol>
 </div></blockquote>
-</div>
-<div class="section" id="plot-a-cross-section-plot-based-on-the-catalog-generated-in-the-unix-command-tutorial">
+</section>
+<section id="plot-a-cross-section-plot-based-on-the-catalog-generated-in-the-unix-command-tutorial">
 <h3>Plot a cross-section plot based on the catalog generated in the Unix command tutorial<a class="headerlink" href="#plot-a-cross-section-plot-based-on-the-catalog-generated-in-the-unix-command-tutorial" title="Permalink to this headline"></a></h3>
 <blockquote>
 <div><ol class="arabic simple">
@@ -301,8 +303,8 @@ draw horizontal color scale; <code class="file docutils literal notranslate"><sp
 <li><p>marked “A” and “A’” in the figure.</p></li>
 </ol>
 </div></blockquote>
-</div>
-<div class="section" id="plot-the-magnitude-variation-figure-refer-to-figure-4b-in-the-paper">
+</section>
+<section id="plot-the-magnitude-variation-figure-refer-to-figure-4b-in-the-paper">
 <h3>Plot the magnitude variation figure. Refer to Figure 4b in the paper<a class="headerlink" href="#plot-the-magnitude-variation-figure-refer-to-figure-4b-in-the-paper" title="Permalink to this headline"></a></h3>
 <blockquote>
 <div><ol class="arabic simple">
@@ -310,9 +312,9 @@ draw horizontal color scale; <code class="file docutils literal notranslate"><sp
 <li><p>filled the circle according to their depth.</p></li>
 </ol>
 </div></blockquote>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
            </div>
@@ -326,7 +328,7 @@ draw horizontal color scale; <code class="file docutils literal notranslate"><sp
 
   <div role="contentinfo">
     <p>&#169; Copyright 2021-2022, CUSeisTut team.
-      <span class="lastupdated">Last updated on 2022-06-22.
+      <span class="lastupdated">Last updated on 2022-09-05.
       </span></p>
   </div>
 

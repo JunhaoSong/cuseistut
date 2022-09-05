@@ -1,5 +1,5 @@
 Earthquake Absolute Location
-=============
+==================================
 
 Introduction
 --------------
@@ -1062,38 +1062,38 @@ Convenient functions
 
 .. code::
 
-def present_loc_results(hyc,sig_square=None,std_fmt='.2f'):
-    """
-    Print earthquake location results
-    Parameters:
-    |         hyc: hypocenter
-    |sigma_square: squared sigma matrix
-    |     std_fmt: format control of the output uncertainty
-    """
-    _x = format(np.round(hyc[0],4),format("6.2f"))
-    _y = format(np.round(hyc[1],4),format("6.2f"))
-    _z = format(np.round(hyc[2],4),format("6.2f"))
-    _t = format(np.round(hyc[3],4),format("6.2f"))
-    if not isinstance(sig_square,np.ndarray):
-        print("x = ",_x," km")
-        print("x = ",_y," km")
-        print("z = ",_z," km")
-        print("t = ",_t," s")
-    else:
-        stdx = sig_square[0,0]**0.5
-        _stdx = format(np.round(stdx,4),std_fmt)
-        stdy = sig_square[1,1]**0.5
-        _stdy = format(np.round(stdy,4),std_fmt)
-        stdz = sig_square[2,2]**0.5
-        _stdz = format(np.round(stdz,4),std_fmt)
-        stdt = sig_square[3,3]**0.5
-        _stdt = format(np.round(stdt,4),std_fmt)
-        print("x = ",_x,"±",_stdx," km")
-        print("y = ",_y,"±",_stdy," km")
-        print("z = ",_z,"±",_stdz," km")
-        print("t = ",_t,"±",_stdt," s")
+    def present_loc_results(hyc,sig_square=None,std_fmt='.2f'):
+        """
+        Print earthquake location results
+        Parameters:
+        |         hyc: hypocenter
+        |sigma_square: squared sigma matrix
+        |     std_fmt: format control of the output uncertainty
+        """
+        _x = format(np.round(hyc[0],4),format("6.2f"))
+        _y = format(np.round(hyc[1],4),format("6.2f"))
+        _z = format(np.round(hyc[2],4),format("6.2f"))
+        _t = format(np.round(hyc[3],4),format("6.2f"))
+        if not isinstance(sig_square,np.ndarray):
+            print("x = ",_x," km")
+            print("x = ",_y," km")
+            print("z = ",_z," km")
+            print("t = ",_t," s")
+        else:
+            stdx = sig_square[0,0]**0.5
+            _stdx = format(np.round(stdx,4),std_fmt)
+            stdy = sig_square[1,1]**0.5
+            _stdy = format(np.round(stdy,4),std_fmt)
+            stdz = sig_square[2,2]**0.5
+            _stdz = format(np.round(stdz,4),std_fmt)
+            stdt = sig_square[3,3]**0.5
+            _stdt = format(np.round(stdt,4),std_fmt)
+            print("x = ",_x,"±",_stdx," km")
+            print("y = ",_y,"±",_stdy," km")
+            print("z = ",_z,"±",_stdz," km")
+            print("t = ",_t,"±",_stdt," s")
 
-    present_loc_results(hyc_abs,sigma_m2,std_fmt='.4f')
+        present_loc_results(hyc_abs,sigma_m2,std_fmt='.4f')
 
 .. parsed-literal::
 

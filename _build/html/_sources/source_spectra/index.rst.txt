@@ -78,13 +78,13 @@ Calculate spectra
 
 Then we calculate the spectra for each waveform traces by conducting fast Fourier transform. The function used here is ``sacfft.m``
 
-.. code ::
+.. code::
 
->>> function [amplitude, phase, frequency]=sacfft(displacement_seri, time_seri);
-% Inputs: the displacement (m) and time series of the waveforms. 
-% Outputs in the left: the amplitude, phase term, and the frequency of the spectra
->>> amplitude=log10(amplitude);
-% following processing are all conducted in log domain
+ >>> function [amplitude, phase, frequency]=sacfft(displacement_seri, time_seri);
+ % Inputs: the displacement (m) and time series of the waveforms. 
+ % Outputs in the left: the amplitude, phase term, and the frequency of the spectra
+ >>> amplitude=log10(amplitude);
+ % following processing are all conducted in log domain
 
 
 Correction for spreading term and radiation pattern
@@ -94,17 +94,17 @@ It has been illustrated in equation (2) that the amplitude of the spectra decay 
 
 .. code ::
 
->>> function [radiationp,Ray_len,Amp_P]=direct_P(dist,depth,Azi,M,path)
-% inputs in the right: epicentral distance (dist), source_depth(km,depth), azimuth of station (Azi), moment tensor (M),path to the folder TT_M (path)
-% outputs in the left: p wave radiation term (radiationp), ray path length (ray_len), synthetic amplitude of P
+ >>> function [radiationp,Ray_len,Amp_P]=direct_P(dist,depth,Azi,M,path)
+ % inputs in the right: epicentral distance (dist), source_depth(km,depth), azimuth of station (Azi), moment tensor (M),path to the folder TT_M (path)
+ % outputs in the left: p wave radiation term (radiationp), ray path length (ray_len), synthetic amplitude of P
 
 The normalized moment tensor has been given as ``M.dat`` in the package. It can be downloaded from the GCMT website. The epicentral distance and azimuth info are extracted from the sac files. The ``TT_M`` folder contains info of the earth model and table for ray parameters. After calculate the synthetic amplitude given a normalized moment tensor, we correct the spectral by substract it from the raw spectra in the log domain. The the amplitude of the spectral should represent the seismic moment (Nm).
 
 
 .. code ::
 
->>> amplitude=amplitude-log10(Amp_P);
-% correction for the spreading term and the radiation pattern
+ >>> amplitude=amplitude-log10(Amp_P);
+ % correction for the spreading term and the radiation pattern
 
 .. image:: spectra_correction1.png
    :width: 100%
@@ -121,10 +121,11 @@ Correction for attenuation
 Here, we adopt the global attenuation model to correct the spectra (Choy and Boatwright, 1985). The correction is based on the function ``corre.m``. 
 
 .. code ::
->>> function tp = corre(f)
-% f: frequency; tp: correction factor for attenuation as a function of frequency
->>> amplitude=amplitude-log10(corr(f));
-% correct for attenuation
+
+ >>> function tp = corre(f)
+ % f: frequency; tp: correction factor for attenuation as a function of frequency
+ >>> amplitude=amplitude-log10(corr(f));
+ % correct for attenuation
 
 .. image:: spectra_correction2.png
    :width: 100%
@@ -134,13 +135,14 @@ Correction for the depth phases
 The depth of the event is 19 km in the SAC files. Given the depth here, the relative arrival times of sP and pP phases are within 15 seconds and contribute to the spectra. Here, we calculate the synthetic spectra for the depth phases effect using the function ``depth_phase_spectrum.m``
 
 .. code ::
->>> function [depth_time,response_depth,anp_dep,ph_dep,ffn_dep]=depth_phase_spectrum(filename,window_length,datalength,M,path)
-% Inputs: the name of the sac file (filename); the length of the selected windows in second (window_length);
-% Inputs: the length of the time series used in Fourier transform; moment tensor(M);path to the folder TT_M
-% Outputs: time series(depth_time);synthetic waveforms normalized by P wave amplitude; 
-% amplitude of spectra for depth phase effect (anp_dep); phase term (ph_dep); frequency (ffn_dep)
->>> amplitude=amplitude-log10(anp_dep);
-% correct for depth phase term effect
+
+ >>> function [depth_time,response_depth,anp_dep,ph_dep,ffn_dep]=depth_phase_spectrum(filename,window_length,datalength,M,path)
+ % Inputs: the name of the sac file (filename); the length of the selected windows in second (window_length);
+ % Inputs: the length of the time series used in Fourier transform; moment tensor(M);path to the folder TT_M
+ % Outputs: time series(depth_time);synthetic waveforms normalized by P wave amplitude; 
+ % amplitude of spectra for depth phase effect (anp_dep); phase term (ph_dep); frequency (ffn_dep)
+ >>> amplitude=amplitude-log10(anp_dep);
+ % correct for depth phase term effect
 
 
 .. image:: spectra_correction3.png
