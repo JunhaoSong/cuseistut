@@ -40,7 +40,7 @@ Developed by Han CHEN.
 1.1 What is focal mechanism
 ============================
 To describe the geometry of a fault, Scientists assume that the fault is a planar surface across which slip occurred
-during an earthquake. The focal mechanism describes the gault geometry of the seismogenic fault (e.g., strike(θ), dip(β)) and
+during an earthquake. The focal mechanism describes the fault geometry of the seismogenic fault (e.g., strike(θ), dip(β)) and
 the slip in the fault (e.g., rake(λ)). The beach ball were the lower-hemisphere stereographic projection of the fault geometry.
 
 .. image:: ./gcap/focal-mechanism.png
@@ -53,13 +53,12 @@ the slip in the fault (e.g., rake(λ)). The beach ball were the lower-hemisphere
 * :file:`gCAP3D` package
 
 ===============
-2 Installiation
+2 Installation
 ===============
------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 2.1 fk
 ============================
-fk is a program written by Prof. Lupei ZHU(LINK) for calculating the synthetic Green's function based on a horizontally layered velocity model. The detailed installation of fk could be find on `here`_.
+fk is a program written by Prof. Lupei ZHU for calculating the synthetic Green's function based on a horizontally layered velocity model. The detailed installation of fk could be find on `here`_.
 
 .. _here: https://seismo-learn.org/software/fk/install/
 
@@ -75,12 +74,12 @@ fk is a program written by Prof. Lupei ZHU(LINK) for calculating the synthetic G
     ## Unzip
     $ tar -xvf fk3.3.tar
     ## make dir "~/Src" and move the fold to "~/Src"
-    $ mkdir -p ~/src/
+    $ mkdir -p ~/Src/
     $ mv fk ~/Src/
 
 *2. File modification and compilation*
 
-There are some error in the source code of fk. Please :download:`download <./fk/fk3.3-v2    90618.patch>` the file and put it into the :file:`~/Src/fk` for modifying the Make file.
+There are some errors in the source code of fk. Please :download:`download <./fk/fk3.3-v20190618.patch>` the file and put it into the :file:`~/Src/fk` for modifying the Make file.
 
 
 .. code-block::
@@ -88,7 +87,7 @@ There are some error in the source code of fk. Please :download:`download <./fk/
     
     $ cd ~/Src/fk/
     ## modify the Make file
-    $ patch < fk3.3-v2    90618.patch
+    $ patch < fk3.3-v20190618.patch
     ## compilation
     $ make clean
     $ make
@@ -118,7 +117,7 @@ SAC is one of the most widely used data analysis software packages in the field 
 Apply SAC source file
 -----------------------
 
-SAC package application address：http://ds.iris.edu/ds/nodes/dmc/forms/sac/
+You will need to submit an application online to obtain the SAC package from IRIS：http://ds.iris.edu/ds/nodes/dmc/forms/sac/
 
 2.2.1 Installation for linux
 -------------------------------
@@ -180,7 +179,7 @@ Type :file:`sac` in the terminal, there will be version information if installat
      
     SAC>
 
-2.2.2 installation for MacOS
+2.2.2 Installation for MacOS
 -------------------------------
 
 *1. Preparation*
@@ -246,7 +245,7 @@ The code is now open source. The installation of gCAP could be found on `seisman
 
 Here I integrated the file in the website and gave the modified package file for you :download:`download <./gcap/gCAP3D.1.0.Cuseistut.tar>`.
 
-*1. Downlaod the file and Unzip*
+*1. Download the file and unzip*
 
 .. code-block::
     :linenos:
@@ -254,21 +253,25 @@ Here I integrated the file in the website and gave the modified package file for
     ## Download
     ## Unizp
     $ tar -xvf gCAP3D.1.0.Cuseistut.tar
+
+*2. Download supplementary file and unzip*
+
+Refer to the seisman website above to download gcap_utils.tar.gz, unzip and put all files into the gCAP3D directory.
     
-*2. Install binary packages*    
+*3. Install binary packages*    
     
 .. code-block::
     :linenos:    
     
     ## Move to installation position 
-    $ sudo mv sac ~/Src
+    $ sudo mv gCAP3D ~/Src
     ## change dir to gCAP3D
     $ cd ~/Src/gCAP3D
     ## compilation
     $ make clean
     $ make
 
-*3. Configuration variable*
+*4. Configuration variable*
 
 Add the environment variables and SAC global variables in :file:`~/.bashrc`
 
@@ -278,10 +281,13 @@ Add the environment variables and SAC global variables in :file:`~/.bashrc`
     $ echo 'export PATH=~/Src/gcap:${PATH}'>> ~/.bashrc
     $ source ~/.bashrc
 
+*5. Modify directory*
 
-*4. Run gCAP3D*
+Open :file:`cap3D.pl`, change the directory on Line 17 from '~/Src/gCAP3D/cap_plt.pl' to '{your home directory}/Src/gCAP3D/cap_plt.pl'
+    
+*6. Run gCAP3D*
 
-Type :file:`gCAP3D.pl` in the terminal, there will be version information if installation is succeeded
+Type :file:`cap3D.pl` in the terminal, there will be version information if installation is succeeded
 
 .. code-block::
     :linenos:
@@ -300,7 +306,7 @@ Type :file:`gCAP3D.pl` in the terminal, there will be version information if ins
 
 .. Tip::
 
-    The steps of focal mechanism inversion by using gCAP3D
+    The steps of focal mechanism inversion using gCAP3D
 
     1. Calculating the Green's function
     
@@ -312,7 +318,7 @@ Type :file:`gCAP3D.pl` in the terminal, there will be version information if ins
 
     .. _this web: http://seisman.info/coordinate-systems-in-seismology.html
     
-    4. Transform the data into the unit of cm/s by multiplying 1x10-7(default unit in SAC data is mm), which is the default unit in CAP.
+    4. Transform the data into the unit of cm/s by multiplying :file:`1e-7` (default unit in SAC data is :file:`nm`), which is the default unit in CAP.
     
     5. Set the onset time of the event as the reference time (the zero point in the time series). Find the details in sac manual.
     
@@ -320,7 +326,7 @@ Type :file:`gCAP3D.pl` in the terminal, there will be version information if ins
     
     7. Remember to remove the waveform data from the folder whose P arrival is too dim to be seen.
     
-    8. Resample the data to Δ𝑡 that the same as the green's0 function
+    8. Resample the data to Δ𝑡 that the same as the Green's function
     
     9. Set up the “info.eve” file under each event folder. It is a five-column file, of which the format is: “o-marker evla evlo evdp mag”.
     
@@ -332,11 +338,11 @@ Type :file:`gCAP3D.pl` in the terminal, there will be version information if ins
     11. check the uncertainty
 
 .. Note::
-    Note that the unit of displacement data obtained by transferring the PZ file is :file:`m`; the default unit of SAC is  :file:`nm`, so it must be multiplied by  :file:`1.0e9` to convert to the default unit of SAC.
+    Note that the unit of displacement data obtained by transferring the PZ file is :file:`m`; the default unit of SAC is  :file:`nm`, so it must be multiplied by  :file:`1e9` to convert to the default unit of SAC.
 
 3.1 Green's function calculation
 ================================
-The first step of runing gCAP is building a Grenn's function library by using fk package. An velocity model file (GD.vel) is need for the calculation. :download:`here <./fk/gCAP3D.1.0.Cuseistut.tar>` is the velocity model used in this tutorial. The default setting of :file:`gCAP` puts the Grenn's function library under :file:`~/data/models/Glib`
+The first step of runing gCAP is building a Grenn's function library by using fk package. An velocity model file (GD.vel) is need for the calculation. :download:`here <./gcap/velocity-model/hn>` is the velocity model used in this tutorial. The default setting of :file:`gCAP` puts the Green's function library under :file:`~/data/models/Glib`
 
 .. Tip::
 
@@ -345,18 +351,18 @@ The first step of runing gCAP is building a Grenn's function library by using fk
 .. code-block::
     :linenos:
     
-    ## mkdir the Grenn's functio library directory
+    ## mkdir the Green's function library directory
     $ mkdir ~/data
     $ mkdir ~/data/models
     $ mkdir ~/data/models/Glib
-    ## move to the  Grenn's functio library directory
+    ## move to Green's function library directory
     $ cd ~/data/models/Glib
     ## build a directory for velocity model GD
     $ mkdir GD
     $ cd GD
     ## cp GD.vel to GD directoty, please replace the '/path/to/fk/GD.vel' to the real path in your system
     $ cp /path/to/fk/GD.vel .
-    ## calculate the Grenn's functio library using fk
+    ## calculate the Green's function library using fk
     $ fk.pl -MGD.vel/15/k -N512/0.2 -S2 05 10 15 20 25 30 35 40 45 50 55 60 65 70 75 80 85 90 95 100 105 110 115 120 125 130 135 140 145 150 155 160 165 170 175 180 185 190 195 200 205 210 215 220 225 230 235 240 245 250 255 260 265 270 275 280 285 290 295 300 305 310 315 320 325 330 335 340 345 350 355 360 365 370 375 380 385 390 395 400 405 410 415
     $ fk.pl -MGD.vel/15/k -N512/0.2 -S0 05 10 15 20 25 30 35 40 45 50 55 60 65 70 75 80 85 90 95 100 105 110 115 120 125 130 135 140 145 150 155 160 165 170 175 180 185 190 195 200 205 210 215 220 225 230 235 240 245 250 255 260 265 270 275 280 285 290 295 300 305 310 315 320 325 330 335 340 345 350 355 360 365 370 375 380 385 390 395 400 405 410 415
 
@@ -364,7 +370,7 @@ The first step of runing gCAP is building a Grenn's function library by using fk
 3.2 Sac file preparation
 ========================
 
-The sac file preparation could be done by using :file:`SAC` software or other softwares, such as the :file:`Obspy`. Here we bridfly introduce the steps while using :file:`SAC`. The derails of commands used in this chapater could be found in the `sac manual`_.
+The sac file preparation could be done by using :file:`SAC` software or other softwares, such as the :file:`Obspy`. Here we briefly introduce the steps while using :file:`SAC`. The details of commands used in this chapater could be found in the `sac manual`_.
 
 .. _sac manual: https://seisman.github.io/SAC_Docs_zh/
 
@@ -377,7 +383,7 @@ The sac file preparation could be done by using :file:`SAC` software or other so
     
     ## Merge PZ files of all stations into the same file
     $ cat SAC_PZs_* >> SAC.PZs
-    ## remove the instrument response by command: tansfer
+    ## remove the instrument response by command: transfer
     $ sac
     SAC> r *.SAC
     ## When going to the instrument response, try to choose a wider frequency band
@@ -393,7 +399,7 @@ The sac file preparation could be done by using :file:`SAC` software or other so
     
     ## Merge RESP files of all stations into the same file
     $ cat RESP.*.*.*.* >> RESP.ALL
-    ## remove the instrument response by command: tansfer
+    ## remove the instrument response by command: transfer
     $ sac
     SAC> r *.SAC
     ## When going to the instrument response, try to choose a wider frequency band
