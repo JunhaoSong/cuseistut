@@ -342,7 +342,7 @@ Type :file:`cap3D.pl` in the terminal, there will be version information if inst
 
 3.1 Green's function calculation
 ================================
-The first step of runing gCAP is building a Grenn's function library by using fk package. An velocity model file (GD.vel) is need for the calculation. :download:`here <./gcap/velocity-model/hn>` is the velocity model used in this tutorial. The default setting of :file:`gCAP` puts the Green's function library under :file:`~/data/models/Glib`
+The first step of runing gCAP is building a Green's function library by using fk package. An velocity model file (GD.vel) is need for the calculation. :download:`here <./gcap/GD.vel>` is the velocity model used in this tutorial. The default setting of :file:`gCAP` puts the Green's function library under :file:`~/data/models/Glib`
 
 .. Tip::
 
