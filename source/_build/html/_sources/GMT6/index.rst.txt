@@ -1,8 +1,0 @@
-Generic Mapping Tools
-=====================
-
-.. image:: https://www.generic-mapping-tools.org/_static/gmt-logo.png
-   :align: center
-   :width: 90%
-
-The Generic Mapping Tools (GMT) are widely used across the Earth, Ocean, and Planetary sciences and beyond.
