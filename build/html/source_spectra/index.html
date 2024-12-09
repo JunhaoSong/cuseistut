@@ -1,0 +1,393 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Spectral Analysis &mdash; CUSeisTut</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Static Stress Change - PyLith" href="../pylith_static/index.html" />
+    <link rel="prev" title="Double-Difference Earthquake Relocation" href="../dd_loc/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> CUSeisTut
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">CUSeisTut</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro/index.html">Introduction</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Entry level</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../unix/index.html">Unix commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../GMT6-1/index.html">Generic Mapping Tools - Topographic Map</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../GMT6-2/index.html">Generic Mapping Tools - Seismic Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obspy-1/index.html">Seismic data request via ObsPy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obspy-2/index.html">Seismic data process via ObsPy</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Intermediate level</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sta_lta/index.html">Earthquake Detection STA/LTA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../abs_loc/index.html">Earthquake Absolute Location</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced level</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../gcap/index.html">Focal mechanism</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eqt/index.html">Earthquake Transformer Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dd_loc/index.html">Double-Difference Earthquake Relocation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Spectral Analysis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#what-is-earthquake-stress-drop">What is earthquake stress drop?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#stress-drop-in-a-circular-fault">Stress drop in a circular fault</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#what-is-earthquake-spectrum">What is earthquake spectrum?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#brune-s-model-for-far-field-spectrum">Brune’s model for far-field spectrum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#path-and-free-surface-effects">Path and free surface effects</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#example-the-2017-11-12-iran-m7-3-earthquake">Example: the 2017-11-12 Iran M7.3 earthquake</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#download-the-waveforms-and-pre-processing">Download the waveforms and pre=processing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#calculate-spectra">Calculate spectra</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#correction-for-spreading-term-and-radiation-pattern">Correction for spreading term and radiation pattern</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#correction-for-attenuation">Correction for attenuation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#correction-for-the-depth-phases">Correction for the depth phases</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#estimating-the-moment-and-stress-drop">Estimating the moment and stress drop</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../pylith_static/index.html">Static Stress Change - PyLith</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pylith_dynamic/index.html">Dynamic Rupture Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../body_tomo/index.html">Body Wave Tomography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../surface_tomo/index.html">Surface Wave Tomography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ambient_tomo/index.html">Ambient noise cross correlation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendix</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index.html">Acknowledgement</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://docs.google.com/forms/d/e/1FAIpQLScSQIcOtANjTonJDhK4KYmoA6H2lUHou9Mqz1oFCHSTd5wxhQ/viewform?usp=sf_link">Give us feedback here</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CUSeisTut</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Spectral Analysis</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/source_spectra/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="spectral-analysis">
+<h1>Spectral Analysis<a class="headerlink" href="#spectral-analysis" title="Permalink to this heading">¶</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">¶</a></h2>
+<section id="what-is-earthquake-stress-drop">
+<h3>What is earthquake stress drop?<a class="headerlink" href="#what-is-earthquake-stress-drop" title="Permalink to this heading">¶</a></h3>
+<p>Stress drop is an important earthquake source parameter, which is proportional to the ratio of fault slip to rupture extent (D/L). The higher stress drop means larger slip given the same rupture area. Since stress drop reflects the strength level on faults, the evolution of the stress drop may indicate some activities on faults such as fluid migration.</p>
+</section>
+<section id="stress-drop-in-a-circular-fault">
+<h3>Stress drop in a circular fault<a class="headerlink" href="#stress-drop-in-a-circular-fault" title="Permalink to this heading">¶</a></h3>
+<p>For a circular fault in a whole space, Eshelby(1957) obtained the relation between the average stress drop and the seismic moment:</p>
+<a class="reference internal image-reference" href="../_images/circular_fault.png"><img alt="../_images/circular_fault.png" src="../_images/circular_fault.png" style="width: 70%;" /></a>
+</section>
+<section id="what-is-earthquake-spectrum">
+<h3>What is earthquake spectrum?<a class="headerlink" href="#what-is-earthquake-spectrum" title="Permalink to this heading">¶</a></h3>
+<p>We can calculate the spectrum for earthquakes from the seismograms after removing the effects from the path. The amplitude in the low frequency limit is determined by earthquake moment (M0). The spectrum starts to decay around corner frequency (fc), and keep a nearly constant decay rate in log-log domain in the high frequency.</p>
+<a class="reference internal image-reference" href="../_images/spectra_case.png"><img alt="../_images/spectra_case.png" src="../_images/spectra_case.png" style="width: 60%;" /></a>
+<p>Figure 1: (Figure 9.13 in Introduction to Seismology) The relationships between near-field displacement and far-field displacement and velocity for time series (left two panels) and spectra (right panel).</p>
+</section>
+<section id="brune-s-model-for-far-field-spectrum">
+<h3>Brune’s model for far-field spectrum<a class="headerlink" href="#brune-s-model-for-far-field-spectrum" title="Permalink to this heading">¶</a></h3>
+<p>Linking the spectra with the source parameters requires assumptions on the source. Brune (1970) assume a built up the relationship between the source spectra and the source parameters including the stress drop. He assumed that the stress pulse is tangential and rupture velocity is infinite on a circular rupture surface, then derived the near-filed displacement under the constraint of edge-effect. The slip and slip rate on the fault evolve with time.</p>
+<a class="reference internal image-reference" href="../_images/brunesource1.png"><img alt="../_images/brunesource1.png" src="../_images/brunesource1.png" style="width: 70%;" /></a>
+<p>The functions of slip and slip rate on faults in Brune’s model</p>
+<blockquote>
+<div><a class="reference internal image-reference" href="../_images/brunesource2.png"><img alt="../_images/brunesource2.png" src="../_images/brunesource2.png" style="width: 50%;" /></a>
+</div></blockquote>
+<p>Figure 2: the shape of slip and slip rate function in Brune’s model.</p>
+<p>The conservation of energy density at high frequency and long-period limit(static field ) were applied to constrain the displacement in Brune’s model. Brune’s model has been widely used in spectral analysis in the following format to link the spectra with the seismic moment and stress drop:</p>
+<a class="reference internal image-reference" href="../_images/equation_final.png"><img alt="../_images/equation_final.png" src="../_images/equation_final.png" style="width: 80%;" /></a>
+</section>
+<section id="path-and-free-surface-effects">
+<h3>Path and free surface effects<a class="headerlink" href="#path-and-free-surface-effects" title="Permalink to this heading">¶</a></h3>
+<p>To calculate the source spectra, the effects from the path and depth phases should be removed. In this tutorial, we will try to remove the attenuation term. For earthquakes happened in shallow depth with relative long duration, the depth phases may overlap with P wave and impact the spectral shape (Hanks, 1981). Therefore, we need to calculate and remove the effect from those depth phases.</p>
+<p>All those processing process will be included in the tutorial package <a class="reference download internal" download="" href="../_downloads/91b8138be7101ca0b6c8bff36199e43d/spectral_analysis.zip"><code class="xref download docutils literal notranslate"><span class="pre">spectral_analysis.zip</span></code></a>. Following is an example of spectral analysis of 2017-11-13 M7.3 Iran earthquake.</p>
+</section>
+</section>
+<section id="example-the-2017-11-12-iran-m7-3-earthquake">
+<h2>Example: the 2017-11-12 Iran M7.3 earthquake<a class="headerlink" href="#example-the-2017-11-12-iran-m7-3-earthquake" title="Permalink to this heading">¶</a></h2>
+<section id="download-the-waveforms-and-pre-processing">
+<h3>Download the waveforms and pre=processing<a class="headerlink" href="#download-the-waveforms-and-pre-processing" title="Permalink to this heading">¶</a></h3>
+<p>We use waveforms with epicentral distances of 30-90 degree. We provide some waveforms in the tutorial packages. You can also download the waveforms from IRIS. Considering the duration of the earthquake, we select a time window of 40s, starting from the P arrival for the spectra calculation. We taper the waveforms in 15s windows at the two ends of the selected time windows.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<div class="line-block">
+<div class="line">Pre-processing including taper, rmean, and so on are needed before start spectral analysis. Waveforms need to be transformed to displacement when removing the instrumental response. Please refer to the ObsPy tutorial. The waveforms provided in the package have been preprocessed. The codes for cutting and tapering are contained in the main script - spectral_analysis.m</div>
+</div>
+</div>
+<a class="reference internal image-reference" href="../_images/waveform_iran.png"><img alt="../_images/waveform_iran.png" src="../_images/waveform_iran.png" style="width: 100%;" /></a>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<div class="line-block">
+<div class="line">We can see the waveform shape varies with azimuth due to the rupture directivity effect. It is suggested to use waveforms covering all the azimuth.</div>
+</div>
+</div>
+</section>
+<section id="calculate-spectra">
+<h3>Calculate spectra<a class="headerlink" href="#calculate-spectra" title="Permalink to this heading">¶</a></h3>
+<p>Then we calculate the spectra for each waveform traces by conducting fast Fourier transform. The function used here is <code class="docutils literal notranslate"><span class="pre">sacfft.m</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">function</span> <span class="p">[</span><span class="n">amplitude</span><span class="p">,</span> <span class="n">phase</span><span class="p">,</span> <span class="n">frequency</span><span class="p">]</span><span class="o">=</span><span class="n">sacfft</span><span class="p">(</span><span class="n">displacement_seri</span><span class="p">,</span> <span class="n">time_seri</span><span class="p">);</span>
+<span class="go">% Inputs: the displacement (m) and time series of the waveforms.</span>
+<span class="go">% Outputs in the left: the amplitude, phase term, and the frequency of the spectra</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">amplitude</span><span class="o">=</span><span class="n">log10</span><span class="p">(</span><span class="n">amplitude</span><span class="p">);</span>
+<span class="go">% following processing are all conducted in log domain</span>
+</pre></div>
+</div>
+</section>
+<section id="correction-for-spreading-term-and-radiation-pattern">
+<h3>Correction for spreading term and radiation pattern<a class="headerlink" href="#correction-for-spreading-term-and-radiation-pattern" title="Permalink to this heading">¶</a></h3>
+<p>It has been illustrated in equation (2) that the amplitude of the spectra decay with ray path length with 1/R and is proportional to the radiation term. Here, we correct for the two terms using the functions <code class="docutils literal notranslate"><span class="pre">direct_P.m</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">function</span> <span class="p">[</span><span class="n">radiationp</span><span class="p">,</span><span class="n">Ray_len</span><span class="p">,</span><span class="n">Amp_P</span><span class="p">]</span><span class="o">=</span><span class="n">direct_P</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span><span class="n">depth</span><span class="p">,</span><span class="n">Azi</span><span class="p">,</span><span class="n">M</span><span class="p">,</span><span class="n">path</span><span class="p">)</span>
+<span class="go">% inputs in the right: epicentral distance (dist), source_depth(km,depth), azimuth of station (Azi), moment tensor (M),path to the folder TT_M (path)</span>
+<span class="go">% outputs in the left: p wave radiation term (radiationp), ray path length (ray_len), synthetic amplitude of P</span>
+</pre></div>
+</div>
+<p>The normalized moment tensor has been given as <code class="docutils literal notranslate"><span class="pre">M.dat</span></code> in the package. It can be downloaded from the GCMT website. The epicentral distance and azimuth info are extracted from the sac files. The <code class="docutils literal notranslate"><span class="pre">TT_M</span></code> folder contains info of the earth model and table for ray parameters. After calculate the synthetic amplitude given a normalized moment tensor, we correct the spectral by substract it from the raw spectra in the log domain. The the amplitude of the spectral should represent the seismic moment (Nm).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">amplitude</span><span class="o">=</span><span class="n">amplitude</span><span class="o">-</span><span class="n">log10</span><span class="p">(</span><span class="n">Amp_P</span><span class="p">);</span>
+<span class="go">% correction for the spreading term and the radiation pattern</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/spectra_correction1.png"><img alt="../_images/spectra_correction1.png" src="../_images/spectra_correction1.png" style="width: 100%;" /></a>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<div class="line-block">
+<div class="line">The amplitudes of spectra obviously become more concentrated after the correction, indicating that the scattering is mostly caused by the radiation pattern and the spreading term.</div>
+</div>
+</div>
+</section>
+<section id="correction-for-attenuation">
+<h3>Correction for attenuation<a class="headerlink" href="#correction-for-attenuation" title="Permalink to this heading">¶</a></h3>
+<p>Here, we adopt the global attenuation model to correct the spectra (Choy and Boatwright, 1985). The correction is based on the function <code class="docutils literal notranslate"><span class="pre">corre.m</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">function</span> <span class="n">tp</span> <span class="o">=</span> <span class="n">corre</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<span class="go">% f: frequency; tp: correction factor for attenuation as a function of frequency</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">amplitude</span><span class="o">=</span><span class="n">amplitude</span><span class="o">-</span><span class="n">log10</span><span class="p">(</span><span class="n">corr</span><span class="p">(</span><span class="n">f</span><span class="p">));</span>
+<span class="go">% correct for attenuation</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/spectra_correction2.png"><img alt="../_images/spectra_correction2.png" src="../_images/spectra_correction2.png" style="width: 100%;" /></a>
+</section>
+<section id="correction-for-the-depth-phases">
+<h3>Correction for the depth phases<a class="headerlink" href="#correction-for-the-depth-phases" title="Permalink to this heading">¶</a></h3>
+<p>The depth of the event is 19 km in the SAC files. Given the depth here, the relative arrival times of sP and pP phases are within 15 seconds and contribute to the spectra. Here, we calculate the synthetic spectra for the depth phases effect using the function <code class="docutils literal notranslate"><span class="pre">depth_phase_spectrum.m</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">function</span> <span class="p">[</span><span class="n">depth_time</span><span class="p">,</span><span class="n">response_depth</span><span class="p">,</span><span class="n">anp_dep</span><span class="p">,</span><span class="n">ph_dep</span><span class="p">,</span><span class="n">ffn_dep</span><span class="p">]</span><span class="o">=</span><span class="n">depth_phase_spectrum</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="n">window_length</span><span class="p">,</span><span class="n">datalength</span><span class="p">,</span><span class="n">M</span><span class="p">,</span><span class="n">path</span><span class="p">)</span>
+<span class="go">% Inputs: the name of the sac file (filename); the length of the selected windows in second (window_length);</span>
+<span class="go">% Inputs: the length of the time series used in Fourier transform; moment tensor(M);path to the folder TT_M</span>
+<span class="go">% Outputs: time series(depth_time);synthetic waveforms normalized by P wave amplitude;</span>
+<span class="go">% amplitude of spectra for depth phase effect (anp_dep); phase term (ph_dep); frequency (ffn_dep)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">amplitude</span><span class="o">=</span><span class="n">amplitude</span><span class="o">-</span><span class="n">log10</span><span class="p">(</span><span class="n">anp_dep</span><span class="p">);</span>
+<span class="go">% correct for depth phase term effect</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/spectra_correction3.png"><img alt="../_images/spectra_correction3.png" src="../_images/spectra_correction3.png" style="width: 100%;" /></a>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<div class="line-block">
+<div class="line">The depth phase will largely affect the waveform shape at low frequency. It is obvious that the spectra become more flat after correcting for the depth phases.</div>
+</div>
+</div>
+</section>
+<section id="estimating-the-moment-and-stress-drop">
+<h3>Estimating the moment and stress drop<a class="headerlink" href="#estimating-the-moment-and-stress-drop" title="Permalink to this heading">¶</a></h3>
+<p>The average magnitude of spectra in the low frequency limit is ~ 4*10^19 Nm. The moment magnitude is 1.1*10^20 Nm. The moment magnitude is 7.3. The corner frequency is ~0.1 Hz. Assuming a P wave speed of 3900 km/s and a density of 3000kg/m^3, the stress drop is estimated to be 25 MPa, residing in the normal range for continental earthquakes.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<div class="line-block">
+<div class="line">The fitting of the spectrum may bare considerable uncertainties according to your fitting algorithm. The uncertainties will be further amplified in the estimate for the stress drop. For example, if the corner frequency change by 20%, from 0.1 to 0.08 Hz, the estimated stress drop will decrease by half from 25 to 13 MPa.</div>
+</div>
+</div>
+<a class="reference internal image-reference" href="../_images/fitting1.png"><img alt="../_images/fitting1.png" src="../_images/fitting1.png" style="width: 60%;" /></a>
+</section>
+</section>
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../pylith_static/index.html" class="btn btn-neutral float-right" title="Static Stress Change - PyLith" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../dd_loc/index.html" class="btn btn-neutral float-left" title="Double-Difference Earthquake Relocation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2021-2022, CUSeisTut team
+      <span class="lastupdated">
+        Last updated on 2022-11-23.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(false);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

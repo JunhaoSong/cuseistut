@@ -1,0 +1,456 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Earthquake Transformer Tutorial &mdash; CUSeisTut</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Double-Difference Earthquake Relocation" href="../dd_loc/index.html" />
+    <link rel="prev" title="Focal mechanism" href="../gcap/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> CUSeisTut
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">CUSeisTut</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro/index.html">Introduction</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Entry level</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../unix/index.html">Unix commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../GMT6-1/index.html">Generic Mapping Tools - Topographic Map</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../GMT6-2/index.html">Generic Mapping Tools - Seismic Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obspy-1/index.html">Seismic data request via ObsPy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obspy-2/index.html">Seismic data process via ObsPy</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Intermediate level</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sta_lta/index.html">Earthquake Detection STA/LTA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../abs_loc/index.html">Earthquake Absolute Location</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced level</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../gcap/index.html">Focal mechanism</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Earthquake Transformer Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#brief-introduction">Brief introduction</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#deep-learning-model-for-automatic-detection">Deep learning model for automatic detection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#what-is-earthquake-transformer-eqt">What is Earthquake Transformer (EQT)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-install-eqt">How to install EQT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#contents-of-this-tutorial">Contents of this tutorial</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#make-the-station-list-and-download-the-data">1 Make the station list and Download the data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#constrain-the-area-and-the-time-of-interest">1.1 Constrain the area and the time of interest</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#make-station-list">1.2 Make Station list</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#download-data">1.3 Download Data</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#detect-earthquake">2 Detect Earthquake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#visualise-the-results">3 Visualise the results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#phase-association">4 Phase association</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../dd_loc/index.html">Double-Difference Earthquake Relocation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source_spectra/index.html">Spectral Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pylith_static/index.html">Static Stress Change - PyLith</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pylith_dynamic/index.html">Dynamic Rupture Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../body_tomo/index.html">Body Wave Tomography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../surface_tomo/index.html">Surface Wave Tomography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ambient_tomo/index.html">Ambient noise cross correlation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendix</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index.html">Acknowledgement</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://docs.google.com/forms/d/e/1FAIpQLScSQIcOtANjTonJDhK4KYmoA6H2lUHou9Mqz1oFCHSTd5wxhQ/viewform?usp=sf_link">Give us feedback here</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CUSeisTut</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Earthquake Transformer Tutorial</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/eqt/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="earthquake-transformer-tutorial">
+<h1>Earthquake Transformer Tutorial<a class="headerlink" href="#earthquake-transformer-tutorial" title="Permalink to this heading">¶</a></h1>
+<section id="brief-introduction">
+<h2>Brief introduction<a class="headerlink" href="#brief-introduction" title="Permalink to this heading">¶</a></h2>
+<section id="deep-learning-model-for-automatic-detection">
+<h3>Deep learning model for automatic detection<a class="headerlink" href="#deep-learning-model-for-automatic-detection" title="Permalink to this heading">¶</a></h3>
+<p>The neural network was first applied in seismology to pick arrival phases since 2006. The algorithm of using machine learning in seismology is to build a model and train it with large sets of well - labeled data. After training, the model can predict from a given sets of input which means it can detect the P - and S - waves automatically. We can also obtain the probability of the results so to evaluate the performance.</p>
+<p>There are numerous architecture of deep learning model. In seismology, Convolutional Neural Network (CNN) is commonly used for classifying the features.</p>
+<p>By setting up a robust automatic system, we can enhance the accuracy and efficiency of the earthquake detection.</p>
+</section>
+<section id="what-is-earthquake-transformer-eqt">
+<h3>What is Earthquake Transformer (EQT)<a class="headerlink" href="#what-is-earthquake-transformer-eqt" title="Permalink to this heading">¶</a></h3>
+<p><strong>Earthquake Transformer (EQT)</strong> is one of the deep learning model for earthquake detection and phase picking.</p>
+<p>You can refer the architecture of EQT <a class="reference external" href="https://www.nature.com/articles/s41467-020-17591-w">here</a>.</p>
+<p>By using EQT, we can detect the earthquake phases (P &amp; S) automatically. The model has been trained on global seismic data so we can simply apply it in different sites.</p>
+</section>
+<section id="how-to-install-eqt">
+<h3>How to install EQT<a class="headerlink" href="#how-to-install-eqt" title="Permalink to this heading">¶</a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<div class="line-block">
+<div class="line">It’s strongly recommended to install ObsPy via conda.</div>
+<div class="line">We here assume you have already installed conda on your computer after finishing the previous GMT tutorial.</div>
+<div class="line">If not, please first install it (suggest installation of <a class="reference external" href="https://docs.conda.io/en/latest/miniconda.html">miniconda</a>).</div>
+</div>
+</div>
+<p>Open your terminal and run the following commands.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ conda create --name eat python=3.7
+$ conda activate eat
+$ conda install -c smousavi05 eqtransformer
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Exclude $ sign and start without whitespace!</p>
+</div>
+<p>In case if you cannot install EQT using conda, you can try:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pip install git+https://github.com/smousavi05/EQTransformer
+</pre></div>
+</div>
+</section>
+<section id="contents-of-this-tutorial">
+<h3>Contents of this tutorial<a class="headerlink" href="#contents-of-this-tutorial" title="Permalink to this heading">¶</a></h3>
+<p>In this tutorial, we will cover:</p>
+<ol class="arabic simple">
+<li><p>Make the station list and Download the data</p></li>
+<li><p>Detect earthquakes</p></li>
+<li><p>Visualise the result</p></li>
+<li><p>Phase association</p></li>
+</ol>
+<p>Developed by LAU Tsz Lam Zoe.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="make-the-station-list-and-download-the-data">
+<h2>1 Make the station list and Download the data<a class="headerlink" href="#make-the-station-list-and-download-the-data" title="Permalink to this heading">¶</a></h2>
+<section id="constrain-the-area-and-the-time-of-interest">
+<h3>1.1 Constrain the area and the time of interest<a class="headerlink" href="#constrain-the-area-and-the-time-of-interest" title="Permalink to this heading">¶</a></h3>
+<p>It is better for us to constrain a small area of interest, otherwise the downloading time will be extended.</p>
+<p>We will use the example from the ObsPy tutorial. But, we will download the continuous data using EQT this time.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Area of interest</span>
+
+<span class="c1"># latitude</span>
+<span class="n">lat_min</span> <span class="o">=</span> <span class="o">-</span><span class="mi">8</span>
+<span class="n">lat_max</span> <span class="o">=</span> <span class="o">-</span><span class="mi">9</span>
+
+<span class="c1"># longitude</span>
+<span class="n">lon_min</span> <span class="o">=</span> <span class="mf">122.5</span>
+<span class="n">lon_max</span> <span class="o">=</span> <span class="mf">124.5</span>
+
+<span class="c1"># Time of interest</span>
+<span class="c1"># You can try with 1 day data first</span>
+<span class="n">start_time</span> <span class="o">=</span> <span class="s2">&quot;2015-08-11 00:00:00.00&quot;</span>
+<span class="n">end_time</span> <span class="o">=</span> <span class="s2">&quot;2015-08-12 00:00:00.00&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="make-station-list">
+<h3>1.2 Make Station list<a class="headerlink" href="#make-station-list" title="Permalink to this heading">¶</a></h3>
+<p>Station list contains the information of the stations and it will help to find the waveforms by stations during the detection.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="n">json_basepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span><span class="s2">&quot;json/station_list.json&quot;</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">EQTransformer.utils.downloader</span> <span class="kn">import</span> <span class="n">makeStationList</span>
+<span class="n">makeStationList</span><span class="p">(</span><span class="n">json_path</span><span class="o">=</span><span class="n">json_basepath</span><span class="p">,</span> <span class="n">client_list</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;IRIS&quot;</span><span class="p">],</span> <span class="n">min_lat</span><span class="o">=</span><span class="n">lat_min</span><span class="p">,</span> <span class="n">max_lat</span><span class="o">=</span><span class="n">lat_max</span><span class="p">,</span> <span class="n">min_lon</span><span class="o">=</span><span class="n">lon_min</span><span class="p">,</span> <span class="n">max_lon</span><span class="o">=</span><span class="n">lon_max</span><span class="p">,</span> <span class="n">start_time</span><span class="o">=</span><span class="n">start_time</span><span class="p">,</span> <span class="n">end_time</span><span class="o">=</span><span class="n">end_time</span><span class="p">,</span> <span class="n">channel_list</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;HH[ZNE]&quot;</span><span class="p">,</span> <span class="s2">&quot;HH[Z21]&quot;</span><span class="p">,</span> <span class="s2">&quot;BH[ZNE]&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">os.path.join</span></code> combine one or more path names into a single path.</p>
+<p><code class="docutils literal notranslate"><span class="pre">makeStationList</span></code> make the station list that is based on your interest and applicable for the earthquake transformer.</p>
+<p>Here is the example of the station list: <a class="reference download internal" download="" href="../_downloads/e56efad1a837812a4abd8a078f4b20d0/station_list.json"><code class="xref download docutils literal notranslate"><span class="pre">station_list.json</span></code></a>.</p>
+<p>It is a dictionary containing the <strong>station name</strong>, <strong>network</strong>, <strong>channels</strong> and <strong>coordinates</strong>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can also customise the station list by creating your own dictionary according to the format.</p>
+</div>
+</section>
+<section id="download-data">
+<h3>1.3 Download Data<a class="headerlink" href="#download-data" title="Permalink to this heading">¶</a></h3>
+<p>We can download the waveform data directly from the EQT. The file names of the downloaded data must applicable to EQT.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">EQTransformer.utils.downloader</span> <span class="kn">import</span> <span class="n">downloadMseeds</span>
+
+<span class="c1"># We have already constrained the area and time of interest</span>
+
+<span class="n">downloadMseeds</span><span class="p">(</span><span class="n">client_list</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;IRIS&quot;</span><span class="p">],</span> <span class="n">stations_json</span><span class="o">=</span><span class="n">json_basepath</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;mseed_data&quot;</span><span class="p">,</span> <span class="n">min_lat</span><span class="o">=</span><span class="n">lat_min</span><span class="p">,</span> <span class="n">max_lat</span><span class="o">=</span><span class="n">lat_max</span><span class="p">,</span> <span class="n">min_lon</span><span class="o">=-</span><span class="n">lon_min</span><span class="p">,</span> <span class="n">max_lon</span><span class="o">=</span><span class="n">lon_max</span><span class="p">,</span> <span class="n">start_time</span><span class="o">=</span><span class="n">start_time</span><span class="p">,</span> <span class="n">end_time</span><span class="o">=</span><span class="n">end_time</span><span class="p">,</span> <span class="n">chunk_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">channel_list</span><span class="o">=</span><span class="p">[],</span> <span class="n">n_processor</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">downloadMseeds</span></code> download the waveform data according to your station list and your interest.</p>
+<p>Make sure you have already made the station list before using this function. The data downloaded will be in mseed format and saved into a directory called <strong>mseed_data</strong>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you have your own data, then you can skip this procedure.</p>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="detect-earthquake">
+<h2>2 Detect Earthquake<a class="headerlink" href="#detect-earthquake" title="Permalink to this heading">¶</a></h2>
+<p>The idea of detecting earthquake is to input the waveform data and station list, then the model will classify the P - and S - wave together with their corresponding arrival time and save it according to the stations.</p>
+<p>There are many alternative ways to undergo the detection. We here introduce one of the method which is using the preprocessed data (hdf5 files).</p>
+<p>The hdf5 file can handle large datasets by slicing data and shorten the time of reading large chunk of individual waveforms.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">EQTransformer.utils.hdf5_maker</span> <span class="kn">import</span> <span class="n">preprocessor</span>
+
+<span class="n">preprocessor</span><span class="p">(</span><span class="n">preproc_dir</span><span class="o">=</span><span class="s2">&quot;preproc&quot;</span><span class="p">,</span> <span class="n">mseed_dir</span><span class="o">=</span><span class="s1">&#39;mseed_data&#39;</span><span class="p">,</span> <span class="n">stations_json</span><span class="o">=</span><span class="s1">&#39;json/station_list.json&#39;</span><span class="p">,</span> <span class="n">overlap</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">n_processor</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">preprocessor</span></code> prepare the data by slicing it into 1-min long Numpy array in hdf5 file and generate a CSV that contains the list of trace it the hdf5 file.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Make sure you have preprocess the data using <code class="docutils literal notranslate"><span class="pre">preprocessor</span></code> before <code class="docutils literal notranslate"><span class="pre">predictor</span></code>.</p>
+</div>
+<p>After <code class="docutils literal notranslate"><span class="pre">preprocessor</span></code> , there will be a new directory name <strong>mseed_data_processed_hdf5</strong>. It will be used in the next step.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">EQTransformer.core.predictor</span> <span class="kn">import</span> <span class="n">predictor</span>
+
+<span class="n">predictor</span><span class="p">(</span><span class="n">input_dir</span><span class="o">=</span> <span class="s1">&#39;mseed_data_processed_hdfs&#39;</span><span class="p">,</span> <span class="n">input_model</span><span class="o">=</span><span class="s1">&#39;EqT_model.h5&#39;</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="s1">&#39;detections&#39;</span><span class="p">,</span> <span class="n">detection_threshold</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">P_threshold</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">S_threshold</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">number_of_plots</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">plot_mode</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">predictor</span></code> predicts the earthquakes by naming the directories of input, output and the model.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can set up the detection according to different settings of your area.</p>
+<p>The threshold of the detection should be adjusted with the ratio of false detection depending on the data noise level. For example, if the noise level is high in the studied region, then the threshold value has to be high in order to reduce the false detection.</p>
+</div>
+<p>Here is the output files after the detection:</p>
+<p><code class="docutils literal notranslate"><span class="pre">X_report.txt</span></code> the report contains information on input and final results (including total number of events that are detected) <a class="reference download internal" download="" href="../_downloads/fc0ff2f7a756084c3b08de048ae9dd46/X_report.txt"><code class="xref download docutils literal notranslate"><span class="pre">X_report.txt</span></code></a>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">X_prediction_results.csv</span></code> the file contains detection and picking results <a class="reference download internal" download="" href="../_downloads/2b536648be67381d480e1787def01cdf/X_prediction_results.csv"><code class="xref download docutils literal notranslate"><span class="pre">X_prediction_results.csv</span></code></a>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">figures</span></code> a directory saves all the plots of the detected events.</p>
+<p>Here is one of the output figures of the detected event:</p>
+<a class="reference internal image-reference" href="../_images/event.png"><img alt="../_images/event.png" src="../_images/event.png" style="width: 70%;" /></a>
+<p>In this figure, we can see the probability and the arrival times of P - and S - waves.</p>
+<p>You can refer the same event in the ObsPy tutorial!</p>
+</section>
+<hr class="docutils" />
+<section id="visualise-the-results">
+<h2>3 Visualise the results<a class="headerlink" href="#visualise-the-results" title="Permalink to this heading">¶</a></h2>
+<p><strong>Histogram</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">EQTransformer.utils.plot</span> <span class="kn">import</span> <span class="n">plot_detections</span>
+
+<span class="n">plot_detections</span><span class="p">(</span><span class="n">input_dir</span><span class="o">=</span><span class="s2">&quot;detections&quot;</span><span class="p">,</span> <span class="n">input_json</span><span class="o">=</span><span class="s2">&quot;station_list.json&quot;</span><span class="p">,</span> <span class="n">plot_type</span><span class="o">=</span><span class="s1">&#39;station_map&#39;</span><span class="p">,</span> <span class="n">marker_size</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">plot_detections</span></code> generate map plot to visualise the number of detections over stations.</p>
+<a class="reference internal image-reference" href="../_images/station_map.png"><img alt="../_images/station_map.png" src="../_images/station_map.png" style="width: 70%;" /></a>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The plot here simply show the distribution of the stations and the number of detections accordingly. You can use other method to plot in order the show a detailed map plot (i.e. GMT).</p>
+</div>
+</section>
+<hr class="docutils" />
+<section id="phase-association">
+<h2>4 Phase association<a class="headerlink" href="#phase-association" title="Permalink to this heading">¶</a></h2>
+<p>Phase association is used to review the detected seismic phases and group them together with the same origin of earthquake.</p>
+<p>After the phase picking process, you can undergo a simple association procedure. This can help you to proceed to the next step (relocation) easily.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">EQTransformer.utils.associator</span> <span class="kn">import</span> <span class="n">run_associator</span>
+
+<span class="n">run_associator</span><span class="p">(</span><span class="n">input_dir</span><span class="o">=</span><span class="s1">&#39;detections&#39;</span><span class="p">,</span> <span class="n">start_time</span><span class="o">=</span><span class="s2">&quot;2015-08-11 00:00:00.00&quot;</span><span class="p">,</span> <span class="n">end_time</span><span class="o">=</span><span class="s2">&quot;2015-08-12 00:00:00.00&quot;</span><span class="p">,</span>  <span class="n">moving_window</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">pair_n</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">run_associator</span></code> perform simple and fast association for further relocation.</p>
+<p>Output files:</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">1. <code class="docutils literal notranslate"><span class="pre">Y2000.phs</span></code> results in HypoInverse format -&gt; HypoInverse <a class="reference download internal" download="" href="../_downloads/0a3ceadc6154ef01bb4a72fa71996ed7/Y2000.phs"><code class="xref download docutils literal notranslate"><span class="pre">Y2000.phs</span></code></a></div>
+</div>
+<div class="line-block">
+<div class="line">2. <code class="docutils literal notranslate"><span class="pre">associations.xml</span></code> ObsPy QuakeML format -&gt; conventional location algorithms (i.e. NonLinLoc) <a class="reference download internal" download="" href="../_downloads/c344ec10d8e49d508b5d73e2d9a11395/associations.xml"><code class="xref download docutils literal notranslate"><span class="pre">associations.xml</span></code></a></div>
+</div>
+<div class="line-block">
+<div class="line">3. <code class="docutils literal notranslate"><span class="pre">traceName_dic.json</span></code> dictionary saves the trace names for source waveforms of the detected events -&gt; later access <a class="reference download internal" download="" href="../_downloads/42afa385638ef6072f5dfcf7bd716acd/traceName_dic.json"><code class="xref download docutils literal notranslate"><span class="pre">traceName_dic.json</span></code></a></div>
+</div>
+</div></blockquote>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Relocation is needed for accurate location.</p>
+</div>
+</section>
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../dd_loc/index.html" class="btn btn-neutral float-right" title="Double-Difference Earthquake Relocation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../gcap/index.html" class="btn btn-neutral float-left" title="Focal mechanism" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2021-2022, CUSeisTut team
+      <span class="lastupdated">
+        Last updated on 2022-11-23.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(false);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
