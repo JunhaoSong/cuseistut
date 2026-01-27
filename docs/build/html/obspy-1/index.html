@@ -1,0 +1,553 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seismic data request via ObsPy &mdash; CUSeisTut</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Seismic data process via ObsPy" href="../obspy-2/index.html" />
+    <link rel="prev" title="Generic Mapping Tools - Seismic Data" href="../GMT6-2/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            CUSeisTut
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">CUSeisTut</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro/index.html">Introduction</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Entry level</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../unix/index.html">Unix commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../GMT6-1/index.html">Generic Mapping Tools - Topographic Map</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../GMT6-2/index.html">Generic Mapping Tools - Seismic Data</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Seismic data request via ObsPy</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#brief-introduction">Brief introduction</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#what-is-obspy">What is ObsPy?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-install-obspy">How to install ObsPy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#contents-of-this-tutorial">Contents of this tutorial</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#utc-date-time">1 UTC Date Time</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#datetime-initialization">1.1 DateTime Initialization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#datetime-attribute-access">1.2 DateTime Attribute Access</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#handling-time-differences">1.3 Handling time differences</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#seismic-data-acquisition-and-visualization">2 Seismic data acquisition and visualization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#flow-chart">Flow chart</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#choose-an-event">2.1 Choose an event</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#choose-a-station">2.2 Choose a station</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#get-waveforms">2.3 Get waveforms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#meta-data">2.4 Meta data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plot-the-waveforms">2.5 Plot the waveforms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#waveform-cross-section-plot">2.6 Waveform Cross-section Plot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#get-the-waveform-data-with-more-than-1-station">2.6.1 Get the waveform data with more than 1 station</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#calculate-the-great-circle-distance-from-stations-to-earthquake">2.6.2 Calculate the great circle distance from stations to earthquake</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plot-the-waveform-cross-section-plot">2.6.3 Plot the waveform cross-section plot</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../obspy-2/index.html">Seismic data process via ObsPy</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Intermediate level</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sta_lta/index.html">Earthquake Detection STA/LTA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../abs_loc/index.html">Earthquake Absolute Location</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced level</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../gcap/index.html">Focal mechanism</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fk/index.html">FK &amp; CAP Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eqt/index.html">Earthquake Transformer Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dd_loc/index.html">Double-Difference Earthquake Relocation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source_spectra/index.html">Spectral Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pylith_static/index.html">Static Stress Change - PyLith</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pylith_dynamic/index.html">Dynamic Rupture Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../body_tomo/index.html">Body Wave Tomography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../surface_tomo/index.html">Surface Wave Tomography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ambient_tomo/index.html">Ambient noise cross correlation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendix</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index.html">Acknowledgement</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://docs.google.com/forms/d/e/1FAIpQLScSQIcOtANjTonJDhK4KYmoA6H2lUHou9Mqz1oFCHSTd5wxhQ/viewform?usp=sf_link">Give us feedback here</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CUSeisTut</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Seismic data request via ObsPy</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/obspy-1/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="seismic-data-request-via-obspy">
+<h1>Seismic data request via ObsPy<a class="headerlink" href="#seismic-data-request-via-obspy" title="Link to this heading"></a></h1>
+<section id="brief-introduction">
+<h2>Brief introduction<a class="headerlink" href="#brief-introduction" title="Link to this heading"></a></h2>
+<section id="what-is-obspy">
+<h3>What is ObsPy?<a class="headerlink" href="#what-is-obspy" title="Link to this heading"></a></h3>
+<p><strong>ObsPy</strong> is an open-source project dedicated to provide a <strong>Python</strong> framework for <strong>processing seismological data</strong>. It provides parsers for common file formats, clients to access data centers and seismological signal processing routines which allow the manipulation of seismological time series (copied from ObsPy Github page).</p>
+<a class="reference internal image-reference" href="../_images/obspy_logo.png"><img alt="../_images/obspy_logo.png" src="../_images/obspy_logo.png" style="width: 50%;" />
+</a>
+<p>We assume that you already have some experience of using Python. If not, you are suggested to read this <a class="reference external" href="https://docs.obspy.org/tutorial/code_snippets/python_introduction.html">small, incomplete introduction to the Python programming language</a>.</p>
+</section>
+<section id="how-to-install-obspy">
+<h3>How to install ObsPy<a class="headerlink" href="#how-to-install-obspy" title="Link to this heading"></a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<div class="line-block">
+<div class="line">It’s strongly recommended to install ObsPy via conda.</div>
+<div class="line">We here assume you have already installed conda on your computer after finishing the previous GMT tutorial.</div>
+<div class="line">If not, please first install it (suggest installation of <a class="reference external" href="https://docs.conda.io/en/latest/miniconda.html">miniconda</a>).</div>
+</div>
+</div>
+<p>Open your terminal and run the following commands.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ conda create --name obspy
+$ conda activate obspy
+$ conda install obspy=1.2
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Exclude $ sign and start without whitespace!</p>
+</div>
+</section>
+<section id="contents-of-this-tutorial">
+<h3>Contents of this tutorial<a class="headerlink" href="#contents-of-this-tutorial" title="Link to this heading"></a></h3>
+<p>We will introduce how to request, read, visualize, and further process seismic data using a few basic <code class="docutils literal notranslate"><span class="pre">functions</span></code> in the ObsPy <code class="docutils literal notranslate"><span class="pre">module</span></code>. it includes:</p>
+<ol class="arabic simple">
+<li><p>UTC DateTime</p></li>
+<li><p>Basic Seismic Data Processing</p></li>
+<li><p>Theoreotical Travel Time Calculation</p></li>
+<li><p>Cross-section Plot with TauP arrivals</p></li>
+</ol>
+<p>Developed by LAU Tsz Lam Zoe under the instructions of Junhao SONG, Han CHEN, and Suli Yao.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="utc-date-time">
+<h2>1 UTC Date Time<a class="headerlink" href="#utc-date-time" title="Link to this heading"></a></h2>
+<p>Now let’s introduce the UTC DateTime format.</p>
+<p>The UTC DateTime is a Coordinated Universal Time. Usually we could see that HKT (UTC+8) or BJT (UTC+8), which means that Hong Kong or Beijing time is 8 hours earlier than UTC time. We usually use UTC Datetime to present the origin time of an earthquake. Seismic time-series data like digital seismograms also use UTC Datetime to present the time of each sample.</p>
+<section id="datetime-initialization">
+<h3>1.1 DateTime Initialization<a class="headerlink" href="#datetime-initialization" title="Link to this heading"></a></h3>
+<p>First in the terminal, type <code class="docutils literal notranslate"><span class="pre">python</span></code> and then type <code class="docutils literal notranslate"><span class="pre">enter</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">## Method1</span>
+<span class="o">&gt;&gt;&gt;</span><span class="kn">from</span><span class="w"> </span><span class="nn">obspy</span><span class="w"> </span><span class="kn">import</span> <span class="n">UTCDateTime</span>   <span class="c1">## import the module</span>
+<span class="o">&gt;&gt;&gt;</span><span class="n">year</span> <span class="o">=</span> <span class="mi">2022</span>
+<span class="o">&gt;&gt;&gt;</span><span class="n">month</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="o">&gt;&gt;&gt;</span><span class="n">day</span> <span class="o">=</span> <span class="mi">7</span>
+<span class="o">&gt;&gt;&gt;</span><span class="n">hour</span> <span class="o">=</span> <span class="mi">17</span>
+<span class="o">&gt;&gt;&gt;</span><span class="n">minute</span> <span class="o">=</span> <span class="mi">45</span>
+<span class="o">&gt;&gt;&gt;</span><span class="n">second</span> <span class="o">=</span> <span class="mf">30.0</span>
+<span class="o">&gt;&gt;&gt;</span><span class="n">UTCDateTime</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">day</span><span class="p">,</span> <span class="n">hour</span><span class="p">,</span> <span class="n">minute</span><span class="p">,</span> <span class="n">second</span><span class="p">)</span>  <span class="c1">## make the UTCDateTime object according to the argument</span>
+<span class="n">UTCDateTime</span><span class="p">(</span><span class="mi">2022</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+
+<span class="c1">##Method 2</span>
+<span class="o">&gt;&gt;&gt;</span><span class="n">UTCDateTime</span><span class="p">(</span><span class="s2">&quot;2012-09-07T12:15:00&quot;</span><span class="p">)</span>
+<span class="n">UTCDateTime</span><span class="p">(</span><span class="mi">2012</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<div class="line-block">
+<div class="line">There are many ways to produce the UTCDateTime object.</div>
+<div class="line">Method 1 &amp; 2 are examples. You can explore others <a class="reference external" href="https://docs.obspy.org/packages/autogen/obspy.core.utcdatetime.UTCDateTime.html#obspy.core.utcdatetime.UTCDateTime">here</a>.</div>
+</div>
+</div>
+</section>
+<section id="datetime-attribute-access">
+<h3>1.2 DateTime Attribute Access<a class="headerlink" href="#datetime-attribute-access" title="Link to this heading"></a></h3>
+<p>Now we can assign the UTCDateTime object to a variable “time”.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;time = UTCDateTime(&quot;2012-09-07T12:15:00&quot;)</span>
+<span class="go">&gt;&gt;&gt;print(time)</span>
+<span class="go">2012-09-07T12:15:00.000000Z</span>
+<span class="go">&gt;&gt;&gt;print(type(time))</span>
+<span class="go">&lt;class &#39;obspy.core.utcdatetime.UTCDateTime&#39;&gt;</span>
+</pre></div>
+</div>
+<p>Then, since it’s a python class object, we can extract different time information by using UTCDateTime built-in functions/atttributes.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;print(time.year)  ## only output the year of &quot;time&quot;</span>
+<span class="go">2012</span>
+<span class="go">&gt;&gt;&gt;print(time.julday)  ## output the Julian day of &quot;time&quot;</span>
+<span class="go">251</span>
+<span class="go">&gt;&gt;&gt;print(time.timestamp) ## output the UNIX timestamp format of &quot;time&quot;.</span>
+<span class="go">1347020100.0</span>
+<span class="go">&gt;&gt;&gt;print(UTCDateTime(&quot;1970-01-01&quot;).timestamp)</span>
+<span class="go">0.0</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<div class="line-block">
+<div class="line">Julian Day is a continuous count of days since the beginning of the year.</div>
+<div class="line">Simple example: What is the July of 1st Feb, 2022?</div>
+<div class="line">Ans: 32</div>
+</div>
+<div class="line-block">
+<div class="line">The UNIX timestamp format means the number of seconds since the Epoch. The reference time is: “1970-01-01”</div>
+</div>
+</div>
+</section>
+<section id="handling-time-differences">
+<h3>1.3 Handling time differences<a class="headerlink" href="#handling-time-differences" title="Link to this heading"></a></h3>
+<p>Calculate the time difference or add seconds into original “time”</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;print(time - UTCDateTime(&quot;2012-09-07&quot;))</span>
+<span class="go">44100.0</span>
+<span class="go">&gt;&gt;&gt;time2 = time + 3600</span>
+<span class="go">&gt;&gt;&gt;print(time2)</span>
+<span class="go">2012-09-07T13:15:00.000000Z</span>
+</pre></div>
+</div>
+<p>Clearly, we can see that “time2” is 1 hour (3600 seconds) later than “time”.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="seismic-data-acquisition-and-visualization">
+<h2>2 Seismic data acquisition and visualization<a class="headerlink" href="#seismic-data-acquisition-and-visualization" title="Link to this heading"></a></h2>
+<section id="flow-chart">
+<h3>Flow chart<a class="headerlink" href="#flow-chart" title="Link to this heading"></a></h3>
+<a class="reference internal image-reference" href="../_images/flowchart2.png"><img alt="../_images/flowchart2.png" src="../_images/flowchart2.png" style="width: 100%;" />
+</a>
+</section>
+<section id="choose-an-event">
+<h3>2.1 Choose an event<a class="headerlink" href="#choose-an-event" title="Link to this heading"></a></h3>
+<p>You can select one event in the event list.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<div class="line-block">
+<div class="line">Here is the header information of the event list</div>
+<div class="line">indx year mon day time sec_relative_to_day res lat lon dep mag</div>
+<div class="line">9393 2015 08 11 16:22:15.200000 58935.2000 1.403 -8.624 123.202 171.9 3.9</div>
+</div>
+</div>
+<p>Input the origin time, coordinates and magnitude of the selected event.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">obspy</span><span class="w"> </span><span class="kn">import</span> <span class="n">UTCDateTime</span>
+<span class="n">origin_time</span> <span class="o">=</span> <span class="n">UTCDateTime</span><span class="p">(</span><span class="s2">&quot;2015-08-11T16:22:15.200000&quot;</span><span class="p">)</span>
+
+<span class="c1"># Coordinates and the magnitude of the event</span>
+<span class="n">eq_lon</span> <span class="o">=</span> <span class="mf">123.202</span>
+<span class="n">eq_lat</span> <span class="o">=</span> <span class="o">-</span><span class="mf">8.624</span>
+<span class="n">eq_dep</span> <span class="o">=</span> <span class="mf">171.9</span>
+<span class="n">eq_mag</span> <span class="o">=</span> <span class="mf">3.9</span>
+</pre></div>
+</div>
+</section>
+<section id="choose-a-station">
+<h3>2.2 Choose a station<a class="headerlink" href="#choose-a-station" title="Link to this heading"></a></h3>
+<p>Choose one station from the station list.
+Make sure the selected station is operating during the event.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<div class="line-block">
+<div class="line">Here is the header information of the station list.</div>
+<div class="line">Network | Station | Location | Channel | Latitude | Longitude | Elevation | Depth | Azimuth | Dip |   SensorDescription | Scale | ScaleFreq | ScaleUnits | SampleRate | StartTime | EndTime</div>
+</div>
+<div class="line-block">
+<div class="line">YS|BAOP||BHZ|-8.4882|123.2696|67.0|0.0|0.0|-90.0|Nanometrics Trillium 120 Sec Response/Taurus Stand|1.19642E9|0.3|m/s|50.0|2014-10-31T00:00:00|2016-12-31T23:59:59</div>
+</div>
+</div>
+</section>
+<section id="get-waveforms">
+<h3>2.3 Get waveforms<a class="headerlink" href="#get-waveforms" title="Link to this heading"></a></h3>
+<p>Import the web service providers and input station information.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">obspy.clients.fdsn</span><span class="w"> </span><span class="kn">import</span> <span class="n">Client</span>
+
+<span class="c1"># IRIS is one of those providers.</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="s1">&#39;IRIS&#39;</span><span class="p">)</span>    <span class="c1">##to initialize a client object　(as IRIS here)</span>
+
+<span class="c1"># Input station informations</span>
+<span class="c1"># network</span>
+<span class="n">net</span> <span class="o">=</span> <span class="s1">&#39;YS&#39;</span>
+<span class="c1"># station</span>
+<span class="n">sta</span> <span class="o">=</span> <span class="s1">&#39;BAOP&#39;</span>
+<span class="c1"># location</span>
+<span class="n">loc</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+<span class="c1"># channel</span>
+<span class="n">cha</span> <span class="o">=</span> <span class="s1">&#39;BHZ&#39;</span>
+
+<span class="c1"># starttime</span>
+<span class="n">stt</span> <span class="o">=</span> <span class="n">origin_time</span>
+<span class="c1"># endtime</span>
+<span class="n">edt</span> <span class="o">=</span> <span class="n">origin_time</span> <span class="o">+</span> <span class="mi">120</span>
+
+<span class="c1"># Get the waveforms from client</span>
+<span class="n">st</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_waveforms</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">sta</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="n">cha</span><span class="p">,</span> <span class="n">stt</span><span class="p">,</span> <span class="n">edt</span><span class="p">)</span>  <span class="c1">## to get the waveform by the corresponding argument from clients.</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<div class="line-block">
+<div class="line">FDSN web services for data access to different web service providers.</div>
+<div class="line">IRIS is one of the web service providers which is commonly used.</div>
+</div>
+</div>
+</section>
+<section id="meta-data">
+<h3>2.4 Meta data<a class="headerlink" href="#meta-data" title="Link to this heading"></a></h3>
+<p>We can print the meta data inside the stream.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">st</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">stats</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                <span class="n">network</span><span class="p">:</span> <span class="n">YS</span>
+               <span class="n">station</span><span class="p">:</span> <span class="n">BAOP</span>
+              <span class="n">location</span><span class="p">:</span>
+               <span class="n">channel</span><span class="p">:</span> <span class="n">BHZ</span>
+             <span class="n">starttime</span><span class="p">:</span> <span class="mi">2015</span><span class="o">-</span><span class="mi">08</span><span class="o">-</span><span class="mi">11</span><span class="n">T16</span><span class="p">:</span><span class="mi">22</span><span class="p">:</span><span class="mf">15.200000</span><span class="n">Z</span>
+               <span class="n">endtime</span><span class="p">:</span> <span class="mi">2015</span><span class="o">-</span><span class="mi">08</span><span class="o">-</span><span class="mi">11</span><span class="n">T16</span><span class="p">:</span><span class="mi">24</span><span class="p">:</span><span class="mf">15.200000</span><span class="n">Z</span>
+         <span class="n">sampling_rate</span><span class="p">:</span> <span class="mf">50.0</span>
+                 <span class="n">delta</span><span class="p">:</span> <span class="mf">0.02</span>
+                  <span class="n">npts</span><span class="p">:</span> <span class="mi">6001</span>
+                 <span class="n">calib</span><span class="p">:</span> <span class="mf">1.0</span>
+<span class="n">_fdsnws_dataselect_url</span><span class="p">:</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">service</span><span class="o">.</span><span class="n">iris</span><span class="o">.</span><span class="n">edu</span><span class="o">/</span><span class="n">fdsnws</span><span class="o">/</span><span class="n">dataselect</span><span class="o">/</span><span class="mi">1</span><span class="o">/</span><span class="n">query</span>
+               <span class="n">_format</span><span class="p">:</span> <span class="n">MSEED</span>
+                 <span class="n">mseed</span><span class="p">:</span> <span class="n">AttribDict</span><span class="p">({</span><span class="s1">&#39;dataquality&#39;</span><span class="p">:</span> <span class="s1">&#39;M&#39;</span><span class="p">,</span> <span class="s1">&#39;number_of_records&#39;</span><span class="p">:</span> <span class="mi">26</span><span class="p">,</span> <span class="s1">&#39;encoding&#39;</span><span class="p">:</span> <span class="s1">&#39;STEIM1&#39;</span><span class="p">,</span> <span class="s1">&#39;byteorder&#39;</span><span class="p">:</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;record_length&#39;</span><span class="p">:</span> <span class="mi">512</span><span class="p">,</span> <span class="s1">&#39;filesize&#39;</span><span class="p">:</span> <span class="mi">13312</span><span class="p">})</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#You can print the corresponding attributes by calling them individually.</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">st</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">sampling_rate</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mf">50.0</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">.stats</span></code> contains all header information of a Trace object.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>There are some default attributes.</p>
+<blockquote>
+<div><table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"></th>
+<th class="head"></th>
+<th class="head"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sampling</span> <span class="pre">rate</span></code></p></td>
+<td><p>Sampling rate in hertz</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">network</span></code></p></td>
+<td><p>Network code</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">station</span></code></p></td>
+<td><p>Station code</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">channel</span></code></p></td>
+<td><p>Channel code</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">starttime</span></code></p></td>
+<td><p>UTCDateTime of the first data sample</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">endtime</span></code></p></td>
+<td><p>UTCDateTime of the last data sample</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">gcarc</span></code></p></td>
+<td><p>Epicentral distance</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">baz</span></code></p></td>
+<td><p>Back azimuths</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>For <code class="docutils literal notranslate"><span class="pre">gcarc</span></code> and <code class="docutils literal notranslate"><span class="pre">bac</span></code> , they are available in sac file. You can print them by:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">st</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">sac</span><span class="o">.</span><span class="n">gcarc</span><span class="p">)</span>
+
+<span class="c1"># If the header value is empty, you can assign value into the header.</span>
+<span class="n">st</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">sac</span><span class="o">.</span><span class="n">gcarc</span> <span class="o">=</span> <span class="mi">10000</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="plot-the-waveforms">
+<h3>2.5 Plot the waveforms<a class="headerlink" href="#plot-the-waveforms" title="Link to this heading"></a></h3>
+<p>Here we plot the waveforms without any preprocessing procedure.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">st</span><span class="o">.</span><span class="n">plot</span><span class="p">();</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/plot_raw.png"><img alt="../_images/plot_raw.png" src="../_images/plot_raw.png" style="width: 80%;" />
+</a>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">st</span><span class="o">.</span><span class="n">spectrogram</span><span class="p">();</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/spectrogram_raw.png"><img alt="../_images/spectrogram_raw.png" src="../_images/spectrogram_raw.png" style="width: 80%;" />
+</a>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Spectrogram is a frequency content of a seismogram. You can check the energy level of the waves over time.</p>
+</div>
+</section>
+<section id="waveform-cross-section-plot">
+<h3>2.6 Waveform Cross-section Plot<a class="headerlink" href="#waveform-cross-section-plot" title="Link to this heading"></a></h3>
+<p>Plot a record section.</p>
+</section>
+<section id="get-the-waveform-data-with-more-than-1-station">
+<h3>2.6.1 Get the waveform data with more than 1 station<a class="headerlink" href="#get-the-waveform-data-with-more-than-1-station" title="Link to this heading"></a></h3>
+<p>For our example, station ‘BAOP’, ‘HADA’, ‘SINA’ ‘BKOR’ and ‘ALRB’ are located near the epicentre of the earthquake.
+It is expected that these 5 stations can record the event well.</p>
+<a class="reference internal image-reference" href="../_images/section_station.png"><img alt="../_images/section_station.png" src="../_images/section_station.png" style="width: 60%;" />
+</a>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set up a list for bulk request</span>
+<span class="n">bulk</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;YS&#39;</span><span class="p">,</span> <span class="s1">&#39;BAOP&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;BHZ&#39;</span><span class="p">,</span> <span class="n">origin_time</span><span class="p">,</span> <span class="n">origin_time</span><span class="o">+</span><span class="mi">120</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;YS&#39;</span><span class="p">,</span> <span class="s1">&#39;HADA&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;BHZ&#39;</span><span class="p">,</span> <span class="n">origin_time</span><span class="p">,</span> <span class="n">origin_time</span><span class="o">+</span><span class="mi">120</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;YS&#39;</span><span class="p">,</span> <span class="s1">&#39;SINA&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;BHZ&#39;</span><span class="p">,</span> <span class="n">origin_time</span><span class="p">,</span> <span class="n">origin_time</span><span class="o">+</span><span class="mi">120</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;YS&#39;</span><span class="p">,</span> <span class="s1">&#39;BKOR&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;BHZ&#39;</span><span class="p">,</span> <span class="n">origin_time</span><span class="p">,</span> <span class="n">origin_time</span><span class="o">+</span><span class="mi">120</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;YS&#39;</span><span class="p">,</span> <span class="s1">&#39;ALRB&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;BHZ&#39;</span><span class="p">,</span> <span class="n">origin_time</span><span class="p">,</span> <span class="n">origin_time</span><span class="o">+</span><span class="mi">120</span><span class="p">)]</span>
+
+<span class="n">st_bulk</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_waveforms_bulk</span><span class="p">(</span><span class="n">bulk</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">get_waveforms_bulk</span></code> send a bulk request for waveforms to the server</p>
+</section>
+<section id="calculate-the-great-circle-distance-from-stations-to-earthquake">
+<h3>2.6.2 Calculate the great circle distance from stations to earthquake<a class="headerlink" href="#calculate-the-great-circle-distance-from-stations-to-earthquake" title="Link to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Input the coordinates of stations</span>
+<span class="n">ALRB_loc</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">8.2194</span><span class="p">,</span> <span class="mf">124.4115</span><span class="p">]</span>
+<span class="n">BAOP_loc</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">8.4882</span><span class="p">,</span> <span class="mf">123.2696</span><span class="p">]</span>
+<span class="n">BKOR_loc</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">8.4868</span><span class="p">,</span> <span class="mf">122.5509</span><span class="p">]</span>
+<span class="n">HADA_loc</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">8.3722</span><span class="p">,</span> <span class="mf">123.5454</span><span class="p">]</span>
+<span class="n">SINA_loc</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">8.1838</span><span class="p">,</span> <span class="mf">122.9124</span><span class="p">]</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">obspy.geodetics</span><span class="w"> </span><span class="kn">import</span> <span class="n">gps2dist_azimuth</span>
+
+<span class="c1"># Loop, get the station coordinates and calculate the distance</span>
+<span class="k">for</span> <span class="n">tr</span> <span class="ow">in</span> <span class="n">st_bulk</span><span class="p">:</span>
+    <span class="n">sta</span> <span class="o">=</span> <span class="n">tr</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">station</span>
+    <span class="k">if</span> <span class="n">sta</span> <span class="o">==</span> <span class="s1">&#39;ALRB&#39;</span><span class="p">:</span>
+        <span class="n">sta_lat</span> <span class="o">=</span> <span class="n">ALRB_loc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">sta_lon</span> <span class="o">=</span> <span class="n">ALRB_loc</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">sta</span> <span class="o">==</span> <span class="s1">&#39;BAOP&#39;</span><span class="p">:</span>
+        <span class="n">sta_lat</span> <span class="o">=</span> <span class="n">BAOP_loc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">sta_lon</span> <span class="o">=</span> <span class="n">BAOP_loc</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">sta</span> <span class="o">==</span><span class="s1">&#39;BKOR&#39;</span><span class="p">:</span>
+        <span class="n">sta_lat</span> <span class="o">=</span> <span class="n">BKOR_loc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">sta_lon</span> <span class="o">=</span> <span class="n">BKOR_loc</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">sta</span> <span class="o">==</span><span class="s1">&#39;HADA&#39;</span><span class="p">:</span>
+        <span class="n">sta_lat</span> <span class="o">=</span> <span class="n">HADA_loc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">sta_lon</span> <span class="o">=</span> <span class="n">HADA_loc</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">sta</span> <span class="o">==</span><span class="s1">&#39;SINA&#39;</span><span class="p">:</span>
+        <span class="n">sta_lat</span> <span class="o">=</span> <span class="n">SINA_loc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">sta_lon</span> <span class="o">=</span> <span class="n">SINA_loc</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">tr</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">distance</span> <span class="o">=</span> <span class="n">gps2dist_azimuth</span><span class="p">(</span><span class="n">sta_lat</span><span class="p">,</span> <span class="n">sta_lon</span><span class="p">,</span><span class="n">eq_lat</span><span class="p">,</span> <span class="n">eq_lon</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># To check the result, you can print the distance with stations.</span>
+<span class="k">for</span> <span class="n">tr</span> <span class="ow">in</span> <span class="n">st_bulk</span><span class="p">:</span>
+   <span class="nb">print</span><span class="p">(</span><span class="n">tr</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">station</span><span class="p">,</span> <span class="n">tr</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">distance</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">gps2dist_azimuth</span></code> calculate the distance between two geographic points and forward and backward azimuths between these points</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<div class="line-block">
+<div class="line">As the mseed file does not contain the location of station, we have to get the information from the station list.</div>
+<div class="line">We also have to save the calculated distance into the metadata, as the value is empty initially.</div>
+</div>
+</div>
+</section>
+<section id="plot-the-waveform-cross-section-plot">
+<h3>2.6.3 Plot the waveform cross-section plot<a class="headerlink" href="#plot-the-waveform-cross-section-plot" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">stream.plot</span></code> allows us to plot the streams at the same figure. For example, we can plot all stream with the same X axis:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">st_bulk</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">1600</span><span class="p">,</span><span class="mi">800</span><span class="p">))</span>  <span class="c1">## size=(1600,800) sets the figure size</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/stream-plot.png"><img alt="../_images/stream-plot.png" src="../_images/stream-plot.png" style="width: 100%;" />
+</a>
+<p>We can also plot the streams in a cross-section view:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">st_bulk</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;section&#39;</span><span class="p">)</span>  <span class="c1">## type=&#39;section&#39; indicates a record section can be plotted</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/section-plot.png"><img alt="../_images/section-plot.png" src="../_images/section-plot.png" style="width: 70%;" />
+</a>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We could add more features to the plot, for example, the phase arrivals, and the station names. It is a good way for us to recognize different seismic phases, We can also get the apparent velocity of P - and S - waves from the plot. We will introduce these in the next section.</p>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../GMT6-2/index.html" class="btn btn-neutral float-left" title="Generic Mapping Tools - Seismic Data" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../obspy-2/index.html" class="btn btn-neutral float-right" title="Seismic data process via ObsPy" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021-2026, CUSeisTut team.
+      <span class="lastupdated">Last updated on 2026-01-27.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(false);
+      });
+  </script> 
+
+</body>
+</html>

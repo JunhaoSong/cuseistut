@@ -1,0 +1,1337 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Double-Difference Earthquake Relocation &mdash; CUSeisTut</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Spectral Analysis" href="../source_spectra/index.html" />
+    <link rel="prev" title="Earthquake Transformer Tutorial" href="../eqt/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            CUSeisTut
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">CUSeisTut</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro/index.html">Introduction</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Entry level</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../unix/index.html">Unix commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../GMT6-1/index.html">Generic Mapping Tools - Topographic Map</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../GMT6-2/index.html">Generic Mapping Tools - Seismic Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obspy-1/index.html">Seismic data request via ObsPy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obspy-2/index.html">Seismic data process via ObsPy</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Intermediate level</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../sta_lta/index.html">Earthquake Detection STA/LTA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../abs_loc/index.html">Earthquake Absolute Location</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced level</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../gcap/index.html">Focal mechanism</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fk/index.html">FK &amp; CAP Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eqt/index.html">Earthquake Transformer Tutorial</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Double-Difference Earthquake Relocation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#contents-of-this-tutorial">Contents of this tutorial</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#initiation">Initiation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#preparation-for-environment">Preparation for Environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#basic-parameters">Basic parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#absolute-earthquake-location">Absolute earthquake location</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#initial-location">Initial location</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#velocity-error">Velocity Error</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#station-delay">Station Delay</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#conduct-inversion-with-delayed-data">Conduct inversion with delayed data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#the-second-event">The second event</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#add-picking-noise">Add Picking Noise</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#double-difference-method">Double Difference Method</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#make-difference">Make difference</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#observed-travel-time-difference">1. Observed Travel Time Difference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#calculated-travel-time-difference">2. Calculated Travel Time Difference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#calculate-double-difference">3. Calculate Double-Difference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#build-up-data-kernel-g">4. Build Up Data Kernel - G</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#check-gtg-inverse-exists">5. Check GTG Inverse Exists</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#add-damp-to-matrix">6. Add Damp to Matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#solve-damped-problem">7. Solve Damped Problem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#update-location">8. Update Location</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#error-analysis">9. Error analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#condition-number">10. Condition Number</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#iterative-double-difference-method">Iterative Double-Difference Method</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#lsqr-algorithm">LSQR Algorithm</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#summary">Summary</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#homework">Homework</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#source-code">Source code</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../source_spectra/index.html">Spectral Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pylith_static/index.html">Static Stress Change - PyLith</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pylith_dynamic/index.html">Dynamic Rupture Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../body_tomo/index.html">Body Wave Tomography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../surface_tomo/index.html">Surface Wave Tomography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ambient_tomo/index.html">Ambient noise cross correlation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendix</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index.html">Acknowledgement</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://docs.google.com/forms/d/e/1FAIpQLScSQIcOtANjTonJDhK4KYmoA6H2lUHou9Mqz1oFCHSTd5wxhQ/viewform?usp=sf_link">Give us feedback here</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CUSeisTut</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Double-Difference Earthquake Relocation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/dd_loc/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="double-difference-earthquake-relocation">
+<h1>Double-Difference Earthquake Relocation<a class="headerlink" href="#double-difference-earthquake-relocation" title="Link to this heading"></a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
+<p>Double-difference earthquake relocation algorithm was developed to improve the location accuracy in the presence of measurement uncertainties when we locate earthquakes in the previous tutorial. It is based on the iterative least-square method, using the time difference between observed and predicted phase arrivals for event pairs recorded by a common station, some uncertainties can be canceled to derive high-accuracy hypocenter locations over large distance. Figure below shows a comparison of ~10,000 earthquake locations (left panel) and double-difference locations (right panel) during the 1997 seismic crisis in the Long Valley caldera (Waldhauser, 2001).</p>
+<img alt="../_images/example.png" src="../_images/example.png" />
+<p>In this tutorial, we’ll go through the powerful earthquake double-difference location method. To better convey the key conception of the method, we simplify the model to avoid it runs too complicated to be understood. We’ll use:</p>
+<ol class="arabic simple">
+<li><p>one-layer homogeneous velocity model to get rid of complicated ray-tracing.</p></li>
+<li><p>2-D X-Z plane rather than 3-D X-Y-Z to decrease complexity</p></li>
+<li><p>P arrivals only</p></li>
+</ol>
+<p>After this tutorial, besides the understanding of key concepts in Double-Difference location, you will also find that model expands from 2-D to 3-D, from one-layer to multi-layers, from P to P&amp;S arrivals, the key processing remains the same.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<div class="line-block">
+<div class="line">You are strongly encouraged to play around codes in this tutorial and introduce to others, you will find your understanding will be enhanced dramatically during the process.</div>
+</div>
+</div>
+<section id="contents-of-this-tutorial">
+<h3>Contents of this tutorial<a class="headerlink" href="#contents-of-this-tutorial" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p>Initiation process</p></li>
+<li><p>Double difference method</p></li>
+<li><p>Iterative double-difference method</p></li>
+</ol>
+<p><strong>Authors</strong>: ZI Jinping, SONG Zilin, Earth Science Sytem Program, CUHK.</p>
+<p><strong>Testers</strong>, XIA Zhuoxuan, Sun Zhangyu, Earth Science Sytem Program, CUHK.</p>
+</section>
+</section>
+<section id="initiation">
+<h2>Initiation<a class="headerlink" href="#initiation" title="Link to this heading"></a></h2>
+<section id="preparation-for-environment">
+<h3>Preparation for Environment<a class="headerlink" href="#preparation-for-environment" title="Link to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.patches</span><span class="w"> </span><span class="kn">import</span> <span class="n">Polygon</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.sparse.linalg</span><span class="w"> </span><span class="kn">import</span> <span class="n">lsqr</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.sparse</span><span class="w"> </span><span class="kn">import</span> <span class="n">csc_matrix</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<div class="line-block">
+<div class="line">It is important to define functions below first.</div>
+</div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">iter_loc</span><span class="p">(</span><span class="n">hyc_loop</span><span class="p">,</span><span class="n">stas</span><span class="p">,</span><span class="n">d</span><span class="p">,</span><span class="n">V</span><span class="p">,</span><span class="n">niter</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Iterative aboslute earthquake location using least-square method,</span>
+<span class="sd">    refer to absolute earthquake location python tutorial.</span>
+<span class="sd">    Parameters:</span>
+<span class="sd">    | hyc_loop: hypocenter for iteration</span>
+<span class="sd">    |     stas: array containing station information</span>
+<span class="sd">    |        d: the observed arrival time</span>
+<span class="sd">    |        V: the velocity</span>
+<span class="sd">    |    niter: maximum number of iteration</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">k</span> <span class="o">&lt;=</span> <span class="n">niter</span><span class="p">:</span>
+        <span class="n">dcal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">d</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">1</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="n">dx</span> <span class="o">=</span> <span class="n">stas</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">hyc_loop</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">dz</span> <span class="o">=</span> <span class="n">stas</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">hyc_loop</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">dcal</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dx</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">dz</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="n">V</span><span class="o">+</span><span class="n">hyc_loop</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">delta_d</span> <span class="o">=</span> <span class="n">d</span> <span class="o">-</span> <span class="n">dcal</span>
+        <span class="n">e2</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">delta_d</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="n">e2</span> <span class="o">+=</span> <span class="n">delta_d</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Iteration </span><span class="si">{</span><span class="nb">format</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="s1">&#39;2d&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> square error: &quot;</span><span class="p">,</span><span class="nb">format</span><span class="p">(</span><span class="n">e2</span><span class="p">,</span><span class="s1">&#39;13.8f&#39;</span><span class="p">))</span>
+
+        <span class="c1"># &gt;&gt;&gt;&gt;&gt; Build G matrix &gt;&gt;&gt;&gt;&gt;&gt;</span>
+        <span class="n">G</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">d</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">3</span><span class="p">))</span>
+        <span class="n">G</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
+                <span class="n">denomiter</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">hyc_loop</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">stas</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="p">(</span><span class="n">hyc_loop</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">stas</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+                <span class="n">G</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span><span class="o">=</span><span class="p">(</span><span class="n">hyc_loop</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">-</span><span class="n">stas</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">])</span><span class="o">/</span><span class="n">denomiter</span><span class="o">/</span><span class="n">V</span>
+
+        <span class="c1"># &gt;&gt;&gt;&gt;&gt; Invert the m value &gt;&gt;&gt;&gt;</span>
+        <span class="n">GTG</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">G</span><span class="p">)</span>
+        <span class="n">GTG_inv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">GTG</span><span class="p">)</span>
+        <span class="n">GTG_inv_GT</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">GTG_inv</span><span class="p">,</span><span class="n">G</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+        <span class="n">delta_m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">GTG_inv_GT</span><span class="p">,</span><span class="n">delta_d</span><span class="p">)</span>
+
+        <span class="c1"># &gt;&gt;&gt;&gt;&gt; Update the hypocenter loop &gt;&gt;&gt;&gt;&gt;</span>
+        <span class="n">hyc_loop</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">hyc_loop</span><span class="p">,</span><span class="n">delta_m</span><span class="o">.</span><span class="n">ravel</span><span class="p">())</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">k</span><span class="o">+</span><span class="mi">1</span>
+
+        <span class="c1"># &gt;&gt;&gt;&gt;&gt; End the loop if error is small &gt;&gt;&gt;&gt;&gt;</span>
+        <span class="k">if</span> <span class="n">e2</span><span class="o">&lt;</span><span class="mf">0.00000001</span><span class="p">:</span>
+            <span class="k">break</span>
+
+    <span class="n">sigma_d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">delta_d</span><span class="p">)</span>
+    <span class="n">var</span> <span class="o">=</span> <span class="n">sigma_d</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">4</span><span class="p">)</span>
+    <span class="n">sigma_m2</span> <span class="o">=</span> <span class="n">var</span> <span class="o">*</span> <span class="n">GTG_inv</span>
+    <span class="k">return</span> <span class="n">hyc_loop</span><span class="p">,</span> <span class="n">sigma_m2</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">present_loc_results</span><span class="p">(</span><span class="n">hyc</span><span class="p">,</span><span class="n">sig_square</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">std_fmt</span><span class="o">=</span><span class="s1">&#39;.2f&#39;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Print earthquake location results, refer to absolute earthquake location</span>
+<span class="sd">    for reference</span>
+<span class="sd">    Parameters:</span>
+<span class="sd">    |         hyc: hypocenter</span>
+<span class="sd">    |sig_square: squared convariance</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_x</span> <span class="o">=</span> <span class="nb">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">hyc</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">4</span><span class="p">),</span><span class="nb">format</span><span class="p">(</span><span class="s2">&quot;6.2f&quot;</span><span class="p">))</span>
+    <span class="n">_z</span> <span class="o">=</span> <span class="nb">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">hyc</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="mi">4</span><span class="p">),</span><span class="nb">format</span><span class="p">(</span><span class="s2">&quot;6.2f&quot;</span><span class="p">))</span>
+    <span class="n">_t</span> <span class="o">=</span> <span class="nb">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">hyc</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="mi">4</span><span class="p">),</span><span class="nb">format</span><span class="p">(</span><span class="s2">&quot;6.2f&quot;</span><span class="p">))</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sig_square</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x = &quot;</span><span class="p">,</span><span class="n">_x</span><span class="p">,</span><span class="s2">&quot; km&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;z = &quot;</span><span class="p">,</span><span class="n">_z</span><span class="p">,</span><span class="s2">&quot; km&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;t = &quot;</span><span class="p">,</span><span class="n">_t</span><span class="p">,</span><span class="s2">&quot; s&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">stdx</span> <span class="o">=</span> <span class="n">sig_square</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="mf">0.5</span>
+        <span class="n">_stdx</span> <span class="o">=</span> <span class="nb">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">stdx</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span><span class="n">std_fmt</span><span class="p">)</span>
+        <span class="n">stdz</span> <span class="o">=</span> <span class="n">sig_square</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mf">0.5</span>
+        <span class="n">_stdz</span> <span class="o">=</span> <span class="nb">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">stdz</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span><span class="n">std_fmt</span><span class="p">)</span>
+        <span class="n">stdt</span> <span class="o">=</span> <span class="n">sig_square</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="o">**</span><span class="mf">0.5</span>
+        <span class="n">_stdt</span> <span class="o">=</span> <span class="nb">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">stdt</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span><span class="n">std_fmt</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x = &quot;</span><span class="p">,</span><span class="n">_x</span><span class="p">,</span><span class="s2">&quot;±&quot;</span><span class="p">,</span><span class="n">_stdx</span><span class="p">,</span><span class="s2">&quot; km&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;z = &quot;</span><span class="p">,</span><span class="n">_z</span><span class="p">,</span><span class="s2">&quot;±&quot;</span><span class="p">,</span><span class="n">_stdz</span><span class="p">,</span><span class="s2">&quot; km&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;t = &quot;</span><span class="p">,</span><span class="n">_t</span><span class="p">,</span><span class="s2">&quot;±&quot;</span><span class="p">,</span><span class="n">_stdt</span><span class="p">,</span><span class="s2">&quot; s&quot;</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">matrix_show</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Show matrix values in grids shape</span>
+<span class="sd">    Parameters:cmap=&quot;cool&quot;,gridsize=0.6,fmt=&#39;.2f&#39;,label_data=True</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ws</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">H</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">str_count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">ndarr_count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">new_args</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span><span class="nb">str</span><span class="p">):</span>
+            <span class="n">new_args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span><span class="nb">list</span><span class="p">):</span>
+            <span class="n">arg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">arg</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Only accept 2D array&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">arg</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="n">arg</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+            <span class="n">tmp</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">arg</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+            <span class="n">arg</span> <span class="o">=</span> <span class="n">tmp</span>
+        <span class="n">h</span><span class="p">,</span><span class="n">w</span> <span class="o">=</span> <span class="n">arg</span><span class="o">.</span><span class="n">shape</span>
+        <span class="k">if</span> <span class="n">h</span><span class="o">&gt;</span><span class="n">H</span><span class="p">:</span>
+            <span class="n">H</span><span class="o">=</span><span class="n">h</span>
+        <span class="n">ws</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+        <span class="n">new_args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
+        <span class="n">ndarr_count</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">ws</span><span class="p">)</span><span class="o">+</span><span class="nb">len</span><span class="p">(</span><span class="n">ws</span><span class="p">)</span>    <span class="c1"># text+matrix+text+...+matrix+text</span>
+    <span class="k">if</span> <span class="n">W</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;No matrix provided!&quot;</span><span class="p">)</span>
+
+    <span class="n">fmt</span> <span class="o">=</span> <span class="s1">&#39;.2f&#39;</span>
+    <span class="n">grid_size</span> <span class="o">=</span> <span class="mf">0.6</span>
+    <span class="n">cmap</span> <span class="o">=</span> <span class="s1">&#39;cool&#39;</span>
+    <span class="n">label_data</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">arg</span> <span class="o">==</span> <span class="s2">&quot;fmt&quot;</span><span class="p">:</span>
+            <span class="n">fmt</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">arg</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">arg</span> <span class="o">==</span> <span class="s1">&#39;grid_size&#39;</span><span class="p">:</span>
+            <span class="n">grid_size</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">arg</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">arg</span> <span class="o">==</span> <span class="s1">&#39;cmap&#39;</span><span class="p">:</span>
+            <span class="n">cmap</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">arg</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">arg</span> <span class="o">==</span> <span class="s1">&#39;label_data&#39;</span><span class="p">:</span>
+            <span class="n">label_data</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">arg</span><span class="p">]</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="n">W</span><span class="o">*</span><span class="n">grid_size</span><span class="p">,</span><span class="n">H</span><span class="o">*</span><span class="n">grid_size</span><span class="p">))</span>
+    <span class="n">gs</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_gridspec</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="n">H</span><span class="p">,</span><span class="n">ncols</span><span class="o">=</span><span class="n">W</span><span class="p">)</span>
+
+    <span class="n">wloop</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">matrix_id</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">new_args</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span><span class="nb">str</span><span class="p">):</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">H</span><span class="p">,</span><span class="n">wloop</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="n">wloop</span><span class="p">])</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">H</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span><span class="n">H</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">arg</span><span class="p">,</span><span class="n">horizontalalignment</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span><span class="n">verticalalignment</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="n">h</span><span class="p">,</span><span class="n">w</span> <span class="o">=</span> <span class="n">arg</span><span class="o">.</span><span class="n">shape</span>
+            <span class="n">hlow</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">((</span><span class="n">H</span><span class="o">-</span><span class="n">h</span><span class="o">+</span><span class="mf">0.01</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>        <span class="c1"># Find the height grid range</span>
+            <span class="n">hhigh</span> <span class="o">=</span> <span class="n">hlow</span><span class="o">+</span><span class="n">h</span>
+            <span class="n">wlow</span> <span class="o">=</span> <span class="n">wloop</span>
+            <span class="n">whigh</span> <span class="o">=</span> <span class="n">wlow</span><span class="o">+</span><span class="n">w</span>
+<span class="c1">#            print(&quot;H: &quot;,H,hlow,hhigh,&quot;; W &quot;,W,wlow,whigh)</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="n">hlow</span><span class="p">:</span><span class="n">hhigh</span><span class="p">,</span><span class="n">wlow</span><span class="p">:</span><span class="n">whigh</span><span class="p">])</span>
+
+            <span class="n">plt</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span><span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">w</span><span class="p">):</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">h</span><span class="p">):</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">j</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">label_data</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">h</span><span class="p">):</span>
+                    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">w</span><span class="p">):</span>
+                        <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">j</span><span class="o">+</span><span class="mf">0.5</span><span class="p">,</span><span class="n">i</span><span class="o">+</span><span class="mf">0.5</span><span class="p">,</span><span class="nb">format</span><span class="p">(</span><span class="n">arg</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">],</span><span class="n">fmt</span><span class="p">),</span>
+                                 <span class="n">horizontalalignment</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span>
+                                 <span class="n">verticalalignment</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">w</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="n">h</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">([])</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([])</span>
+            <span class="n">wloop</span><span class="o">+=</span><span class="n">w</span><span class="o">+</span><span class="mi">1</span>
+            <span class="n">matrix_id</span><span class="o">+=</span><span class="mi">1</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="basic-parameters">
+<h3>Basic parameters<a class="headerlink" href="#basic-parameters" title="Link to this heading"></a></h3>
+<p>Set up station array, earthquake true location, wave-velocity and generate synthetic arrival time.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">stas</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="o">-</span><span class="mi">14</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="o">-</span><span class="mi">8</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">8</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">14</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">20</span><span class="p">,</span><span class="mi">0</span><span class="p">]])</span> <span class="c1"># Station</span>
+<span class="n">stas</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mi">19</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="o">-</span><span class="mi">13</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="o">-</span><span class="mi">7</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">8</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">14</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">20</span><span class="p">,</span><span class="mi">0</span><span class="p">]])</span> <span class="c1"># Station</span>
+<span class="n">hyc1_true</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">Vtrue</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">nsta</span> <span class="o">=</span> <span class="n">stas</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">dobs1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nsta</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dobs1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+    <span class="n">dx</span> <span class="o">=</span> <span class="n">stas</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">hyc1_true</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">dz</span> <span class="o">=</span> <span class="n">stas</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">hyc1_true</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">dobs1</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dx</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">dz</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="n">Vtrue</span><span class="o">+</span><span class="n">hyc1_true</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot event, stations, and rays</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hyc1_true</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">hyc1_true</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;r*&#39;</span><span class="p">,</span><span class="n">ms</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;Event 1&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">stas</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">stas</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;b^&#39;</span><span class="p">,</span><span class="n">ms</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;Station&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">sta</span> <span class="ow">in</span> <span class="n">stas</span><span class="p">:</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">hyc1_true</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">sta</span><span class="p">[</span><span class="mi">0</span><span class="p">]],[</span><span class="n">hyc1_true</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">sta</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span><span class="s1">&#39;k-&#39;</span><span class="p">)</span>
+
+<span class="c1"># Add grey background</span>
+<span class="n">nodes</span> <span class="o">=</span> <span class="p">[[</span><span class="o">-</span><span class="mi">25</span><span class="p">,</span><span class="mi">10</span><span class="p">],[</span><span class="mi">25</span><span class="p">,</span><span class="mi">10</span><span class="p">],[</span><span class="mi">25</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="o">-</span><span class="mi">25</span><span class="p">,</span><span class="mi">0</span><span class="p">]]</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">Polygon</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span><span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;lightgrey&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">stas</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+    <span class="n">sta</span> <span class="o">=</span> <span class="n">stas</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">sta</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span><span class="n">sta</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span><span class="s1">&#39;Sta &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+
+<span class="c1"># Set up plot elements</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="o">-</span><span class="mi">25</span><span class="p">,</span><span class="mi">25</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;X (km)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Depth (km)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Model&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
+</pre></div>
+</div>
+<img alt="../_images/output_6_0.png" src="../_images/output_6_0.png" />
+</section>
+</section>
+<section id="absolute-earthquake-location">
+<h2>Absolute earthquake location<a class="headerlink" href="#absolute-earthquake-location" title="Link to this heading"></a></h2>
+<section id="initial-location">
+<h3>Initial location<a class="headerlink" href="#initial-location" title="Link to this heading"></a></h3>
+<p>The station which records the earliest waveform is closest to the hypocenter, so it is reasonable to start iteration:</p>
+<ol class="arabic simple">
+<li><p>The same x and y with the closest station;</p></li>
+<li><p>Initial depth at 5 km;</p></li>
+<li><p>Initial origin time 1 sec before the earliest arrival;</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">dobs1</span><span class="p">)</span>       <span class="c1"># The index of station</span>
+<span class="n">dmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">dobs1</span><span class="p">)</span>         <span class="c1"># The minimum arrival time</span>
+
+<span class="n">hyc1_init</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>      <span class="c1"># Init array</span>
+<span class="n">hyc1_init</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">stas</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span><span class="mi">0</span><span class="p">];</span>   <span class="c1"># Set the same x,y with station</span>
+<span class="n">hyc1_init</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>                 <span class="c1"># Set initial depth 5 km</span>
+<span class="n">hyc1_init</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">dmin</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>        <span class="c1"># Set initial event time 1s earlier than arrival</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initial trial parameters &quot;</span><span class="p">,</span><span class="s2">&quot;x: &quot;</span><span class="p">,</span><span class="n">hyc1_init</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="s2">&quot;km; &quot;</span><span class="p">,</span><span class="s2">&quot;z: &quot;</span><span class="p">,</span><span class="n">hyc1_init</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s2">&quot;km; &quot;</span><span class="p">,</span><span class="s2">&quot;t: &quot;</span><span class="p">,</span> <span class="nb">format</span><span class="p">(</span><span class="n">hyc1_init</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="s1">&#39;.4f&#39;</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; s&quot;</span><span class="p">)</span>
+<span class="n">hyc1_loop</span> <span class="o">=</span> <span class="n">hyc1_init</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Initial</span> <span class="n">trial</span> <span class="n">parameters</span>  <span class="n">x</span><span class="p">:</span>  <span class="mf">0.0</span> <span class="n">km</span><span class="p">;</span>  <span class="n">z</span><span class="p">:</span>  <span class="mf">5.0</span> <span class="n">km</span><span class="p">;</span>  <span class="n">t</span><span class="p">:</span>  <span class="mf">0.6125</span> <span class="n">s</span>
+</pre></div>
+</div>
+<p>We can also define a function to get the initial location</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_init_loc</span><span class="p">(</span><span class="n">dobs</span><span class="p">,</span><span class="n">stas</span><span class="p">,</span><span class="n">depth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">gap_time</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get initial earthquake location</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">dobs</span><span class="p">)</span>         <span class="c1"># The minimum arrival time</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">dobs</span><span class="p">)</span>       <span class="c1"># The index of observation</span>
+
+    <span class="n">hyc_init</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>      <span class="c1"># Init array</span>
+    <span class="n">hyc_init</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">stas</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span><span class="mi">0</span><span class="p">];</span>   <span class="c1"># Set the same x,y with station</span>
+    <span class="n">hyc_init</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">depth</span><span class="p">;</span>             <span class="c1"># Set initial depth 5 km</span>
+    <span class="n">hyc_init</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">dmin</span><span class="o">-</span><span class="n">gap_time</span><span class="p">;</span>        <span class="c1"># Set initial event time 1s earlier than arrival</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initial trial parameters &quot;</span><span class="p">,</span><span class="s2">&quot;x: &quot;</span><span class="p">,</span><span class="n">hyc_init</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="s2">&quot;km; &quot;</span><span class="p">,</span><span class="s2">&quot;z: &quot;</span><span class="p">,</span><span class="n">hyc_init</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s2">&quot;km; &quot;</span><span class="p">,</span><span class="s2">&quot;t: &quot;</span><span class="p">,</span> <span class="nb">format</span><span class="p">(</span><span class="n">hyc_init</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="s1">&#39;.4f&#39;</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; s&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">hyc_init</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hyc1_init</span> <span class="o">=</span> <span class="n">get_init_loc</span><span class="p">(</span><span class="n">dobs1</span><span class="p">,</span><span class="n">stas</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Initial</span> <span class="n">trial</span> <span class="n">parameters</span>  <span class="n">x</span><span class="p">:</span>  <span class="mf">0.0</span> <span class="n">km</span><span class="p">;</span>  <span class="n">z</span><span class="p">:</span>  <span class="mf">5.0</span> <span class="n">km</span><span class="p">;</span>  <span class="n">t</span><span class="p">:</span>  <span class="mf">0.6125</span> <span class="n">s</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<div class="line-block">
+<div class="line">For the knowledge of iterative location, please refer to the tutorial Earthquake Absolute Location.</div>
+</div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hyc1_abs</span><span class="p">,</span> <span class="n">sigma_m2</span> <span class="o">=</span> <span class="n">iter_loc</span><span class="p">(</span><span class="n">hyc1_loop</span><span class="p">,</span><span class="n">stas</span><span class="p">,</span><span class="n">dobs1</span><span class="p">,</span><span class="n">Vtrue</span><span class="p">)</span>
+<span class="n">present_loc_results</span><span class="p">(</span><span class="n">hyc1_abs</span><span class="p">,</span><span class="n">sigma_m2</span><span class="p">,</span><span class="n">std_fmt</span><span class="o">=</span><span class="s1">&#39;.4f&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Iteration  0 square error:     0.83833287
+Iteration  1 square error:     0.01411773
+Iteration  2 square error:     0.00000020
+Iteration  3 square error:     0.00000000
+x =   -1.00 ± 0.0000  km
+z =    8.00 ± 0.0000  km
+t =    0.00 ± 0.0000  s
+</pre></div>
+</div>
+</section>
+<section id="velocity-error">
+<h3>Velocity Error<a class="headerlink" href="#velocity-error" title="Link to this heading"></a></h3>
+<p>In the calculation above, we use the true velocity (<strong>Vtrue</strong>) to conduct the inversion. However, in reality, the velocity we measure is more or less different from the true velocity, thus leading to some bias.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<div class="line-block">
+<div class="line">Try to use other velocity values to conduct the inversion and check the results, what features do you find?</div>
+</div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Vp</span> <span class="o">=</span> <span class="mf">4.8</span>
+<span class="n">hyc1_abs</span><span class="p">,</span> <span class="n">sigma_m2</span> <span class="o">=</span> <span class="n">iter_loc</span><span class="p">(</span><span class="n">hyc1_init</span><span class="p">,</span><span class="n">stas</span><span class="p">,</span><span class="n">dobs1</span><span class="p">,</span><span class="n">Vp</span><span class="p">)</span>
+<span class="n">present_loc_results</span><span class="p">(</span><span class="n">hyc1_abs</span><span class="p">,</span><span class="n">sigma_m2</span><span class="p">,</span><span class="n">std_fmt</span><span class="o">=</span><span class="s1">&#39;.4f&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;True location (hyc1_true) &quot;</span><span class="p">,</span><span class="s2">&quot;x: &quot;</span><span class="p">,</span><span class="n">hyc1_true</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="s2">&quot;km; &quot;</span><span class="p">,</span><span class="s2">&quot;z: &quot;</span><span class="p">,</span><span class="n">hyc1_true</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s2">&quot;km; &quot;</span><span class="p">,</span><span class="s2">&quot;t: &quot;</span><span class="p">,</span> <span class="nb">format</span><span class="p">(</span><span class="n">hyc1_true</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="s1">&#39;.4f&#39;</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; s&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<div class="line-block">
+<div class="line">For the knowledge of iteration location, please refer to the absolute earthquake location tutorial</div>
+</div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Iteration  0 square error:     1.44386729
+Iteration  1 square error:     0.03284725
+Iteration  2 square error:     0.00078154
+Iteration  3 square error:     0.00077835
+Iteration  4 square error:     0.00077835
+Iteration  5 square error:     0.00077835
+Iteration  6 square error:     0.00077835
+Iteration  7 square error:     0.00077835
+Iteration  8 square error:     0.00077835
+Iteration  9 square error:     0.00077835
+Iteration 10 square error:     0.00077835
+x =   -0.98 ± 0.0398  km
+z =    8.90 ± 0.1464  km
+t =   -0.24 ± 0.0204  s
+True location (hyc1_true)  x:  -1 km;  z:  8 km;  t:  0.0000 s
+</pre></div>
+</div>
+</section>
+<section id="station-delay">
+<h3>Station Delay<a class="headerlink" href="#station-delay" title="Link to this heading"></a></h3>
+<p>In near surface, the material velocity where stations are located might vary and lead to influence on the travel time, we call it <strong>Station delay</strong>. The <strong>River sediments</strong> are generally composed by not fully consolidated materials, their velocities are therefore low. A lower velocity will lead to a longer travel time, thus the actual arrival time will be later than estimated, here we call it <strong>Positive delay</strong>.</p>
+<p>The <strong>Granite</strong> is igneous rock, its density is high with fast velocity. A higher velocity will lead to a shorter travel time, thus the actual arrival time will be earlier than estimated, we call it
+<strong>Negative delay</strong>.</p>
+<p>In this tutorial, we set value of 0.05s for positive delay and -0.05s for negative delay.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">semix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">101</span><span class="p">)</span>
+<span class="n">semiy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">semix</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">semixy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">101</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">semixy</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">semix</span>
+<span class="n">semixy</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">semiy</span><span class="o">*</span><span class="mf">0.5</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">sta</span> <span class="ow">in</span> <span class="n">stas</span><span class="p">:</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">hyc1_true</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">sta</span><span class="p">[</span><span class="mi">0</span><span class="p">]],[</span><span class="n">hyc1_true</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">sta</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+<span class="n">station</span><span class="p">,</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">stas</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">stas</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;b^&#39;</span><span class="p">,</span><span class="n">ms</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;Station&quot;</span><span class="p">)</span>
+<span class="n">event</span><span class="p">,</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hyc1_true</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">hyc1_true</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;r*&#39;</span><span class="p">,</span><span class="n">ms</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;Event 1&#39;</span><span class="p">)</span>
+<span class="n">nodes</span> <span class="o">=</span> <span class="p">[[</span><span class="o">-</span><span class="mi">25</span><span class="p">,</span><span class="mi">10</span><span class="p">],[</span><span class="mi">25</span><span class="p">,</span><span class="mi">10</span><span class="p">],[</span><span class="mi">25</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="o">-</span><span class="mi">25</span><span class="p">,</span><span class="mi">0</span><span class="p">]]</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">Polygon</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span><span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;lightgrey&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">sta</span> <span class="ow">in</span> <span class="n">stas</span><span class="p">[:</span><span class="mi">3</span><span class="p">]:</span>
+    <span class="n">p_pos</span> <span class="o">=</span> <span class="n">Polygon</span><span class="p">(</span><span class="n">sta</span><span class="o">+</span><span class="n">semixy</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span><span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;cyan&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">p_pos</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">sta</span> <span class="ow">in</span> <span class="n">stas</span><span class="p">[</span><span class="mi">4</span><span class="p">:]:</span>
+    <span class="n">p_neg</span> <span class="o">=</span> <span class="n">Polygon</span><span class="p">(</span><span class="n">sta</span><span class="o">+</span><span class="n">semixy</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span><span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;yellow&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">p_neg</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">stas</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+    <span class="n">sta</span> <span class="o">=</span> <span class="n">stas</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">sta</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span><span class="n">sta</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span><span class="s1">&#39;Sta &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;X (km)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Depth (km)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="o">-</span><span class="mi">25</span><span class="p">,</span><span class="mi">25</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="n">station</span><span class="p">,</span><span class="n">event</span><span class="p">,</span><span class="n">p_pos</span><span class="p">,</span><span class="n">p_neg</span><span class="p">],[</span><span class="s2">&quot;Station&quot;</span><span class="p">,</span><span class="s2">&quot;Event 1&quot;</span><span class="p">,</span><span class="s2">&quot;River sediments&quot;</span><span class="p">,</span><span class="s2">&quot;Granite&quot;</span><span class="p">]);</span>
+</pre></div>
+</div>
+<img alt="../_images/output_16_0.png" src="../_images/output_16_0.png" />
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">stas_delay</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nsta</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">stas_delay</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span> <span class="p">[</span><span class="mf">0.05</span><span class="p">,</span><span class="mf">0.05</span><span class="p">,</span><span class="mf">0.05</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mf">0.05</span><span class="p">,</span><span class="o">-</span><span class="mf">0.05</span><span class="p">,</span><span class="o">-</span><span class="mf">0.05</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="conduct-inversion-with-delayed-data">
+<h3>Conduct inversion with delayed data<a class="headerlink" href="#conduct-inversion-with-delayed-data" title="Link to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dobs1_delay</span> <span class="o">=</span> <span class="n">dobs1</span> <span class="o">+</span> <span class="n">stas_delay</span>
+<span class="n">hyc1_abs_delay</span><span class="p">,</span> <span class="n">sigma_m2</span> <span class="o">=</span> <span class="n">iter_loc</span><span class="p">(</span><span class="n">hyc1_init</span><span class="p">,</span><span class="n">stas</span><span class="p">,</span><span class="n">dobs1_delay</span><span class="p">,</span><span class="n">Vp</span><span class="p">)</span>
+<span class="n">present_loc_results</span><span class="p">(</span><span class="n">hyc1_abs_delay</span><span class="p">,</span><span class="n">sigma_m2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;True location (hyc1_true) &quot;</span><span class="p">,</span><span class="s2">&quot;x: &quot;</span><span class="p">,</span><span class="n">hyc1_true</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="s2">&quot;km; &quot;</span><span class="p">,</span><span class="s2">&quot;z: &quot;</span><span class="p">,</span><span class="n">hyc1_true</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s2">&quot;km; &quot;</span><span class="p">,</span><span class="s2">&quot;t: &quot;</span><span class="p">,</span> <span class="nb">format</span><span class="p">(</span><span class="n">hyc1_true</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="s1">&#39;.4f&#39;</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; s&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Iteration  0 square error:     1.36803100
+Iteration  1 square error:     0.03083627
+Iteration  2 square error:     0.00074298
+Iteration  3 square error:     0.00073813
+Iteration  4 square error:     0.00073813
+Iteration  5 square error:     0.00073813
+Iteration  6 square error:     0.00073813
+Iteration  7 square error:     0.00073813
+Iteration  8 square error:     0.00073813
+Iteration  9 square error:     0.00073813
+Iteration 10 square error:     0.00073813
+x =   -0.69 ± 0.04  km
+z =    8.96 ± 0.14  km
+t =   -0.24 ± 0.02  s
+True location (hyc1_true)  x:  -1 km;  z:  8 km;  t:  0.0000 s
+</pre></div>
+</div>
+</section>
+<section id="the-second-event">
+<h3>The second event<a class="headerlink" href="#the-second-event" title="Link to this heading"></a></h3>
+<p>Now we consider a second event occurred close to the first event</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hyc2_true</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mf">8.3</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+<span class="c1"># Plot event, stations, and rays</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Add grey background</span>
+<span class="n">nodes</span> <span class="o">=</span> <span class="p">[[</span><span class="o">-</span><span class="mi">25</span><span class="p">,</span><span class="mi">10</span><span class="p">],[</span><span class="mi">25</span><span class="p">,</span><span class="mi">10</span><span class="p">],[</span><span class="mi">25</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="o">-</span><span class="mi">25</span><span class="p">,</span><span class="mi">0</span><span class="p">]]</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">Polygon</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span><span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;lightgrey&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+
+<span class="c1"># Plot events</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hyc1_true</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">hyc1_true</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;r*&#39;</span><span class="p">,</span><span class="n">ms</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;Event 1&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hyc2_true</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">hyc2_true</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;g*&#39;</span><span class="p">,</span><span class="n">ms</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Event 2&quot;</span><span class="p">)</span>
+
+
+<span class="c1"># Plot stations and rays</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">stas</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">stas</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;b^&#39;</span><span class="p">,</span><span class="n">ms</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;Station&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">stas</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+    <span class="n">sta</span> <span class="o">=</span> <span class="n">stas</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">sta</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="n">sta</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span><span class="s1">&#39;Sta &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">hyc1_true</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">sta</span><span class="p">[</span><span class="mi">0</span><span class="p">]],[</span><span class="n">hyc1_true</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">sta</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span><span class="s1">&#39;k-&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">hyc2_true</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">sta</span><span class="p">[</span><span class="mi">0</span><span class="p">]],[</span><span class="n">hyc2_true</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">sta</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span><span class="s1">&#39;w-&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">3</span><span class="p">:</span>
+        <span class="n">p_pos</span> <span class="o">=</span> <span class="n">Polygon</span><span class="p">(</span><span class="n">sta</span><span class="o">+</span><span class="n">semixy</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span><span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;cyan&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">p_pos</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">i</span><span class="o">&gt;</span><span class="mi">3</span><span class="p">:</span>
+        <span class="n">p_neg</span> <span class="o">=</span> <span class="n">Polygon</span><span class="p">(</span><span class="n">sta</span><span class="o">+</span><span class="n">semixy</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span><span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;yellow&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">p_neg</span><span class="p">)</span>
+
+<span class="c1"># Set up plot elements</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="o">-</span><span class="mi">25</span><span class="p">,</span><span class="mi">25</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;X (km)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Depth (km)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Model&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
+</pre></div>
+</div>
+<img alt="../_images/output_21_0.png" src="../_images/output_21_0.png" />
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dobs2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nsta</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dobs2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+    <span class="n">dx</span> <span class="o">=</span> <span class="n">stas</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">hyc2_true</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">dz</span> <span class="o">=</span> <span class="n">stas</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">hyc2_true</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">dobs2</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dx</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">dz</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="n">Vtrue</span><span class="o">+</span><span class="n">hyc2_true</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hyc2_init</span> <span class="o">=</span> <span class="n">get_init_loc</span><span class="p">(</span><span class="n">dobs2</span><span class="p">,</span><span class="n">stas</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Initial</span> <span class="n">trial</span> <span class="n">parameters</span>  <span class="n">x</span><span class="p">:</span>  <span class="mf">0.0</span> <span class="n">km</span><span class="p">;</span>  <span class="n">z</span><span class="p">:</span>  <span class="mf">5.0</span> <span class="n">km</span><span class="p">;</span>  <span class="n">t</span><span class="p">:</span>  <span class="mf">1.6720</span> <span class="n">s</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dobs2_delay</span> <span class="o">=</span> <span class="n">dobs2</span> <span class="o">+</span> <span class="n">stas_delay</span>
+<span class="n">hyc2_abs</span><span class="p">,</span> <span class="n">sigma_m2</span> <span class="o">=</span> <span class="n">iter_loc</span><span class="p">(</span><span class="n">hyc2_init</span><span class="p">,</span><span class="n">stas</span><span class="p">,</span><span class="n">dobs2_delay</span><span class="p">,</span><span class="n">Vtrue</span><span class="p">)</span>
+<span class="n">present_loc_results</span><span class="p">(</span><span class="n">hyc2_abs</span><span class="p">,</span><span class="n">sigma_m2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;True location (hyc2_true) &quot;</span><span class="p">,</span><span class="s2">&quot;x: &quot;</span><span class="p">,</span><span class="n">hyc2_true</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="s2">&quot;km; &quot;</span><span class="p">,</span><span class="s2">&quot;z: &quot;</span><span class="p">,</span><span class="n">hyc2_true</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s2">&quot;km; &quot;</span><span class="p">,</span><span class="s2">&quot;t: &quot;</span><span class="p">,</span> <span class="nb">format</span><span class="p">(</span><span class="n">hyc2_true</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="s1">&#39;.4f&#39;</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; s&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Iteration  0 square error:     1.12489413
+Iteration  1 square error:     0.01976384
+Iteration  2 square error:     0.00025005
+Iteration  3 square error:     0.00024981
+Iteration  4 square error:     0.00024981
+Iteration  5 square error:     0.00024981
+Iteration  6 square error:     0.00024981
+Iteration  7 square error:     0.00024981
+Iteration  8 square error:     0.00024981
+Iteration  9 square error:     0.00024981
+Iteration 10 square error:     0.00024981
+x =    1.30 ± 0.02  km
+z =    8.23 ± 0.08  km
+t =    1.01 ± 0.01  s
+True location (hyc2_true)  x:  1 km;  z:  8.3 km;  t:  1.0000 s
+</pre></div>
+</div>
+</section>
+<section id="add-picking-noise">
+<h3>Add Picking Noise<a class="headerlink" href="#add-picking-noise" title="Link to this heading"></a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<div class="line-block">
+<div class="line">please refer to Earthquake Absolute Location tutorial for more information of add picking noise</div>
+</div>
+</div>
+<p>Add random noise to simulate the phase picking uncertainty</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mu</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">sigma</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">252</span><span class="p">)</span>
+<span class="n">errors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span><span class="n">sigma</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">nsta</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">dobs1_delay_noise</span> <span class="o">=</span> <span class="n">dobs1_delay</span><span class="o">+</span><span class="n">errors</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">101</span><span class="p">)</span>
+<span class="n">errors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span><span class="n">sigma</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">nsta</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">dobs2_delay_noise</span> <span class="o">=</span> <span class="n">dobs2_delay</span><span class="o">+</span><span class="n">errors</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="double-difference-method">
+<h2>Double Difference Method<a class="headerlink" href="#double-difference-method" title="Link to this heading"></a></h2>
+<p>The travel-time residual of event <span class="math notranslate nohighlight">\(i\)</span> at station <span class="math notranslate nohighlight">\(k\)</span>:</p>
+<p><span class="math notranslate nohighlight">\(r_k^i=(T_k^i)^{obs}-(T_k^i)^{cal}\)</span> comes from:</p>
+<ol class="arabic simple">
+<li><p>Earthquake location mistfit;</p></li>
+<li><p>Earthquake origin time misfit;</p></li>
+<li><p>Along ray-path velocity variation;</p></li>
+<li><p>Station delay.</p></li>
+</ol>
+<p>could be presented via below equation:</p>
+<div class="math notranslate nohighlight">
+\[r_k^i=\sum_{l=1}^2\frac{\partial T_k^i}{\partial x_l^i}\Delta x_l^i +\Delta\tau^i+\int_{s_i}^{r_k}\Delta uds+S_k\]</div>
+<p><span class="math notranslate nohighlight">\(T\)</span>: travel time</p>
+<p><span class="math notranslate nohighlight">\(\tau\)</span>: event origin time</p>
+<p><span class="math notranslate nohighlight">\(s,r\)</span>: source and receiver location</p>
+<p><span class="math notranslate nohighlight">\(u=\frac{1}{V}\)</span>: slowness</p>
+<p><span class="math notranslate nohighlight">\(S_k\)</span>: station delay</p>
+<p><strong>Event :math:`j`, station :math:`k`</strong></p>
+<p>The travel-time residual of event <span class="math notranslate nohighlight">\(j\)</span> at station <span class="math notranslate nohighlight">\(k\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[r_k^j=(T_k^j)^{obs}-(T_k^j)^{cal}=\sum_{l=1}^2\frac{\partial T_k^j}{\partial x_l^j}\Delta x_l^j +\Delta\tau^j+\int_{s_j}^{r_k}\Delta uds+S_k\]</div>
+<section id="make-difference">
+<h3>Make difference<a class="headerlink" href="#make-difference" title="Link to this heading"></a></h3>
+<div class="math notranslate nohighlight">
+\[r_k^i-r_k^j=\sum_{l=1}^2\frac{\partial T_k^i}{\partial x_l^i}\Delta x_l^i +\Delta\tau^i+\int_{s_i}^{r_k}\Delta uds-
+\sum_{l=1}^2\frac{\partial T_k^j}{\partial x_l^j}\Delta x_l^j -\Delta\tau^j-\int_{s_j}^{r_k}\Delta uds\]</div>
+<p>Noted that station delay <span class="math notranslate nohighlight">\(S\)</span> is removed.</p>
+<div class="math notranslate nohighlight">
+\[r_k^i-r_k^j = \{(T_k^i)^{obs}-(T_k^i)^{cal}\}-\{(T_k^j)^{obs}-(T_k^j)^{cal}\}\]</div>
+<p>Reorganizing the equation leads to</p>
+<div class="math notranslate nohighlight">
+\[r_k^i - r_k^j=(T_k^i-T_k^j)^{obs}-(T_k^i-T_k^j)^{cal}\]</div>
+<p>This is the so-called <strong>double-difference</strong>.</p>
+<p>If <strong>two events are close</strong> to each other, then they have similar ray
+paths, that is:</p>
+<div class="math notranslate nohighlight">
+\[\int_{s_i}^{r_k}\Delta uds \approx \int_{s_j}^{r_k}\Delta uds\]</div>
+<p>The velocity anomaly along the ray path is the same for two events. Then we get</p>
+<div class="math notranslate nohighlight">
+\[r_k^i-r_k^j=\sum_{l=1}^2\frac{\partial T_k^i}{\partial x_l^i}\Delta x_l^i+\Delta\tau^i-
+\sum_{l=1}^2\frac{\partial T_k^j}{\partial x_l^j}\Delta x_l^j -\Delta\tau^j\]</div>
+<p>The travel time residual
+<span class="math notranslate nohighlight">\(r_k^i=(T_k^i)^{obs}-(T_k^i)^{cal}\)</span>, the travel time residual
+<span class="math notranslate nohighlight">\(r_k^j=(T_k^j)^{obs}-(T_k^j)^{cal}\)</span>, their difference is related to:</p>
+<ol class="arabic simple">
+<li><p>Earthquake location misfit</p></li>
+<li><p>Origin time misfit</p></li>
+</ol>
+<p>and the error sources:
+1. Station delay
+2. Velocity variation along ray-path
+are remove or mitigated by double-difference</p>
+<p>An inversion equation could be set up:</p>
+<div class="math notranslate nohighlight">
+\[G\Delta m=\Delta d\]</div>
+<p>Detailed expression is, note the negative signs in the last 3 columns of data kernel <span class="math notranslate nohighlight">\(\mathbf{G}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{bmatrix}
+\frac{\partial T_1^1}{\partial x}&amp;\frac{\partial T_1^1}{\partial z}&amp;1&amp;-\frac{\partial T_1^2}{\partial x}&amp;-\frac{\partial T_1^2}{\partial z}&amp;-1\\
+\frac{\partial T_2^1}{\partial x}&amp;\frac{\partial T_2^1}{\partial z}&amp;1&amp;-\frac{\partial T_2^2}{\partial x}&amp;-\frac{\partial T_2^2}{\partial z}&amp;-1\\
+\vdots&amp;\vdots&amp;\vdots&amp;\vdots&amp;\vdots&amp;\vdots&amp;\\
+\frac{\partial T_k^1}{\partial x}&amp;\frac{\partial T_k^1}{\partial z}&amp;1&amp;-\frac{\partial T_k^2}{\partial x}&amp;-\frac{\partial T_k^2}{\partial z}&amp;-1\\
+\end{bmatrix}
+\begin{bmatrix}
+\Delta x_1\\\Delta z_1 \\\Delta t_1 \\\Delta x_2 \\\Delta z_2 \\\Delta t_2
+\end{bmatrix}=
+\begin{bmatrix}
+r_1^1 - r_1^2\\r_2^1 - r_2^2\\\vdots\\r_k^1 - r_k^2\\
+\end{bmatrix}\end{split}\]</div>
+<p>Practical usage will be introduced later.</p>
+<p><strong>Workflow</strong></p>
+<img alt="../_images/DD_Earthquake_location_workflow_new.png" src="../_images/DD_Earthquake_location_workflow_new.png" />
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hyc1_dd</span> <span class="o">=</span> <span class="n">hyc1_abs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">hyc2_dd</span> <span class="o">=</span> <span class="n">hyc2_abs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="observed-travel-time-difference">
+<h2>1. Observed Travel Time Difference<a class="headerlink" href="#observed-travel-time-difference" title="Link to this heading"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">obs_trav_t1</span> <span class="o">=</span> <span class="n">dobs1_delay</span> <span class="o">-</span> <span class="n">hyc1_dd</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="c1"># Travel time = arrival_time - origin_time</span>
+<span class="n">obs_trav_t2</span> <span class="o">=</span> <span class="n">dobs2_delay</span> <span class="o">-</span> <span class="n">hyc2_dd</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">obs_dt</span> <span class="o">=</span> <span class="n">obs_trav_t1</span> <span class="o">-</span> <span class="n">obs_trav_t2</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">matrix_show</span><span class="p">(</span><span class="n">obs_dt</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/output_34_0.png" src="../_images/output_34_0.png" />
+</section>
+<section id="calculated-travel-time-difference">
+<h2>2. Calculated Travel Time Difference<a class="headerlink" href="#calculated-travel-time-difference" title="Link to this heading"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dcal1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nsta</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dobs1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+    <span class="n">dx</span> <span class="o">=</span> <span class="n">stas</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">hyc1_dd</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">dz</span> <span class="o">=</span> <span class="n">stas</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">hyc1_dd</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">dcal1</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dx</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">dz</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="n">Vtrue</span><span class="o">+</span><span class="n">hyc1_dd</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">dcal2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nsta</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dobs1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+    <span class="n">dx</span> <span class="o">=</span> <span class="n">stas</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">hyc2_dd</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">dz</span> <span class="o">=</span> <span class="n">stas</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">hyc2_dd</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">dcal2</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dx</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">dz</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="n">Vtrue</span><span class="o">+</span><span class="n">hyc2_dd</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">cal_trav_t1</span> <span class="o">=</span> <span class="n">dcal1</span> <span class="o">-</span> <span class="n">hyc1_dd</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="c1"># Travel time = calculated_time - origin_time</span>
+<span class="n">cal_trav_t2</span> <span class="o">=</span> <span class="n">dcal2</span> <span class="o">-</span> <span class="n">hyc2_dd</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">cal_dt</span> <span class="o">=</span> <span class="n">cal_trav_t1</span> <span class="o">-</span> <span class="n">cal_trav_t2</span>
+</pre></div>
+</div>
+</section>
+<section id="calculate-double-difference">
+<h2>3. Calculate Double-Difference<a class="headerlink" href="#calculate-double-difference" title="Link to this heading"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dtdt</span> <span class="o">=</span> <span class="n">obs_dt</span> <span class="o">-</span> <span class="n">cal_dt</span>
+<span class="n">matrix_show</span><span class="p">(</span><span class="n">dtdt</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/output_38_0.png" src="../_images/output_38_0.png" />
+</section>
+<section id="build-up-data-kernel-g">
+<h2>4. Build Up Data Kernel - G<a class="headerlink" href="#build-up-data-kernel-g" title="Link to this heading"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ncol</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="mi">2</span>           <span class="c1"># Two event, each has 3 parameter (delta x, delta z, delta t)</span>
+<span class="n">G</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nsta</span><span class="p">,</span><span class="n">ncol</span><span class="p">))</span>
+<span class="n">G</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> <span class="n">G</span><span class="p">[:,</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>   <span class="c1"># Partial derivative of origin column is 1</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nsta</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
+        <span class="n">denomiter1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">hyc1_dd</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">stas</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="p">(</span><span class="n">hyc1_dd</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">stas</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">G</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span><span class="o">=</span><span class="p">(</span><span class="n">hyc1_dd</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">-</span><span class="n">stas</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">])</span><span class="o">/</span><span class="n">denomiter1</span><span class="o">/</span><span class="n">Vtrue</span>
+        <span class="n">denomiter2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">hyc2_dd</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">stas</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="p">(</span><span class="n">hyc2_dd</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">stas</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">G</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="o">+</span><span class="mi">3</span><span class="p">]</span><span class="o">=-</span><span class="p">(</span><span class="n">hyc2_dd</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">-</span><span class="n">stas</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">])</span><span class="o">/</span><span class="n">denomiter2</span><span class="o">/</span><span class="n">Vtrue</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">matrix_show</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/output_41_0.png" src="../_images/output_41_0.png" />
+</section>
+<section id="check-gtg-inverse-exists">
+<h2>5. Check GTG Inverse Exists<a class="headerlink" href="#check-gtg-inverse-exists" title="Link to this heading"></a></h2>
+<div class="math notranslate nohighlight">
+\[G\Delta m =\Delta d\]</div>
+<p><span class="math notranslate nohighlight">\(G\)</span> is not a square matrix, <span class="math notranslate nohighlight">\(G^TG\)</span> is a squared matrix, we
+then have:</p>
+<div class="math notranslate nohighlight">
+\[G^TG\Delta m=G^T\Delta d\]</div>
+<p>If the inverse of <span class="math notranslate nohighlight">\(G^TG\)</span> exists (the determinnant != 0, in here we
+have 10 observations to solve for 4 parameters), then:</p>
+<div class="math notranslate nohighlight">
+\[\Delta m = (G^TG)^{-1}G^T\Delta d\]</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GTG</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">G</span><span class="p">)</span>
+<span class="n">det</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">GTG</span><span class="p">)</span>  <span class="c1"># Calculate matrix determinant</span>
+<span class="k">if</span> <span class="n">det</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error! The determinant is ZERO!!!&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Error! The determinant is ZERO!!!
+</pre></div>
+</div>
+</section>
+<section id="add-damp-to-matrix">
+<h2>6. Add Damp to Matrix<a class="headerlink" href="#add-damp-to-matrix" title="Link to this heading"></a></h2>
+<p>Determinant equals zero means there is no unique solution to the inverse problem, that is, the constraints in data kernel G are not enough to get a result, more constraints is needed. The common method is to add damp to the data kernel.</p>
+<p>### Damping the kernel Before damping:</p>
+<div class="math notranslate nohighlight">
+\[\begin{bmatrix}G\end{bmatrix}\begin{bmatrix}m\end{bmatrix}=\begin{bmatrix}d\end{bmatrix}\]</div>
+<p>After damping:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{bmatrix}G\\\lambda I\end{bmatrix}\begin{bmatrix}m\end{bmatrix}=\begin{bmatrix}d\\O\end{bmatrix}\end{split}\]</div>
+<p><span class="math notranslate nohighlight">\(I\)</span> is an identity matrix, in this case, it should have columns with G, so its dimension is <span class="math notranslate nohighlight">\(6\times6\)</span>, here:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\lambda I=\begin{bmatrix}
+\lambda&amp;0&amp;0&amp;0&amp;0&amp;0\\
+0&amp;\lambda&amp;0&amp;0&amp;0&amp;0\\
+0&amp;0&amp;\lambda&amp;0&amp;0&amp;0\\
+0&amp;0&amp;0&amp;\lambda&amp;0&amp;0\\
+0&amp;0&amp;0&amp;0&amp;\lambda&amp;0\\
+0&amp;0&amp;0&amp;0&amp;0&amp;\lambda\\
+\end{bmatrix}\end{split}\]</div>
+<p>### Mathematical Meaning Write new constraints in equation, that is:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+\lambda\Delta x_1 &amp;= 0\\ \lambda\Delta z_1 &amp;= 0\\ \lambda\Delta t_1 &amp;= 0\\ \lambda\Delta x_2 &amp;= 0\\ \lambda\Delta z_2 &amp;= 0\\ \lambda\Delta t_2 &amp;= 0
+\end{align}\end{split}\]</div>
+<p>What does this mean? It means that the solution <strong>SHOULD</strong> be zero. As a least square problem solution is a trade-off among equations. The application of damping factor will lead to the solution be small values. <span class="math notranslate nohighlight">\(\lambda\)</span> controls the weight(importance) of damping. A large damp will lead to the solution more close to zero.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">G_dp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nsta</span><span class="o">+</span><span class="n">ncol</span><span class="p">,</span><span class="n">ncol</span><span class="p">))</span>
+<span class="n">G_dp</span><span class="p">[:</span><span class="n">nsta</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">G</span>
+<span class="n">damp</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="n">G_dp</span><span class="p">[</span><span class="n">nsta</span><span class="p">:,:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span><span class="o">*</span><span class="n">damp</span>
+<span class="n">dtdt_damp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nsta</span><span class="o">+</span><span class="n">ncol</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">dtdt_damp</span><span class="p">[:</span><span class="n">nsta</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dtdt</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">matrix_show</span><span class="p">(</span><span class="n">G_dp</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/output_46_0.png" src="../_images/output_46_0.png" />
+</section>
+<section id="solve-damped-problem">
+<h2>7. Solve Damped Problem<a class="headerlink" href="#solve-damped-problem" title="Link to this heading"></a></h2>
+<p>Step 1:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{bmatrix}G\\\lambda I\end{bmatrix}\begin{bmatrix}m\end{bmatrix}=\begin{bmatrix}d\\O\end{bmatrix}\end{split}\]</div>
+<p>Step 2:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{bmatrix}G^T\lambda I\end{bmatrix}
+\begin{bmatrix}G\\\lambda I\end{bmatrix}
+\begin{bmatrix}m\end{bmatrix}
+=
+\begin{bmatrix}G^T\lambda I\end{bmatrix}
+\begin{bmatrix}d\\O\end{bmatrix}\end{split}\]</div>
+<p>Step 3:</p>
+<div class="math notranslate nohighlight">
+\[\begin{bmatrix}G^TG+\lambda^2 I\end{bmatrix}
+\begin{bmatrix}m\end{bmatrix}
+=
+\begin{bmatrix}G^Td\end{bmatrix}\]</div>
+<p>Step 4:</p>
+<div class="math notranslate nohighlight">
+\[m=(G^TG+\lambda^2 I)^{-1}G^Td\]</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">G_dpTG_dp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">G_dp</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">G_dp</span><span class="p">)</span>
+<span class="n">G_dpTG_dp_inv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">G_dpTG_dp</span><span class="p">)</span>
+<span class="n">G_dpTG_dp_inv_G_dpT</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">G_dpTG_dp_inv</span><span class="p">,</span><span class="n">G_dp</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+<span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">G_dpTG_dp_inv_G_dpT</span><span class="p">,</span><span class="n">dtdt_damp</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">matrix_show</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/output_49_0.png" src="../_images/output_49_0.png" />
+</section>
+<section id="update-location">
+<h2>8. Update Location<a class="headerlink" href="#update-location" title="Link to this heading"></a></h2>
+<p>The output results are the earthquake location misfit with reference to its absolute location. Therefore, the absolute earthquake location should be updated.</p>
+<div class="math notranslate nohighlight">
+\[x_1 = x_1+\Delta x_1\]</div>
+<div class="math notranslate nohighlight">
+\[z_1 = z_1+\Delta z_1\]</div>
+<div class="math notranslate nohighlight">
+\[t_1 = t_1+\Delta t_1\]</div>
+<div class="math notranslate nohighlight">
+\[x_2 = x_2+\Delta x_2\]</div>
+<div class="math notranslate nohighlight">
+\[z_2 = z_2+\Delta z_2\]</div>
+<div class="math notranslate nohighlight">
+\[t_2 = t_2+\Delta t_2\]</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hyc1_dd</span> <span class="o">=</span> <span class="n">hyc1_dd</span><span class="o">+</span><span class="n">m</span><span class="o">.</span><span class="n">ravel</span><span class="p">()[:</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">hyc2_dd</span> <span class="o">=</span> <span class="n">hyc2_dd</span><span class="o">+</span><span class="n">m</span><span class="o">.</span><span class="n">ravel</span><span class="p">()[</span><span class="mi">3</span><span class="p">:]</span>
+</pre></div>
+</div>
+<p>We can see the solutions already depart the initial location and move closer to the true location</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xmin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">hyc1_true</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">hyc1_abs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">hyc1_dd</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">xmax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">hyc1_true</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">hyc1_abs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">hyc1_dd</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">ymin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">hyc1_true</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">hyc1_abs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">hyc1_dd</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">ymax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">hyc1_true</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">hyc1_abs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">hyc1_dd</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hyc1_true</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">hyc1_true</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s2">&quot;bo&quot;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;Event 1 true location&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hyc2_true</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">hyc2_true</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s2">&quot;ro&quot;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;Event 2 true location&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hyc1_abs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">hyc1_abs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;bx&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;Event 1 absolute location&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hyc2_abs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">hyc2_abs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;rx&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;Event 2 absolute location&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hyc1_dd</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">hyc1_dd</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;b*&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;Event 1 dd location&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hyc2_dd</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">hyc2_dd</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;r*&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;Event 2 dd location&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="n">ymax</span><span class="o">+</span><span class="mf">0.5</span><span class="p">,</span><span class="n">ymin</span><span class="o">-</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Depth (km)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;X (km)&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+<img alt="../_images/output_52_0.png" src="../_images/output_52_0.png" />
+</section>
+<section id="error-analysis">
+<h2>9. Error analysis<a class="headerlink" href="#error-analysis" title="Link to this heading"></a></h2>
+<p>The error in observed data will of course lead to uncertainties in the estimation of earthquake location parameters. Their relationship could be described as:</p>
+<div class="math notranslate nohighlight">
+\[\sigma_m^2=\sigma^2(G^TG+\lambda^2 I)^{-1}\]</div>
+<p>(Wanna know how this relationship derived? Page 435 of <strong>An Introduction
+to Seismology, Earthquakes, and Earth Structure</strong>)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mean_dtdt_damp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dtdt_damp</span><span class="p">)</span>
+<span class="n">e2</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dtdt</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+    <span class="n">e2</span> <span class="o">+=</span> <span class="p">(</span><span class="n">dtdt_damp</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">mean_dtdt_damp</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Square error: &quot;</span><span class="p">,</span><span class="nb">format</span><span class="p">(</span><span class="n">e2</span><span class="p">,</span><span class="s1">&#39;13.8f&#39;</span><span class="p">))</span>
+<span class="n">var</span> <span class="o">=</span> <span class="n">e2</span><span class="o">/</span><span class="p">(</span><span class="n">dtdt_damp</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">6</span><span class="p">)</span>
+<span class="n">sigma_m2</span> <span class="o">=</span> <span class="n">G_dpTG_dp_inv</span><span class="o">*</span><span class="n">var</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.04330659</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">present_loc_results</span><span class="p">(</span><span class="n">hyc1_dd</span><span class="p">,</span><span class="n">sigma_m2</span><span class="p">[:</span><span class="mi">3</span><span class="p">,:</span><span class="mi">3</span><span class="p">])</span>
+<span class="n">present_loc_results</span><span class="p">(</span><span class="n">hyc2_dd</span><span class="p">,</span><span class="n">sigma_m2</span><span class="p">[</span><span class="mi">3</span><span class="p">:,</span><span class="mi">3</span><span class="p">:])</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>x =   -0.80 ± 0.56  km
+z =    8.60 ± 0.64  km
+t =   -0.14 ± 0.56  s
+x =    1.24 ± 0.55  km
+z =    8.54 ± 0.63  km
+t =    0.90 ± 0.56  s
+</pre></div>
+</div>
+<p><strong>Exercise (5 min)</strong></p>
+<p>Try to modify the <strong>damp</strong> parameter and update the results, how it changes? What is the relationship between <strong>damping factor</strong>, <strong>m</strong>, and <strong>Uncertainty</strong>? Can you explain why?</p>
+</section>
+<section id="condition-number">
+<h2>10. Condition Number<a class="headerlink" href="#condition-number" title="Link to this heading"></a></h2>
+<p>We have realized that the damping factor controls the converge rate, a larger <strong>damping factor</strong> will lead to slow converge rate but small uncertainty; a smaller <strong>damping factor</strong> will lead to fast converge rate but large uncertainty. Then how to choose proper damping factor?</p>
+<p>A good indicator is the <a class="reference external" href="https://en.wikipedia.org/wiki/Condition_number">conditon number</a>. Conditon number quantifies the relationship between solution error and data error. In earthquake double difference location, the condition number should be in the range 40-100 (empirical).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cond</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">cond</span><span class="p">(</span><span class="n">G_dp</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Condtion number is: &quot;</span><span class="p">,</span><span class="nb">format</span><span class="p">(</span><span class="n">cond</span><span class="p">,</span><span class="s1">&#39;.2f&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Condtion</span> <span class="n">number</span> <span class="ow">is</span><span class="p">:</span>  <span class="mf">37.72</span>
+</pre></div>
+</div>
+<p><strong>Exercise: Start Another Iteration</strong></p>
+<p>The error is still high, update the earthquake location and rerun the process to check the location variation.</p>
+</section>
+<section id="iterative-double-difference-method">
+<h2>Iterative Double-Difference Method<a class="headerlink" href="#iterative-double-difference-method" title="Link to this heading"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hyc1_loop</span> <span class="o">=</span> <span class="n">hyc1_abs</span>
+<span class="n">hyc2_loop</span> <span class="o">=</span> <span class="n">hyc2_abs</span>
+<span class="n">niter</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">k</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">event_number</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">event_parameters</span> <span class="o">=</span> <span class="mi">3</span> <span class="c1">#(x,y,z)</span>
+<span class="c1">#----------Iteration starts----------------------</span>
+<span class="k">while</span> <span class="n">k</span> <span class="o">&lt;=</span><span class="n">niter</span><span class="p">:</span>
+    <span class="c1">#----1. Update observed travel time difference------------------</span>
+    <span class="n">obs_trav_t1</span> <span class="o">=</span> <span class="n">dobs1_delay</span> <span class="o">-</span> <span class="n">hyc1_dd</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>               <span class="c1"># Travel time = arrival_time - origin_time</span>
+    <span class="n">obs_trav_t2</span> <span class="o">=</span> <span class="n">dobs2_delay</span> <span class="o">-</span> <span class="n">hyc2_dd</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">obs_dt</span> <span class="o">=</span> <span class="n">obs_trav_t1</span> <span class="o">-</span> <span class="n">obs_trav_t2</span>
+    <span class="c1">#----2. Update calculated travel time difference------------------</span>
+    <span class="n">dcal1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dobs1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">1</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dobs1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="n">stas</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">hyc1_loop</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">dz</span> <span class="o">=</span> <span class="n">stas</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">hyc1_loop</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">dcal1</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dx</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">dz</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="n">Vtrue</span><span class="o">+</span><span class="n">hyc1_loop</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">dcal2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dobs2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">1</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dobs1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="n">stas</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">hyc2_loop</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">dz</span> <span class="o">=</span> <span class="n">stas</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">hyc2_loop</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">dcal2</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dx</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">dz</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="n">Vtrue</span><span class="o">+</span><span class="n">hyc2_loop</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">cal_trav_t1</span> <span class="o">=</span> <span class="n">dcal1</span> <span class="o">-</span> <span class="n">hyc1_dd</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">cal_trav_t2</span> <span class="o">=</span> <span class="n">dcal2</span> <span class="o">-</span> <span class="n">hyc2_dd</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">cal_dt</span> <span class="o">=</span> <span class="n">cal_trav_t1</span> <span class="o">-</span> <span class="n">cal_trav_t2</span>
+    <span class="c1">#----3. Calculate double difference-------------------------------</span>
+    <span class="n">dtdt</span> <span class="o">=</span> <span class="n">obs_dt</span> <span class="o">-</span> <span class="n">cal_dt</span>
+    <span class="c1">#----4. Set up G kernel-------------------------------------------</span>
+    <span class="n">ncol</span> <span class="o">=</span> <span class="n">event_number</span> <span class="o">*</span> <span class="n">event_parameters</span>
+    <span class="n">G</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nsta</span><span class="p">,</span><span class="n">ncol</span><span class="p">))</span>
+    <span class="n">G</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> <span class="n">G</span><span class="p">[:,</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>   <span class="c1"># Partial derivative of origin column is 1</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nsta</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
+            <span class="n">denomiter1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">hyc1_loop</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">stas</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="p">(</span><span class="n">hyc1_loop</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">stas</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">G</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span><span class="o">=</span><span class="p">(</span><span class="n">hyc1_loop</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">-</span><span class="n">stas</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">])</span><span class="o">/</span><span class="n">denomiter1</span><span class="o">/</span><span class="n">Vtrue</span>
+            <span class="n">denomiter2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">hyc2_loop</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">stas</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="p">(</span><span class="n">hyc2_loop</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">stas</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">G</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="o">+</span><span class="mi">3</span><span class="p">]</span><span class="o">=-</span><span class="p">(</span><span class="n">hyc2_loop</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">-</span><span class="n">stas</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">])</span><span class="o">/</span><span class="n">denomiter2</span><span class="o">/</span><span class="n">Vtrue</span>
+    <span class="c1">#----5. Add damp--------------------------------------------------</span>
+    <span class="n">G_dp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nsta</span><span class="o">+</span><span class="n">ncol</span><span class="p">,</span><span class="n">ncol</span><span class="p">))</span>
+    <span class="n">G_dp</span><span class="p">[:</span><span class="n">nsta</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">G</span>
+    <span class="n">damp</span> <span class="o">=</span> <span class="mf">0.1</span>
+    <span class="n">G_dp</span><span class="p">[</span><span class="n">nsta</span><span class="p">:,:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span><span class="o">*</span><span class="n">damp</span>
+    <span class="n">dtdt_damp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nsta</span><span class="o">+</span><span class="n">ncol</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">dtdt_damp</span><span class="p">[:</span><span class="n">nsta</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dtdt</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+    <span class="c1">#----6. Solve for Solution-----------------------------------------</span>
+    <span class="n">G_dpTG_dp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">G_dp</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">G_dp</span><span class="p">)</span>
+    <span class="n">G_dpTG_dp_inv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">G_dpTG_dp</span><span class="p">)</span>
+    <span class="n">G_dpTG_dp_inv_G_dpT</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">G_dpTG_dp_inv</span><span class="p">,</span><span class="n">G_dp</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">G_dpTG_dp_inv_G_dpT</span><span class="p">,</span><span class="n">dtdt_damp</span><span class="p">)</span>
+    <span class="c1">#----7. Update location-----------------------------------------------</span>
+    <span class="n">hyc1_loop</span> <span class="o">=</span> <span class="n">hyc1_loop</span><span class="o">+</span><span class="n">m</span><span class="o">.</span><span class="n">ravel</span><span class="p">()[:</span><span class="mi">3</span><span class="p">]</span>
+    <span class="n">hyc2_loop</span> <span class="o">=</span> <span class="n">hyc2_loop</span><span class="o">+</span><span class="n">m</span><span class="o">.</span><span class="n">ravel</span><span class="p">()[</span><span class="mi">3</span><span class="p">:]</span>
+    <span class="c1">#----8. Error Calculation------------------------------------------------</span>
+    <span class="n">mean_dtdt_damp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dtdt_damp</span><span class="p">)</span>
+    <span class="n">e2</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dtdt</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="n">e2</span> <span class="o">+=</span> <span class="p">(</span><span class="n">dtdt_damp</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">mean_dtdt_damp</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Iteration </span><span class="si">{</span><span class="nb">format</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="s1">&#39;4d&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> square error: &quot;</span><span class="p">,</span><span class="nb">format</span><span class="p">(</span><span class="n">e2</span><span class="p">,</span><span class="s1">&#39;13.8f&#39;</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">e2</span><span class="o">&lt;</span><span class="mf">0.0000000001</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Itertion stopped for too small error!&quot;</span><span class="p">)</span>
+        <span class="k">break</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="n">k</span><span class="o">+</span><span class="mi">1</span>
+<span class="c1">#--------9. Variance analysis-------------------------------------------</span>
+<span class="n">var</span> <span class="o">=</span> <span class="n">e2</span><span class="o">/</span><span class="p">(</span><span class="n">dtdt_damp</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">event_number</span> <span class="o">*</span> <span class="n">event_parameters</span><span class="p">)</span>
+<span class="n">sigma_m2</span> <span class="o">=</span> <span class="n">G_dpTG_dp_inv</span><span class="o">*</span><span class="n">var</span>
+<span class="n">hyc1_dd</span> <span class="o">=</span> <span class="n">hyc1_loop</span>
+<span class="n">hyc2_dd</span> <span class="o">=</span> <span class="n">hyc2_loop</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Iteration</span>    <span class="mi">0</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.04330659</span>
+<span class="n">Iteration</span>    <span class="mi">1</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00096939</span>
+<span class="n">Iteration</span>    <span class="mi">2</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00013074</span>
+<span class="n">Iteration</span>    <span class="mi">3</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00005316</span>
+<span class="n">Iteration</span>    <span class="mi">4</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00004521</span>
+<span class="n">Iteration</span>    <span class="mi">5</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00004369</span>
+<span class="n">Iteration</span>    <span class="mi">6</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00004278</span>
+<span class="n">Iteration</span>    <span class="mi">7</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00004195</span>
+<span class="n">Iteration</span>    <span class="mi">8</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00004113</span>
+<span class="n">Iteration</span>    <span class="mi">9</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00004032</span>
+<span class="n">Iteration</span>   <span class="mi">10</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00003954</span>
+<span class="o">......</span>
+<span class="n">Iteration</span>   <span class="mi">90</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00000830</span>
+<span class="n">Iteration</span>   <span class="mi">91</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00000814</span>
+<span class="n">Iteration</span>   <span class="mi">92</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00000799</span>
+<span class="n">Iteration</span>   <span class="mi">93</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00000784</span>
+<span class="n">Iteration</span>   <span class="mi">94</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00000769</span>
+<span class="n">Iteration</span>   <span class="mi">95</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00000754</span>
+<span class="n">Iteration</span>   <span class="mi">96</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00000740</span>
+<span class="n">Iteration</span>   <span class="mi">97</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00000726</span>
+<span class="n">Iteration</span>   <span class="mi">98</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00000713</span>
+<span class="n">Iteration</span>   <span class="mi">99</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00000699</span>
+<span class="n">Iteration</span>  <span class="mi">100</span> <span class="n">square</span> <span class="n">error</span><span class="p">:</span>     <span class="mf">0.00000686</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">present_loc_results</span><span class="p">(</span><span class="n">hyc1_dd</span><span class="p">,</span><span class="n">sigma_m2</span><span class="p">[:</span><span class="mi">3</span><span class="p">,:</span><span class="mi">3</span><span class="p">],</span><span class="n">std_fmt</span><span class="o">=</span><span class="s1">&#39;.5f&#39;</span><span class="p">)</span>
+<span class="n">present_loc_results</span><span class="p">(</span><span class="n">hyc2_dd</span><span class="p">,</span><span class="n">sigma_m2</span><span class="p">[</span><span class="mi">3</span><span class="p">:,</span><span class="mi">3</span><span class="p">:],</span><span class="n">std_fmt</span><span class="o">=</span><span class="s1">&#39;.5f&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>x =   -0.87 ± 0.00700  km
+z =    8.16 ± 0.00790  km
+t =   -0.12 ± 0.00700  s
+x =    1.14 ± 0.00700  km
+z =    8.41 ± 0.00800  km
+t =    0.88 ± 0.00700  s
+</pre></div>
+</div>
+<section id="lsqr-algorithm">
+<h3>LSQR Algorithm<a class="headerlink" href="#lsqr-algorithm" title="Link to this heading"></a></h3>
+<p>Considering a double difference cluster with 1000 events, we estimate the time consumed for one iteration. Note the <span class="math notranslate nohighlight">\(G^TG\)</span> dimension is <span class="math notranslate nohighlight">\(4000\times 4000\)</span>, it costs 16 seconds to calculate the inverse and singular value decomposition. What about 10 k events?</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">G</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">4000</span><span class="p">,</span><span class="mi">4000</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tmp1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">G_inv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+<span class="n">u</span><span class="p">,</span><span class="n">s</span><span class="p">,</span><span class="n">vt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">svd</span><span class="p">(</span><span class="n">G_inv</span><span class="p">)</span>
+<span class="n">tmp2</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tmp2</span><span class="o">-</span><span class="n">tmp1</span><span class="p">,</span><span class="s1">&#39; s&#39;</span><span class="p">)</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">tmp2</span><span class="o">-</span><span class="n">tmp1</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">5</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Wow, it cost a lot of time of do the calculation&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mf">38.39115285873413</span>  <span class="n">s</span>
+<span class="n">Wow</span><span class="p">,</span> <span class="n">it</span> <span class="n">cost</span> <span class="n">a</span> <span class="n">lot</span> <span class="n">of</span> <span class="n">time</span> <span class="n">of</span> <span class="n">do</span> <span class="n">the</span> <span class="n">calculation</span>
+</pre></div>
+</div>
+<p><strong>Introduction to LSQR</strong></p>
+<p>Least-Square QR decompositon (LSQR, <a class="reference external" href="https://dl.acm.org/doi/pdf/10.1145/355984.355989">Paige, C.C and Saunders, M.A. (1982)</a>) method is developed for least-square solution for large dataset, its
+performance in ill-conditioned problems is superior.</p>
+<p>From problem <span class="math notranslate nohighlight">\(\mathbf{Am=b}\)</span>, <span class="math notranslate nohighlight">\(\mathbf{A}\)</span> maps the solution to the data space. <span class="math notranslate nohighlight">\(\mathbf{A^T}\)</span> maps the data to the solution space. LSQR method eliminates residual iteratively with limited computation.</p>
+<p>To ensure the stability of method, each A column is required to be scaled up to be unit value. That is:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\mathbf{Am} &amp;= \begin{bmatrix}A_1&amp;A_2&amp;\cdots&amp;A_k\end{bmatrix}\begin{bmatrix}m_1\\m_2\\\vdots\\m_k\end{bmatrix}\\&amp;=
+A_1m_1+A_2m_2+\cdots+A_km_k \\&amp;= \frac{A_1}{\|A_1\|}(\|A_1\|m_1)+\frac{A_2}{\|A_2\|}(\|A_2\|m_2)+\cdots+\frac{A_k}{\|A_k\|}(\|A_k\|m_k)\\&amp;=\mathbf{A'm'=b}
+\end{aligned}\end{split}\]</div>
+<p>After get the solution, a conversion between <span class="math notranslate nohighlight">\(\mathbf{m'}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{m}\)</span> is needed by <span class="math notranslate nohighlight">\(m_i=\frac{m'_i}{\|A_i\|}\)</span></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hyc1_loop</span> <span class="o">=</span> <span class="n">hyc1_abs</span>
+<span class="n">hyc2_loop</span> <span class="o">=</span> <span class="n">hyc2_abs</span>
+<span class="n">niter</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">k</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">event_number</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">event_parameters</span> <span class="o">=</span> <span class="mi">3</span> <span class="c1">#(x,y,z)</span>
+<span class="c1">#----------Iteration starts----------------------</span>
+<span class="k">while</span> <span class="n">k</span> <span class="o">&lt;=</span><span class="n">niter</span><span class="p">:</span>
+    <span class="c1">#----1. Update observed travel time difference------------------</span>
+    <span class="n">obs_trav_t1</span> <span class="o">=</span> <span class="n">dobs1_delay</span> <span class="o">-</span> <span class="n">hyc1_dd</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>               <span class="c1"># Travel time = arrival_time - origin_time</span>
+    <span class="n">obs_trav_t2</span> <span class="o">=</span> <span class="n">dobs2_delay</span> <span class="o">-</span> <span class="n">hyc2_dd</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">obs_dt</span> <span class="o">=</span> <span class="n">obs_trav_t1</span> <span class="o">-</span> <span class="n">obs_trav_t2</span>
+    <span class="c1">#----2. Update calculated travel time difference------------------</span>
+    <span class="n">dcal1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dobs1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">1</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dobs1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="n">stas</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">hyc1_loop</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">dz</span> <span class="o">=</span> <span class="n">stas</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">hyc1_loop</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">dcal1</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dx</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">dz</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="n">Vtrue</span><span class="o">+</span><span class="n">hyc1_loop</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">dcal2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dobs2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">1</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dobs1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="n">stas</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">hyc2_loop</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">dz</span> <span class="o">=</span> <span class="n">stas</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">hyc2_loop</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">dcal2</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dx</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">dz</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="n">Vtrue</span><span class="o">+</span><span class="n">hyc2_loop</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">cal_trav_t1</span> <span class="o">=</span> <span class="n">dcal1</span> <span class="o">-</span> <span class="n">hyc1_dd</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">cal_trav_t2</span> <span class="o">=</span> <span class="n">dcal2</span> <span class="o">-</span> <span class="n">hyc2_dd</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">cal_dt</span> <span class="o">=</span> <span class="n">cal_trav_t1</span> <span class="o">-</span> <span class="n">cal_trav_t2</span>
+    <span class="c1">#----3. Calculate double difference-------------------------------</span>
+    <span class="n">dtdt</span> <span class="o">=</span> <span class="n">obs_dt</span> <span class="o">-</span> <span class="n">cal_dt</span>
+    <span class="c1">#----4. Set up G kernel-------------------------------------------</span>
+    <span class="n">ncol</span> <span class="o">=</span> <span class="n">event_number</span> <span class="o">*</span> <span class="n">event_parameters</span>
+    <span class="n">G</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nsta</span><span class="p">,</span><span class="n">ncol</span><span class="p">))</span>
+    <span class="n">G</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> <span class="n">G</span><span class="p">[:,</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>   <span class="c1"># Partial derivative of origin column is 1</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nsta</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
+            <span class="n">denomiter1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">hyc1_loop</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">stas</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="p">(</span><span class="n">hyc1_loop</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">stas</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">G</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span><span class="o">=</span><span class="p">(</span><span class="n">hyc1_loop</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">-</span><span class="n">stas</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">])</span><span class="o">/</span><span class="n">denomiter1</span><span class="o">/</span><span class="n">Vtrue</span>
+            <span class="n">denomiter2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">hyc2_loop</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">stas</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="p">(</span><span class="n">hyc2_loop</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">stas</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">G</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="o">+</span><span class="mi">3</span><span class="p">]</span><span class="o">=-</span><span class="p">(</span><span class="n">hyc2_loop</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">-</span><span class="n">stas</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">])</span><span class="o">/</span><span class="n">denomiter2</span><span class="o">/</span><span class="n">Vtrue</span>
+    <span class="c1">#---- Scale up G columns to unit length--------------------------</span>
+    <span class="n">Gnorms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">ncol</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ncol</span><span class="p">):</span>
+        <span class="n">norm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">G</span><span class="p">[:,</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">Gnorms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">norm</span>
+        <span class="n">G</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">G</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span><span class="o">/</span><span class="n">norm</span>
+    <span class="c1">#----6. LSQR and rescale solution---------------------------------</span>
+    <span class="n">damp</span> <span class="o">=</span> <span class="mf">0.1</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="n">csc_matrix</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">m</span><span class="p">,</span><span class="n">istop</span><span class="p">,</span><span class="n">itn</span><span class="p">,</span><span class="n">r1norm</span><span class="p">,</span><span class="n">r2norm</span><span class="p">,</span><span class="n">anorm</span><span class="p">,</span><span class="n">acond</span><span class="p">,</span><span class="n">arnorm</span><span class="p">,</span><span class="n">xnorm</span><span class="p">,</span><span class="n">var</span><span class="o">=</span><span class="n">lsqr</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">dtdt</span><span class="p">,</span><span class="n">damp</span><span class="o">=</span><span class="n">damp</span><span class="p">,</span><span class="n">calc_var</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">Gnorms</span><span class="p">)</span>
+    <span class="n">var</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">var</span><span class="p">,</span><span class="n">Gnorms</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="c1">#----7. Update location-----------------------------------------------</span>
+    <span class="n">hyc1_loop</span> <span class="o">=</span> <span class="n">hyc1_loop</span><span class="o">+</span><span class="n">m</span><span class="o">.</span><span class="n">ravel</span><span class="p">()[:</span><span class="mi">3</span><span class="p">]</span>
+    <span class="n">hyc2_loop</span> <span class="o">=</span> <span class="n">hyc2_loop</span><span class="o">+</span><span class="n">m</span><span class="o">.</span><span class="n">ravel</span><span class="p">()[</span><span class="mi">3</span><span class="p">:]</span>
+    <span class="c1">#----8. Error Calculation------------------------------------------------</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Iteration </span><span class="si">{</span><span class="nb">format</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="s1">&#39;4d&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> residual: &quot;</span><span class="p">,</span><span class="nb">format</span><span class="p">(</span><span class="n">r1norm</span><span class="p">,</span><span class="s1">&#39;13.8f&#39;</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">r1norm</span><span class="o">&lt;</span><span class="mf">0.0000000001</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Itertion stopped for too small error!&quot;</span><span class="p">)</span>
+        <span class="k">break</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="n">k</span><span class="o">+</span><span class="mi">1</span>
+<span class="c1">#--------9. Variance analysis-------------------------------------------</span>
+<span class="n">sigma_m2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">var</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">r2norm</span><span class="o">**</span><span class="mi">2</span>
+<span class="n">hyc1_dd</span> <span class="o">=</span> <span class="n">hyc1_loop</span>
+<span class="n">hyc2_dd</span> <span class="o">=</span> <span class="n">hyc2_loop</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Iteration</span>    <span class="mi">0</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.01522528</span>
+<span class="n">Iteration</span>    <span class="mi">1</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00683196</span>
+<span class="n">Iteration</span>    <span class="mi">2</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00624882</span>
+<span class="n">Iteration</span>    <span class="mi">3</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00581534</span>
+<span class="n">Iteration</span>    <span class="mi">4</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00541587</span>
+<span class="n">Iteration</span>    <span class="mi">5</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00504727</span>
+<span class="n">Iteration</span>    <span class="mi">6</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00470742</span>
+<span class="n">Iteration</span>    <span class="mi">7</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00439429</span>
+<span class="n">Iteration</span>    <span class="mi">8</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00410597</span>
+<span class="n">Iteration</span>    <span class="mi">9</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00384061</span>
+<span class="n">Iteration</span>   <span class="mi">10</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00359645</span>
+<span class="o">......</span>
+<span class="n">Iteration</span>   <span class="mi">95</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00013054</span>
+<span class="n">Iteration</span>   <span class="mi">96</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00012620</span>
+<span class="n">Iteration</span>   <span class="mi">97</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00012201</span>
+<span class="n">Iteration</span>   <span class="mi">98</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00011796</span>
+<span class="n">Iteration</span>   <span class="mi">99</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00011405</span>
+<span class="n">Iteration</span>  <span class="mi">100</span> <span class="n">residual</span><span class="p">:</span>     <span class="mf">0.00011026</span>
+</pre></div>
+</div>
+<p>We then find the residual is very small, and the earthquake location almost reached its true location</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xmin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">hyc1_true</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">hyc1_abs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">hyc1_dd</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">xmax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">hyc1_true</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">hyc1_abs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">hyc1_dd</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">ymin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">hyc1_true</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">hyc1_abs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">hyc1_dd</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">ymax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">hyc1_true</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">hyc1_abs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">hyc1_dd</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hyc1_true</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">hyc1_true</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s2">&quot;bo&quot;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;Event 1 true location&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hyc2_true</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">hyc2_true</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s2">&quot;ro&quot;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;Event 2 true location&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hyc1_abs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">hyc1_abs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;bx&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;Event 1 absolute location&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hyc2_abs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">hyc2_abs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;rx&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;Event 2 absolute location&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hyc1_dd</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">hyc1_dd</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;*&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;Event 1 dd location&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hyc2_dd</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">hyc2_dd</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;*&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;Event 2 dd location&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="n">ymax</span><span class="o">+</span><span class="mf">0.5</span><span class="p">,</span><span class="n">ymin</span><span class="o">-</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Depth (km)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;X (km)&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+<img alt="../_images/output_69_0.png" src="../_images/output_69_0.png" />
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">present_loc_results</span><span class="p">(</span><span class="n">hyc1_dd</span><span class="p">,</span><span class="n">sigma_m2</span><span class="p">[:</span><span class="mi">3</span><span class="p">,:</span><span class="mi">3</span><span class="p">],</span><span class="n">std_fmt</span><span class="o">=</span><span class="s1">&#39;.8f&#39;</span><span class="p">)</span>
+<span class="n">present_loc_results</span><span class="p">(</span><span class="n">hyc2_dd</span><span class="p">,</span><span class="n">sigma_m2</span><span class="p">[</span><span class="mi">3</span><span class="p">:,</span><span class="mi">3</span><span class="p">:],</span><span class="n">std_fmt</span><span class="o">=</span><span class="s1">&#39;.8f&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>x =   -0.99 ± 0.03210000  km
+z =    8.00 ± 0.04610000  km
+t =   -0.12 ± 0.00000000  s
+x =    1.01 ± 0.03280000  km
+z =    8.30 ± 0.04760000  km
+t =    0.88 ± 0.00000000  s
+</pre></div>
+</div>
+</section>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<p>In this tutorial, we first demonstrate the influence of velocity misfit and <strong>Station delay</strong>’s influence on earthquake location results.</p>
+<p>We then introduce the double-difference method, which theoretically diminishes the station delay effect and limits the influence of velocity misfit. During processing, we: * Set up the data kernel <strong>G</strong> and calculate the double difference array <strong>dtdt</strong> * Add damping to the data kernel to make it stable (<em>determinant not be zero</em>) * Use <strong>conditon number</strong> to guide the selection of damping factor * Comparison shows <strong>double-difference</strong> location leads to location with <strong>better performance</strong></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<div class="line-block">
+<div class="line">we use one-layer velocity model for the convenience in finding the ray partial derivatives.</div>
+</div>
+</div>
+<section id="homework">
+<h3>Homework<a class="headerlink" href="#homework" title="Link to this heading"></a></h3>
+<ol class="arabic">
+<li><p>In the demo example, is event origin time fully recovered? Could you please explain the reason?(10 points)</p></li>
+<li><p>Note we add negative symbol to partial derivatives of the event 2 in constructing the data kernel, do you know why? (10 points)</p></li>
+<li><p>In calculating the variance(<strong>var</strong>), it is written <code class="docutils literal notranslate"><span class="pre">var</span> <span class="pre">=</span> <span class="pre">e2/(dtdt_damp.shape[0]-event_number</span> <span class="pre">*</span> <span class="pre">event_parameters)</span></code>, do you know why variance is different from square error here? (10 points)</p></li>
+<li><p>Add one more event hyc_true3 = (0.2,8.1,1) (x,z,t) and prepare for inversion, set up suitable damping factor so that condition number is in the range 40-100.(80 points)
+-  Show the absolute location result of the newly added event and its uncertainty. (20 points)
+-  Show your data kernel G for Double-Difference inversion and its determinant. (20 points)
+-  Show your Double-Difference inversion result and its uncertainty, how many iterations you used? (20 points)
+-  Did your results get closer to true earthquake locations? Make a plot and show (20 points) #### Hint The dimension of <span class="math notranslate nohighlight">\(m\)</span> should be <span class="math notranslate nohighlight">\(9 \times 1\)</span></p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[m^T = \begin{bmatrix}
+  \Delta x_1&amp;\Delta z_1&amp;\Delta t_1 &amp;
+  \Delta x_2&amp;\Delta z_2&amp;\Delta t_2 &amp;
+  \Delta x_3&amp;\Delta z_3&amp;\Delta t_3
+\end{bmatrix}\]</div>
+<p>For the double-difference value of event_1 and event_2 recorded in station k, its corresponding row of data kernel G should be:</p>
+<div class="math notranslate nohighlight">
+\[\begin{bmatrix}
+  \frac{\partial T^{1}_{k}}{\partial x}&amp;\frac{\partial T^{1}_{k}}{\partial z}&amp;\frac{\partial T^{1}_{k}}{\partial t}&amp;
+  -\frac{\partial T^{2}_{k}}{\partial x}&amp;-\frac{\partial T^{2}_{k}}{\partial z}&amp;-\frac{\partial T^{2}_{k}}{\partial t}&amp;
+  0&amp;0&amp;0
+\end{bmatrix}\]</div>
+<p>For the double-difference value of event_2 and event_3 recorded in station k, its corresponding row of data kernel G should be:</p>
+<div class="math notranslate nohighlight">
+\[\begin{bmatrix}
+  0&amp;0&amp;0&amp;
+  \frac{\partial T^{2}_{k}}{\partial x}&amp;\frac{\partial T^{2}_{k}}{\partial z}&amp;\frac{\partial T^{2}_{k}}{\partial t}&amp;
+  -\frac{\partial T^{3}_{k}}{\partial x}&amp;-\frac{\partial T^{3}_{k}}{\partial z}&amp;-\frac{\partial T^{3}_{k}}{\partial t}
+\end{bmatrix}\]</div>
+</div></blockquote>
+</li>
+</ol>
+</section>
+<section id="source-code">
+<h3>Source code<a class="headerlink" href="#source-code" title="Link to this heading"></a></h3>
+<p>Download tutorial code <a class="reference download internal" download="" href="../_downloads/b5f0555e6d6cb2678327be5cac894b40/Relative_Location.zip"><code class="xref download docutils literal notranslate"><span class="pre">here</span></code></a></p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../eqt/index.html" class="btn btn-neutral float-left" title="Earthquake Transformer Tutorial" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../source_spectra/index.html" class="btn btn-neutral float-right" title="Spectral Analysis" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021-2026, CUSeisTut team.
+      <span class="lastupdated">Last updated on 2026-01-27.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(false);
+      });
+  </script> 
+
+</body>
+</html>
