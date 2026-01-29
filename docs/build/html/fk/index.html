@@ -63,7 +63,13 @@
 <p class="caption" role="heading"><span class="caption-text">Advanced level</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../gcap/index.html">Focal mechanism</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">FK &amp; CAP Installation Guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">FK &amp; CAP Installation Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#package-required">1. Package required</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation">2. Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#run-an-example">3. Run an example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#optional-install-pyfk">4. Optional: Install pyfk</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../eqt/index.html">Earthquake Transformer Tutorial</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../dd_loc/index.html">Double-Difference Earthquake Relocation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../source_spectra/index.html">Spectral Analysis</a></li>
@@ -105,7 +111,236 @@
              
   <section id="fk-cap-installation-guide">
 <h1>FK &amp; CAP Installation Guide<a class="headerlink" href="#fk-cap-installation-guide" title="Link to this heading"></a></h1>
-<p>Coming soon…</p>
+<p>These instructions are adapted from:</p>
+<p><a class="reference external" href="https://seiswave.cn/oh-my-cap/install/">https://seiswave.cn/oh-my-cap/install/</a></p>
+<p><a class="reference external" href="https://cuseistut.readthedocs.io/en/latest/gcap/index.html#/">https://cuseistut.readthedocs.io/en/latest/gcap/index.html#/</a></p>
+<section id="package-required">
+<h2>1. Package required<a class="headerlink" href="#package-required" title="Link to this heading"></a></h2>
+<p>Compilers &amp; build tools: gcc, gfortran, make</p>
+<p>Seismic tools: rdseed, SAC, TauP, FK, gCAP</p>
+<p>Plotting: GMT6</p>
+</section>
+<section id="installation">
+<h2>2. Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h2>
+<p>2.1 Compile tools</p>
+<p><em>2.1.1 MacOS</em></p>
+<p>Install Homebrew</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>$ /bin/bash -c &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)&quot;
+<span class="linenos">2</span>$ brew install gcc gfortran make
+</pre></div>
+</div>
+<p><em>2.1.2 Linux</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>$ sudo apt-get install gcc gfortran
+</pre></div>
+</div>
+<p>2.2 rdseed</p>
+<p>rdseed <a class="reference download internal" download="" href="../_downloads/bd18fc86a89d4c9b3043867eea6d9550/rdseedv5.3.1.tar.gz"><code class="xref download docutils literal notranslate"><span class="pre">rdseedv5.3.1.tar.gz</span></code></a>  is used to convert SEED files to SAC format</p>
+<p>Reference: <a class="reference external" href="https://blog.seisman.info/rdseed-install/">https://blog.seisman.info/rdseed-install/</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span>$ tar -xvf rdseedv5.3.1.tar.gz
+<span class="linenos"> 2</span>$ mkdir ~/opt
+<span class="linenos"> 3</span>$ mv rdseedv5.3.1 ~/opt
+<span class="linenos"> 4</span>$ cd ~/opt/rdseedv5.3.1
+<span class="linenos"> 5</span>
+<span class="linenos"> 6</span>#For MacOS, run following lines
+<span class="linenos"> 7</span>$ ./rdseed.mac.x86_64
+<span class="linenos"> 8</span>$ xattr -d com.apple.quarantine rdseed.mac.x86_64
+<span class="linenos"> 9</span>$ mv rdseed.mac.x86_64 rdseed
+<span class="linenos">10</span>$ echo &#39;export PATH=${HOME}/opt/rdseedv5.3.1:${PATH}&#39;&gt;&gt; ~/.zshrc
+<span class="linenos">11</span>
+<span class="linenos">12</span>#For Linux, run following lines
+<span class="linenos">13</span>$ ./rdseed.rh6.linux_64
+<span class="linenos">14</span>$ mv rdseed.rh6.linux_64 rdseed
+<span class="linenos">15</span>$ echo &#39;export PATH=${HOME}/opt/rdseedv5.3.1:${PATH}&#39;&gt;&gt; ~/.bashrc
+</pre></div>
+</div>
+<p>2.3 SAC</p>
+<p>SAC is used to process sac file</p>
+<p>Reference:</p>
+<p><a class="reference external" href="https://seisman.github.io/SAC_Docs_zh/install/">https://seisman.github.io/SAC_Docs_zh/install/</a></p>
+<p>You need to download the package by yourself using following link:</p>
+<p><a class="reference external" href="http://ds.iris.edu/ds/nodes/dmc/forms/sac/">http://ds.iris.edu/ds/nodes/dmc/forms/sac/</a></p>
+<p><em>2.3.1 MacOS</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span>$ xcode-select --install
+<span class="linenos"> 2</span>$ brew install --cask xquartz
+<span class="linenos"> 3</span>$ tar -xvf sac-102.0-mac.tar.gz
+<span class="linenos"> 4</span>$ sudo mv sac /usr/local
+<span class="linenos"> 5</span>#Add environment variables:
+<span class="linenos"> 6</span>$ echo &#39;export SACHOME=/usr/local/sac&#39; &gt;&gt; ~/.zshrc
+<span class="linenos"> 7</span>$ echo &#39;export SACAUX=${SACHOME}/aux&#39; &gt;&gt; ~/.zshrc
+<span class="linenos"> 8</span>$ echo &#39;export PATH=${SACHOME}/bin:${PATH}&#39; &gt;&gt; ~/.zshrc
+<span class="linenos"> 9</span>$ echo &#39;export SAC_DISPLAY_COPYRIGHT=1&#39; &gt;&gt; ~/.zshrc
+<span class="linenos">10</span>$ echo &#39;export SAC_PPK_LARGE_CROSSHAIRS=1&#39; &gt;&gt; ~/.zshrc
+<span class="linenos">11</span>$ echo &#39;export SAC_USE_DATABASE=0&#39; &gt;&gt; ~/.zshrc
+<span class="linenos">12</span>$ source ~/.zshrc
+<span class="linenos">13</span>$ sac
+</pre></div>
+</div>
+<p><em>2.3.2 Linux</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span>$ sudo apt update
+<span class="linenos"> 2</span>$ sudo apt install libc6 libsm6 libice6 libxpm4 libx11-6
+<span class="linenos"> 3</span>$ sudo apt install zlib1g libncurses6
+<span class="linenos"> 4</span>$ tar -xvf sac-102.0-linux_x86_64.tar.gz
+<span class="linenos"> 5</span>$ sudo mv sac /usr/local
+<span class="linenos"> 6</span>#Add environment variables:
+<span class="linenos"> 7</span>$ echo &#39;export SACHOME=/usr/local/sac&#39; &gt;&gt; ~/.bashrc
+<span class="linenos"> 8</span>$ echo &#39;export SACAUX=${SACHOME}/aux&#39; &gt;&gt; ~/.bashrc
+<span class="linenos"> 9</span>$ echo &#39;export PATH=${SACHOME}/bin:${PATH}&#39; &gt;&gt; ~/.bashrc
+<span class="linenos">10</span>$ echo &#39;export SAC_DISPLAY_COPYRIGHT=1&#39; &gt;&gt; ~/.bashrc
+<span class="linenos">11</span>$ echo &#39;export SAC_PPK_LARGE_CROSSHAIRS=1&#39; &gt;&gt; ~/.bashrc
+<span class="linenos">12</span>$ echo &#39;export SAC_USE_DATABASE=0&#39; &gt;&gt; ~/.bashrc
+<span class="linenos">13</span>$ source ~/.bashrc
+<span class="linenos">14</span>$ sac
+</pre></div>
+</div>
+<p>2.4 GMT6</p>
+<p>GMT is used for high-quality plotting</p>
+<p>Reference: <a class="reference external" href="https://docs.gmt-china.org/latest/install/">https://docs.gmt-china.org/latest/install/</a></p>
+<p><em>2.4.1 MacOS</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>$ brew update &amp;&amp; brew upgrade
+<span class="linenos">2</span>$ brew install gmt
+<span class="linenos">3</span>$ brew install ghostscript
+<span class="linenos">4</span>$ brew install graphicsmagick
+<span class="linenos">5</span>$ brew install ffmpeg
+<span class="linenos">6</span>$ gmt --version
+</pre></div>
+</div>
+<p><em>2.4.2 Linux</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>$ sudo apt update
+<span class="linenos">2</span>$ sudo apt install gmt gmt-dcw gmt-gshhg
+<span class="linenos">3</span>$ sudo apt install xdg-utils
+<span class="linenos">4</span>$ sudo apt install gdal-bin
+<span class="linenos">5</span>$ sudo apt install ghostscript
+<span class="linenos">6</span>$ sudo apt install graphicsmagick
+<span class="linenos">7</span>$ sudo apt install ffmpeg
+<span class="linenos">8</span>$ gmt --version
+</pre></div>
+</div>
+<p>If the version is not GMT6, see: <a class="reference external" href="https://docs.gmt-china.org/latest/install/conda/">https://docs.gmt-china.org/latest/install/conda/</a></p>
+<p>2.5 TauP</p>
+<p>TauP  <a class="reference download internal" download="" href="../_downloads/50bf19db00d6c3301133c8cf38896177/TauP-2.6.1.tgz"><code class="xref download docutils literal notranslate"><span class="pre">TauP-2.6.1.tgz</span></code></a> is used to calculate theoretical ray paths and arrival times</p>
+<p>Reference: <a class="reference external" href="https://seismo-learn.org/software/taup/install/">https://seismo-learn.org/software/taup/install/</a></p>
+<p>For MacOS, run following lines to install JAVA</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>$ brew install openjdk
+<span class="linenos">2</span>$ sudo ln -sfn $(brew --prefix)/opt/openjdk/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk.jdk
+</pre></div>
+</div>
+<p>For Linux, run following lines to install JAVA</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>$ sudo apt install default-jdk
+<span class="linenos">2</span>$ java -version
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>$ wget http://www.seis.sc.edu/downloads/TauP/TauP-2.6.1.tgz
+<span class="linenos">2</span>$ tar -xvf TauP-2.6.1.tgz
+<span class="linenos">3</span>$ mkdir -p ~/opt/
+<span class="linenos">4</span>$ mv TauP-2.6.1 ~/opt/
+</pre></div>
+</div>
+<p>For MacOS, run following lines</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>$ echo &#39;export PATH=${HOME}/opt/TauP-2.6.1/bin:${PATH}&#39; &gt;&gt; ~/.zshrc
+<span class="linenos">2</span>$ source ~/.zshrc
+<span class="linenos">3</span>$ taup
+</pre></div>
+</div>
+<p>For Linux, run following lines</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>$ echo &#39;export PATH=${HOME}/opt/TauP-2.6.1/bin:${PATH}&#39; &gt;&gt; ~/.bashrc
+<span class="linenos">2</span>$ source ~/.bashrc
+<span class="linenos">3</span>$ taup
+</pre></div>
+</div>
+<p>2.6 FK</p>
+<p>FK computes synthetic Green’s functions for layered velocity models written by Prof. Lupei ZHU</p>
+<p>Source:</p>
+<p><a class="reference external" href="http://www.eas.slu.edu/People/LZhu/downloads/fk3.3.tar/">http://www.eas.slu.edu/People/LZhu/downloads/fk3.3.tar/</a></p>
+<p><a class="reference external" href="https://seismo-learn.org/software/fk/install/">https://seismo-learn.org/software/fk/install/</a></p>
+<p>We recommend using oh-my-cap (simpler on macOS):</p>
+<p><a class="reference external" href="https://seiswave.cn/oh-my-cap/install/">https://seiswave.cn/oh-my-cap/install/</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>$ wget https://github.com/wangliang1989/oh-my-cap/archive/v2.0.0.tar.gz
+<span class="linenos">2</span>$ tar -zxvf v2.0.0.tar.gz
+<span class="linenos">3</span>$ mv oh-my-cap-2.0.0 ~/opt/
+<span class="linenos">4</span>$ cd ~/opt/oh-my-cap/src/fk
+<span class="linenos">5</span>$ make
+</pre></div>
+</div>
+<p>For MacOS, run the following line</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>$ echo &#39;export PATH=${HOME}/opt/oh-my-cap-2.0.0/src/fk:${PATH}&#39; &gt;&gt; ~/.zshrc
+<span class="linenos">2</span>$ source ~/.zshrc
+<span class="linenos">3</span>$ fk.pl
+</pre></div>
+</div>
+<p>For Linux, run the following line</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>$ echo &#39;export PATH=${HOME}/opt/oh-my-cap-2.0.0/src/fk:${PATH}&#39; &gt;&gt; ~/.bashrc
+<span class="linenos">2</span>$ source ~/.bashrc
+<span class="linenos">3</span>$ fk.pl
+</pre></div>
+</div>
+<p>2.7 CAP</p>
+<p>CAP is a focal-mechanism inversion method developed by Prof. Lupei ZHU.</p>
+<p>Source:</p>
+<p><a class="reference external" href="http://www.eas.slu.edu/People/LZhu/downloads/gcap1.0.tar/">http://www.eas.slu.edu/People/LZhu/downloads/gcap1.0.tar/</a></p>
+<p><a class="reference external" href="https://blog.seisman.info/gcap-install/">https://blog.seisman.info/gcap-install/</a></p>
+<p>We recommend using oh-my-cap (simpler on macOS):</p>
+<p><a class="reference external" href="https://seiswave.cn/oh-my-cap/install/">https://seiswave.cn/oh-my-cap/install/</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>$ cd ~/opt/oh-my-cap/src/gcap
+<span class="linenos">2</span>$ make
+</pre></div>
+</div>
+<p>For MacOS, run following lines</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>$ echo &#39;export OH_MY_CAP=${HOME}/opt/oh-my-cap-2.0.0&#39; &gt;&gt;  ~/.zshrc
+<span class="linenos">2</span>$ echo &#39;export PATH=${HOME}/opt/oh-my-cap-2.0.0/src/gcap:${PATH}&#39; &gt;&gt; ~/.zshrc
+<span class="linenos">3</span>$ source ~/.zshrc
+<span class="linenos">4</span>$ cap.pl
+</pre></div>
+</div>
+<p>For Linux, run following lines</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>$ echo &#39;export OH_MY_CAP=${HOME}/opt/oh-my-cap-2.0.0&#39; &gt;&gt;  ~/.bashrc
+<span class="linenos">2</span>$ echo &#39;export PATH=${HOME}/opt/oh-my-cap-2.0.0/src/gcap:${PATH}&#39; &gt;&gt; ~/.bashrc
+<span class="linenos">3</span>$ source ~/.bashrc
+<span class="linenos">4</span>$ cap.pl
+</pre></div>
+</div>
+</section>
+<section id="run-an-example">
+<h2>3. Run an example<a class="headerlink" href="#run-an-example" title="Link to this heading"></a></h2>
+<p>3.1 Calculate Green’s function (FK)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>$ cd ~/opt/oh-my-cap Glib
+<span class="linenos">2</span>$ perl run_fk.pl model.fk
+</pre></div>
+</div>
+<p>3.2 Data pre-processing</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>$ cd ../example/
+<span class="linenos">2</span>$ perl process.pl 20080418093658
+</pre></div>
+</div>
+<p>3.3 Inversion (CAP)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>$ perl weight.pl 20080418093658
+<span class="linenos">2</span>$ perl inversion.pl 20080418093658
+<span class="linenos">3</span>$ perl gmt6depth.pl 20080418093658
+<span class="linenos">4</span>$ perl depth.pl 20080418093658
+</pre></div>
+</div>
+</section>
+<section id="optional-install-pyfk">
+<h2>4. Optional: Install pyfk<a class="headerlink" href="#optional-install-pyfk" title="Link to this heading"></a></h2>
+<p>Reference: <a class="reference external" href="https://github.com/ziyixi/pyfk/blob/master/docs/introduction/install.rst/">https://github.com/ziyixi/pyfk/blob/master/docs/introduction/install.rst/</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>$ conda create -n fk python=3.9 -y
+<span class="linenos">2</span>$ conda activate fk
+<span class="linenos">3</span>$ conda install -c conda-forge -y  numpy=1.26 &quot;cython&lt;3&quot; setuptools wheel scipy make notebook
+</pre></div>
+</div>
+<p>For MacOS, run following lines</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>$ pip install cysignals pyfk --no-build-isolation
+<span class="linenos">2</span>$ jupyter notebook
+</pre></div>
+</div>
+<p>For Linux, run following lines</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>$ pip install cysignals pyfk
+<span class="linenos">2</span>$ jupyter notebook
+</pre></div>
+</div>
+<p>Open and run pyfk.ipynb <a class="reference download internal" download="" href="../_downloads/7a086d7114882c2c8d384f0a57568ef6/pyfk.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">./pyfk.ipynb</span></code></a></p>
+<p>This notebook was written by Khalil and revised by Qili</p>
+<p>The test systems are macOS 15.6.1 and Ubuntu 18.04.6</p>
+</section>
 </section>
 
 
@@ -120,7 +355,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright 2021-2026, CUSeisTut team.
-      <span class="lastupdated">Last updated on 2026-01-27.
+      <span class="lastupdated">Last updated on 2026-01-29.
       </span></p>
   </div>
 
