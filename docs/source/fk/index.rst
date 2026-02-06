@@ -223,7 +223,7 @@ https://seiswave.cn/oh-my-cap/install/
     $ cd ~/opt/oh-my-cap/src/fk
     $ make
 
-For MacOS, run the following line
+For MacOS, run following lines
 
 .. code-block::
     :linenos:
@@ -232,7 +232,7 @@ For MacOS, run the following line
     $ source ~/.zshrc
     $ fk.pl
 
-For Linux, run the following line
+For Linux, run following lines
 
 .. code-block::
     :linenos:
